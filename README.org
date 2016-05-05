@@ -1,0 +1,7 @@
+* Conforguration
+
+Configure things with Org!
+
+* License
+
+GPL v3.  See COPYING for details.
