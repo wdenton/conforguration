@@ -6,7 +6,7 @@
 
 Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
-This is a short example of using Org to configure a machine to download and compile [R](https://r-project.org/) from source, in ~/usr/local/src/R/~, arrange symlinks so there will be a constant path to the binary across version changes, install a set of preferred packages, and if necessary edit your ~/.bashrc~ so that your $PATH is proper.
+This is a short example of using Org to configure a machine to download and compile [[https://r-project.org/][R]] from source, in ~/usr/local/src/R/~, arrange symlinks so there will be a constant path to the binary across version changes, install a set of preferred packages, and if necessary edit your ~/.bashrc~ so that your $PATH is proper.
 
 Run ~M-x org-babel-tangle~ to generate shell scripts in the ~scripts/~ directory.  Sync the scripts to remote servers, then run the scripts on those remote servers.
 
