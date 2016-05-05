@@ -1,6 +1,26 @@
+#+TITLE: Conforguration README
+#+AUTHOR: William Denton
+#+EMAIL: wtd@pobox.com
+
+# This is under the GPL v3.  See COPYING for details.
+
 * Conforguration
 
-Configure things with Org!
+Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
+
+* How does it work?
+
+Run ~M-x org-babel-tangle~ on [[file:conforguration.org][conforguration.org]] to generate shell scripts in the ~scripts/~ directory.  Sync the scripts to remote servers, then run the scripts on those remote servers.
+
+The nice things about this is that either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
+
+* Why?
+
+Because [[https://www.ansible.com/][Ansible]] and similar configuration management tools aren't done in Org.
+
+* What next?
+
+I don't know, but if you're interested, have at it.
 
 * License
 
