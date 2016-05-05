@@ -4,6 +4,8 @@
 
 This is a short example of using Org to configure a machine to download and compile [[https://r-project.org/][R]] from source, in ~/usr/local/src/R/~, arrange symlinks so there will be a constant path to the binary across version changes, install a set of preferred packages, and if necessary edit your ~/.bashrc~ so that your $PATH is proper.
 
+If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
+
 * Setup
 
 Make the ~scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
