@@ -63,7 +63,7 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 This will synchronize the scripts to vm1, a server I run.  Other servers could be added.
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --delete --times scripts vm1:
+rsync -avz --times scripts/ vm1:scripts/
 #+END_SRC
 
 * Remote machines
@@ -73,7 +73,7 @@ The best way to arrange actually running the scripts on the remote servers is pr
 ** vm1
 
 #+BEGIN_SRC shell :dir /vm1:scripts/ :results output
-./install-r-from-source.sh
+./r-install-from-source.sh
 #+END_SRC
 
 #+RESULTS:
