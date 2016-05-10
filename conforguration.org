@@ -21,7 +21,7 @@ mkdir -p $dotfiles_dir
 
 Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).  The setup script, that symlinks everything, is also in there.
 
-If you need some special environment variables on a machine, put them in ~.bash.env.$HOSTNAME.sh~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
+If you need some special environment variables on a machine, put them in ~.bash.$HOSTNAME.rc~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
 #+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
 DOTFILES=".[a-zA-Z]*"
