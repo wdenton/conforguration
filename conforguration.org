@@ -14,6 +14,53 @@ Make the ~scripts/~ directory on this machine.  (Doing this at the start is easi
 mkdir -p scripts
 #+END_SRC
 
+* Dotfiles
+
+Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later),
+
+However, the setup script, that symlinks everything, is kept here for easy editing.
+
+#+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
+DOTFILES="bashrc dircolors.ansi-dark gemrc git-completion.bash profile"
+for DOTFILE in $DOTFILES; do
+  rm -f ~/.${DOTFILE}
+  ln -s ~/dotfiles/.${DOTFILE} ~/.${DOTFILE}
+done
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC shell :results output
+ls -al dotfiles/
+#+END_SRC
+
+#+RESULTS:
+: total 148
+: drwxr-xr-x 2 wtd wtd  4096 May  9 21:30 .
+: drwxr-xr-x 5 wtd wtd  4096 May  9 21:30 ..
+: -rwxr-xr-x 1 wtd wtd  5895 May  9 19:56 .bashrc
+: -rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
+: -rwxr-xr-x 1 wtd wtd   183 May  9 21:30 dotfile-setup.sh
+: -rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
+: -rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
+: -rwxr-xr-x 1 wtd wtd    41 May  9 19:56 .profile
+
+Compile the dotfiles into a zip file, to make it easier to copy elsewhere.
+
+#+BEGIN_SRC shell :results output
+rm -f dotfiles.zip
+zip -r dotfiles.zip dotfiles/
+#+END_SRC
+
+#+RESULTS:
+:   adding: dotfiles/ (stored 0%)
+:   adding: dotfiles/.bashrc (deflated 53%)
+:   adding: dotfiles/.profile (stored 0%)
+:   adding: dotfiles/.gemrc (deflated 21%)
+:   adding: dotfiles/.dircolors.ansi-dark (deflated 64%)
+:   adding: dotfiles/.git-completion.bash (deflated 72%)
+:   adding: dotfiles/dotfile-setup.sh (deflated 28%)
+
 * R
 
 ** Requirements
@@ -58,7 +105,82 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
 #+END_SRC
 
-* Sync machines
+* Machines
+
+** marcus
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+cp -r dotfiles ~/
+cd ~/dotfiles/
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+** music
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times dotfiles.zip music:
+#+END_SRC
+
+#+RESULTS:
+: sending incremental file list
+: dotfiles.zip
+:
+: sent 3,254 bytes  received 449 bytes  1,058.00 bytes/sec
+: total size is 24,089  speedup is 6.51
+
+#+BEGIN_SRC shell :dir /music: :results output
+unzip -o dotfiles.zip
+cd dotfiles
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+: Archive:  dotfiles.zip
+:   inflating: dotfiles/.bashrc
+:  extracting: dotfiles/.profile
+:   inflating: dotfiles/.gemrc
+:   inflating: dotfiles/.dircolors.ansi-dark
+:   inflating: dotfiles/.git-completion.bash
+:   inflating: dotfiles/dotfile-setup.sh
+
+** vm1
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times dotfiles.zip vm1:
+#+END_SRC
+
+#+RESULTS:
+: sending incremental file list
+: dotfiles.zip
+:
+: sent 23,535 bytes  received 233 bytes  9,507.20 bytes/sec
+: total size is 24,089  speedup is 1.01
+
+#+BEGIN_SRC shell :dir /vm1: :results output
+unzip -o dotfiles.zip
+cd dotfiles
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+: Archive:  dotfiles.zip
+:    creating: dotfiles/
+:   inflating: dotfiles/.bashrc
+:  extracting: dotfiles/.profile
+:   inflating: dotfiles/.gemrc
+:   inflating: dotfiles/.dircolors.ansi-dark
+:   inflating: dotfiles/.git-completion.bash
+:   inflating: dotfiles/dotfile-setup.sh
+
+*** Synchronize install scripts
 
 This will synchronize the scripts to vm1, a server I run.  Other servers could be added.
 
@@ -66,11 +188,9 @@ This will synchronize the scripts to vm1, a server I run.  Other servers could b
 rsync -avz --times scripts/ vm1:scripts/
 #+END_SRC
 
-* Remote machines
+*** Install
 
 The best way to arrange actually running the scripts on the remote servers is probably to specify a section for each one and specify each script that will be run.
-
-** vm1
 
 #+BEGIN_SRC shell :dir /vm1:scripts/ :results output
 ./r-install-from-source.sh
