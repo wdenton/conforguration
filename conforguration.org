@@ -178,11 +178,10 @@ rsync -avz --times $dotfiles_dir/ vm1:$dotfiles_dir/
 #+RESULTS:
 : sending incremental file list
 : ./
-: .bashrc
-: dotfile-setup.sh
+: .tmux.conf
 :
-: sent 423 bytes  received 117 bytes  360.00 bytes/sec
-: total size is 73,974  speedup is 136.99
+: sent 481 bytes  received 50 bytes  354.00 bytes/sec
+: total size is 76,297  speedup is 143.69
 
 #+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
 ./dotfile-setup.sh
