@@ -10,6 +10,10 @@ Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
 * How does it work?
 
+** Dotfiles
+
+** Installing applications and packages
+
 Run ~M-x org-babel-tangle~ on [[file:conforguration.org][conforguration.org]] to generate shell scripts in the ~scripts/~ directory.  Sync the scripts to remote servers, then run the scripts on those remote servers.
 
 The nice things about this is that either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.

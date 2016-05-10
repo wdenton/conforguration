@@ -16,7 +16,7 @@ mkdir -p scripts
 
 * Setup: Dotfiles
 
-Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later),
+Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).
 
 However, the setup script, that symlinks everything, is kept here for easy editing.
 
@@ -65,6 +65,8 @@ zip -r dotfiles.zip dotfiles/
 
 ** Requirements
 
+PATH needs to include ~/usr/local/src/R~, but my ~bashrc~ has that configured already.
+
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
 #+BEGIN_SRC shell :tangle scripts/r-install-requirements.sh :shebang "#!/bin/bash"
@@ -72,34 +74,25 @@ sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install libgsl0-dev
 #+END_SRC
 
-** Set up PATH
-
-#+BEGIN_SRC shell :tangle scripts/r-update-bashrc.sh :shebang "#!/bin/bash"
-if ! [[ ":$PATH:" == *":/usr/local/src/R:"* ]]; then
-  echo 'Adding /usr/local/src/R to $PATH'
-  echo '# Running R from source in /usr/local/src/R' >> ~/.bashrc
-  echo 'PATH=$PATH:/usr/local/src/R' >> ~/.bashrc
-else
-  echo "/usr/local/src/R is already in $PATH"
-fi
-#+END_SRC
 
 ** Installing
 
-Change the version number on this script as needed.
+Change the version number as needed.
 
-#+BEGIN_SRC shell :tangle scripts/r-install-from-source.sh :shebang "#!/bin/bash"
+#+NAME: RVERSION
+| 3.3.0 |
+
+#+BEGIN_SRC shell :tangle scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var RVERSION=RVERSION
 cd /usr/local/src/R
-VERSION=3.3.0
-curl -O http://cran.utstat.utoronto.ca/src/base/R-3/R-$VERSION.tar.gz
-tar xzvf R-$VERSION.tar.gz
-cd R-$VERSION
+curl -O http://cran.utstat.utoronto.ca/src/base/R-3/R-$RVERSION.tar.gz
+tar xzvf R-$RVERSION.tar.gz
+cd R-$RVERSION
 ./configure
 make && make check
 cd ..
 rm R Rscript
-ln -s R-$VERSION/bin/R R
-ln -s R-$VERSION/bin/Rscript Rscript
+ln -s R-$RVERSION/bin/R R
+ln -s R-$RVERSION/bin/Rscript Rscript
 PACKAGE_LIST="dplyr readr tidyr ggplot2 devtools lubridate shiny knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
 ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
@@ -213,15 +206,11 @@ cd dotfiles
 
 *** Synchronize install scripts
 
-This will synchronize the scripts to vm1, a server I run.  Other servers could be added.
-
 #+BEGIN_SRC shell :results silent
 rsync -avz --times scripts/ vm1:scripts/
 #+END_SRC
 
 *** Install
-
-The best way to arrange actually running the scripts on the remote servers is probably to specify a section for each one and specify each script that will be run.
 
 #+BEGIN_SRC shell :dir /vm1:scripts/ :results output
 ./r-install-from-source.sh
@@ -261,15 +250,11 @@ cd dotfiles
 
 *** Synchronize install scripts
 
-This will synchronize the scripts to vm1, a server I run.  Other servers could be added.
-
 #+BEGIN_SRC shell :results silent
 rsync -avz --times scripts/ wdenton:scripts/
 #+END_SRC
 
 *** Install
-
-The best way to arrange actually running the scripts on the remote servers is probably to specify a section for each one and specify each script that will be run.
 
 #+BEGIN_SRC shell :dir /wdenton:scripts/ :results output
 ./r-install-from-source.sh
