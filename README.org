@@ -10,11 +10,17 @@ Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
 * How does it work?
 
+Run ~M-x org-babel-tangle~ on [[file:conforguration.org][conforguration.org]] to generate installation scripts in the ~conforguration_scripts/~ and ~dotfiles/~ directories.
+
 ** Dotfiles
+
+Raw dotfiles are in ~dotfiles/~. Because they start with a dot (e.g. ~.bashrc~) they are not visible to ~ls~ normally, so use ~ls -a~ to see them.
+
+Dotfiles are copied to ~$HOME/dotfiles/~ and symlinks are made from your home directory to there.
 
 ** Installing applications and packages
 
-Run ~M-x org-babel-tangle~ on [[file:conforguration.org][conforguration.org]] to generate shell scripts in the ~scripts/~ directory.  Sync the scripts to remote servers, then run the scripts on those remote servers.
+Sync the scripts to remote servers, then run the scripts on those remote servers.
 
 The nice things about this is that either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
 

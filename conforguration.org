@@ -4,7 +4,7 @@
 
 #+PROPERTY: header-args :var script_directory="conforguration_scripts"
 
-This is a short example of using Org to configure a machine to download and compile [[https://r-project.org/][R]] from source, in ~/usr/local/src/R/~, arrange symlinks so there will be a constant path to the binary across version changes, install a set of preferred packages, and if necessary edit your ~/.bashrc~ so that your $PATH is proper.
+This has my dotfiles and helper scripts to install R from source.
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
 
@@ -18,9 +18,9 @@ mkdir -p $script_directory
 
 * Setup: Dotfiles
 
-Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).
+Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).  The setup script, that symlinks everything, is also in there.
 
-However, the setup script, that symlinks everything, is kept here for easy editing.
+If you need some special environment variables on a machine, put them in ~.bash.env.$HOSTNAME.sh~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
 #+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
 DOTFILES=".[a-zA-Z]*"
