@@ -8,10 +8,10 @@ If you're looking at this on GitHub, the BEGIN and END source block wrappers are
 
 * Initialize
 
-Make the ~scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
+Make the ~conforguration_scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
 
 #+BEGIN_SRC shell :results silent
-mkdir -p scripts
+mkdir -p conforguration_scripts
 #+END_SRC
 
 * Setup: Dotfiles
@@ -69,11 +69,10 @@ PATH needs to include ~/usr/local/src/R~, but my ~bashrc~ has that configured al
 
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
-#+BEGIN_SRC shell :tangle scripts/r-install-requirements.sh :shebang "#!/bin/bash"
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install libgsl0-dev
 #+END_SRC
-
 
 ** Installing
 
@@ -82,7 +81,7 @@ Change the version number as needed.
 #+NAME: RVERSION
 | 3.3.0 |
 
-#+BEGIN_SRC shell :tangle scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var RVERSION=RVERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var RVERSION=RVERSION
 cd /usr/local/src/R
 curl -O http://cran.utstat.utoronto.ca/src/base/R-3/R-$RVERSION.tar.gz
 tar xzvf R-$RVERSION.tar.gz
