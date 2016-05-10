@@ -1,6 +1,7 @@
 #!/bin/sh
-DOTFILES="bashrc dircolors.ansi-dark gemrc git-completion.bash profile"
+script_directory='conforguration_scripts'
+DOTFILES=".[a-zA-Z]*"
 for DOTFILE in $DOTFILES; do
-  rm -f ~/.${DOTFILE}
-  ln -s ~/dotfiles/.${DOTFILE} ~/.${DOTFILE}
+  rm -f ~/${DOTFILE}
+  ln -s ~/dotfiles/${DOTFILE} ~/${DOTFILE}
 done

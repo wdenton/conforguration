@@ -23,10 +23,10 @@ Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this
 However, the setup script, that symlinks everything, is kept here for easy editing.
 
 #+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
-DOTFILES="bashrc dircolors.ansi-dark gemrc git-completion.bash profile"
+DOTFILES=".[a-zA-Z]*"
 for DOTFILE in $DOTFILES; do
-  rm -f ~/.${DOTFILE}
-  ln -s ~/dotfiles/.${DOTFILE} ~/.${DOTFILE}
+  rm -f ~/${DOTFILE}
+  ln -s ~/dotfiles/${DOTFILE} ~/${DOTFILE}
 done
 #+END_SRC
 
@@ -38,11 +38,11 @@ ls -al dotfiles/
 
 #+RESULTS:
 : total 148
-: drwxr-xr-x 2 wtd wtd  4096 May 10 09:00 .
-: drwxr-xr-x 6 wtd wtd  4096 May 10 09:09 ..
+: drwxr-xr-x 2 wtd wtd  4096 May 10 09:13 .
+: drwxr-xr-x 6 wtd wtd  4096 May 10 09:13 ..
 : -rwxr-xr-x 1 wtd wtd  5895 May  9 19:56 .bashrc
 : -rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
-: -rwxr-xr-x 1 wtd wtd   183 May 10 09:00 dotfile-setup.sh
+: -rwxr-xr-x 1 wtd wtd   172 May 10 09:13 dotfile-setup.sh
 : -rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
 : -rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
 : -rwxr-xr-x 1 wtd wtd    41 May  9 19:56 .profile
@@ -61,7 +61,7 @@ zip -r dotfiles.zip dotfiles/
 :   adding: dotfiles/.gemrc (deflated 21%)
 :   adding: dotfiles/.dircolors.ansi-dark (deflated 64%)
 :   adding: dotfiles/.git-completion.bash (deflated 72%)
-:   adding: dotfiles/dotfile-setup.sh (deflated 28%)
+:   adding: dotfiles/dotfile-setup.sh (deflated 25%)
 
 * Setup: R
 
@@ -125,8 +125,8 @@ rsync -avz --times dotfiles.zip music:
 : sending incremental file list
 : dotfiles.zip
 :
-: sent 3,254 bytes  received 449 bytes  1,058.00 bytes/sec
-: total size is 24,089  speedup is 6.51
+: sent 1,242 bytes  received 245 bytes  594.80 bytes/sec
+: total size is 24,087  speedup is 16.20
 
 #+BEGIN_SRC shell :dir /music: :results output
 unzip -o dotfiles.zip

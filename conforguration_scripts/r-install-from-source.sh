@@ -1,4 +1,5 @@
 #!/bin/bash
+script_directory='conforguration_scripts'
 unset RVERSION
 declare -a RVERSION=( '3.3.0' )
 cd /usr/local/src/R
