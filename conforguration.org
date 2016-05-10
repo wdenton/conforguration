@@ -228,3 +228,51 @@ The best way to arrange actually running the scripts on the remote servers is pr
 #+END_SRC
 
 #+RESULTS:
+** wdenton
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times dotfiles.zip wdenton:
+#+END_SRC
+
+#+RESULTS:
+: sending incremental file list
+: dotfiles.zip
+:
+: sent 23,535 bytes  received 233 bytes  15,845.33 bytes/sec
+: total size is 24,089  speedup is 1.01
+
+#+BEGIN_SRC shell :dir /wdenton: :results output
+unzip -o dotfiles.zip
+cd dotfiles
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+: Archive:  dotfiles.zip
+:    creating: dotfiles/
+:   inflating: dotfiles/.bashrc
+:  extracting: dotfiles/.profile
+:   inflating: dotfiles/.gemrc
+:   inflating: dotfiles/.dircolors.ansi-dark
+:   inflating: dotfiles/.git-completion.bash
+:   inflating: dotfiles/dotfile-setup.sh
+
+*** Synchronize install scripts
+
+This will synchronize the scripts to vm1, a server I run.  Other servers could be added.
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times scripts/ wdenton:scripts/
+#+END_SRC
+
+*** Install
+
+The best way to arrange actually running the scripts on the remote servers is probably to specify a section for each one and specify each script that will be run.
+
+#+BEGIN_SRC shell :dir /wdenton:scripts/ :results output
+./r-install-from-source.sh
+#+END_SRC
+
+#+RESULTS:
