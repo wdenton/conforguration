@@ -109,10 +109,11 @@ rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 #+RESULTS:
 : sending incremental file list
 : ./
+: .bashrc
 : dotfile-setup.sh
 :
-: sent 388 bytes  received 44 bytes  172.80 bytes/sec
-: total size is 73,982  speedup is 171.25
+: sent 423 bytes  received 117 bytes  216.00 bytes/sec
+: total size is 73,974  speedup is 136.99
 
 #+BEGIN_SRC shell :dir /music:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -131,10 +132,11 @@ rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 #+RESULTS:
 : sending incremental file list
 : ./
+: .bashrc
 : dotfile-setup.sh
 :
-: sent 388 bytes  received 44 bytes  123.43 bytes/sec
-: total size is 73,982  speedup is 171.25
+: sent 423 bytes  received 117 bytes  216.00 bytes/sec
+: total size is 73,974  speedup is 136.99
 
 #+BEGIN_SRC shell :dir /pair:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -152,9 +154,12 @@ rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
 
 #+RESULTS:
 : sending incremental file list
+: ./
+: .bashrc
+: dotfile-setup.sh
 :
-: sent 172 bytes  received 11 bytes  366.00 bytes/sec
-: total size is 73,982  speedup is 404.27
+: sent 387 bytes  received 120 bytes  338.00 bytes/sec
+: total size is 73,974  speedup is 145.91
 
 #+BEGIN_SRC shell :dir /shell:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -171,19 +176,13 @@ rsync -avz --times $dotfiles_dir/ vm1:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-sending incremental file list
-./
-.bashrc
-.dircolors.ansi-dark
-.gemrc
-.git-completion.bash
-.profile
-dotfile-setup.sh
-
-sent 579 bytes  received 793 bytes  548.80 bytes/sec
-total size is 73,982  speedup is 53.92
-#+end_example
+: sending incremental file list
+: ./
+: .bashrc
+: dotfile-setup.sh
+:
+: sent 423 bytes  received 117 bytes  360.00 bytes/sec
+: total size is 73,974  speedup is 136.99
 
 #+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -214,19 +213,13 @@ rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-sending incremental file list
-./
-.bashrc
-.dircolors.ansi-dark
-.gemrc
-.git-completion.bash
-.profile
-dotfile-setup.sh
-
-sent 579 bytes  received 793 bytes  914.67 bytes/sec
-total size is 73,982  speedup is 53.92
-#+end_example
+: sending incremental file list
+: ./
+: .bashrc
+: dotfile-setup.sh
+:
+: sent 423 bytes  received 117 bytes  360.00 bytes/sec
+: total size is 73,974  speedup is 136.99
 
 #+BEGIN_SRC shell :dir /wdenton:dotfiles/ :results output
 ./dotfile-setup.sh

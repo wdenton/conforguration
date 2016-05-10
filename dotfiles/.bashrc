@@ -251,12 +251,12 @@ PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
 PATH=$PATH:~/bin/:.
 
 ####
-#### Custom environment variables
+#### Machine-specific settings
 ####
 
-# E.g., if the machine is named dartagnan, put machine-specific
-# environment variables in ~/.bash.env.dartagnan.sh
+# If the machine is named dartagnan, put machine-specific environment
+# variables and settings in ~/.bash.dartagnan.rc
 
-if [ -f ~/.bash.env.$HOSTNAME.sh ] ; then
-    . ~/.bash.env.$HOSTNAME.sh
+if [ -f ~/.bash.$HOSTNAME.rc ] ; then
+    . ~/.bash.$HOSTNAME.rc
 fi
