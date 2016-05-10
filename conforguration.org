@@ -6,7 +6,7 @@ This is a short example of using Org to configure a machine to download and comp
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
 
-* Setup
+* Initialize
 
 Make the ~scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
 
@@ -14,7 +14,7 @@ Make the ~scripts/~ directory on this machine.  (Doing this at the start is easi
 mkdir -p scripts
 #+END_SRC
 
-* Dotfiles
+* Setup: Dotfiles
 
 Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later),
 
@@ -61,7 +61,7 @@ zip -r dotfiles.zip dotfiles/
 :   adding: dotfiles/.git-completion.bash (deflated 72%)
 :   adding: dotfiles/dotfile-setup.sh (deflated 28%)
 
-* R
+* Setup: R
 
 ** Requirements
 
@@ -107,7 +107,7 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 
 * Machines
 
-** marcus
+** localhost (marcus)
 
 *** Dotfiles
 
@@ -142,6 +142,37 @@ cd dotfiles
 
 #+RESULTS:
 : Archive:  dotfiles.zip
+:   inflating: dotfiles/.bashrc
+:  extracting: dotfiles/.profile
+:   inflating: dotfiles/.gemrc
+:   inflating: dotfiles/.dircolors.ansi-dark
+:   inflating: dotfiles/.git-completion.bash
+:   inflating: dotfiles/dotfile-setup.sh
+
+** pair
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times dotfiles.zip pair:
+#+END_SRC
+
+#+RESULTS:
+: sending incremental file list
+: dotfiles.zip
+:
+: sent 23,535 bytes  received 35 bytes  5,237.78 bytes/sec
+: total size is 24,089  speedup is 1.02
+
+#+BEGIN_SRC shell :dir /pair: :results output
+unzip -o dotfiles.zip
+cd dotfiles
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+: Archive:  dotfiles.zip
+:    creating: dotfiles/
 :   inflating: dotfiles/.bashrc
 :  extracting: dotfiles/.profile
 :   inflating: dotfiles/.gemrc
