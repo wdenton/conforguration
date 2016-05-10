@@ -142,6 +142,26 @@ rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 
 #+RESULTS:
 
+** shell
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
+#+END_SRC
+
+#+RESULTS:
+: sending incremental file list
+:
+: sent 172 bytes  received 11 bytes  366.00 bytes/sec
+: total size is 73,982  speedup is 404.27
+
+#+BEGIN_SRC shell :dir /shell:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
 ** vm1
 
 *** Dotfiles
@@ -184,6 +204,7 @@ rsync -avz --times $script_dir/ vm1:$script_dir/
 #+END_SRC
 
 #+RESULTS:
+
 ** wdenton
 
 *** Dotfiles
