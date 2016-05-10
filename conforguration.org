@@ -2,6 +2,8 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
+#+PROPERTY: header-args :var script_directory="conforguration_scripts"
+
 This is a short example of using Org to configure a machine to download and compile [[https://r-project.org/][R]] from source, in ~/usr/local/src/R/~, arrange symlinks so there will be a constant path to the binary across version changes, install a set of preferred packages, and if necessary edit your ~/.bashrc~ so that your $PATH is proper.
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
@@ -11,7 +13,7 @@ If you're looking at this on GitHub, the BEGIN and END source block wrappers are
 Make the ~conforguration_scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
 
 #+BEGIN_SRC shell :results silent
-mkdir -p conforguration_scripts
+mkdir -p $script_directory
 #+END_SRC
 
 * Setup: Dotfiles
@@ -36,11 +38,11 @@ ls -al dotfiles/
 
 #+RESULTS:
 : total 148
-: drwxr-xr-x 2 wtd wtd  4096 May  9 21:30 .
-: drwxr-xr-x 5 wtd wtd  4096 May  9 21:30 ..
+: drwxr-xr-x 2 wtd wtd  4096 May 10 09:00 .
+: drwxr-xr-x 6 wtd wtd  4096 May 10 09:09 ..
 : -rwxr-xr-x 1 wtd wtd  5895 May  9 19:56 .bashrc
 : -rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
-: -rwxr-xr-x 1 wtd wtd   183 May  9 21:30 dotfile-setup.sh
+: -rwxr-xr-x 1 wtd wtd   183 May 10 09:00 dotfile-setup.sh
 : -rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
 : -rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
 : -rwxr-xr-x 1 wtd wtd    41 May  9 19:56 .profile
@@ -99,7 +101,7 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 
 * Machines
 
-** localhost (marcus)
+** localhost
 
 *** Dotfiles
 
@@ -206,12 +208,12 @@ cd dotfiles
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times scripts/ vm1:scripts/
+rsync -avz --times $script_directory/ vm1:$script_directory/
 #+END_SRC
 
 *** Install
 
-#+BEGIN_SRC shell :dir /vm1:scripts/ :results output
+#+BEGIN_SRC shell :dir /vm1:conforguration_scripts/ :results output
 ./r-install-from-source.sh
 #+END_SRC
 
@@ -250,12 +252,12 @@ cd dotfiles
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times scripts/ wdenton:scripts/
+rsync -avz --times $script_directory/ wdenton:$script_directory/
 #+END_SRC
 
 *** Install
 
-#+BEGIN_SRC shell :dir /wdenton:scripts/ :results output
+#+BEGIN_SRC shell :dir /wdenton:conforguration_scripts/ :results output
 ./r-install-from-source.sh
 #+END_SRC
 
