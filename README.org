@@ -32,6 +32,8 @@ Because [[https://www.ansible.com/][Ansible]] and similar configuration manageme
 
 I don't know, but if you're interested, have at it.
 
+There is a lot of duplication.  Perhaps there is a nice way to tidy that up.
+
 * License
 
 GPL v3.  See COPYING for details.

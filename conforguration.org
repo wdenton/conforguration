@@ -2,7 +2,7 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
-#+PROPERTY: header-args :var script_directory="conforguration_scripts"
+#+PROPERTY: header-args :var script_dir="conforguration_scripts", dotfiles_dir="dotfiles"
 
 This has my dotfiles and helper scripts to install R from source.
 
@@ -10,10 +10,11 @@ If you're looking at this on GitHub, the BEGIN and END source block wrappers are
 
 * Initialize
 
-Make the ~conforguration_scripts/~ directory on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
+Make the ~conforguration_scripts/~ and ~dotfiles/~ directories on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
 
 #+BEGIN_SRC shell :results silent
-mkdir -p $script_directory
+mkdir -p $script_dir
+mkdir -p $dotfiles_dir
 #+END_SRC
 
 * Setup: Dotfiles
@@ -26,42 +27,26 @@ If you need some special environment variables on a machine, put them in ~.bash.
 DOTFILES=".[a-zA-Z]*"
 for DOTFILE in $DOTFILES; do
   rm -f ~/${DOTFILE}
-  ln -s ~/dotfiles/${DOTFILE} ~/${DOTFILE}
+  ln -s ~/$dotfiles_dir/${DOTFILE} ~/${DOTFILE}
 done
 #+END_SRC
 
 #+RESULTS:
 
 #+BEGIN_SRC shell :results output
-ls -al dotfiles/
+ls -al $dotfiles_dir
 #+END_SRC
 
 #+RESULTS:
 : total 148
-: drwxr-xr-x 2 wtd wtd  4096 May 10 09:13 .
-: drwxr-xr-x 6 wtd wtd  4096 May 10 09:13 ..
+: drwxr-xr-x 2 wtd wtd  4096 May 10 09:46 .
+: drwxr-xr-x 5 wtd wtd  4096 May 10 09:52 ..
 : -rwxr-xr-x 1 wtd wtd  5895 May  9 19:56 .bashrc
 : -rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
-: -rwxr-xr-x 1 wtd wtd   172 May 10 09:13 dotfile-setup.sh
+: -rwxr-xr-x 1 wtd wtd   195 May 10 09:46 dotfile-setup.sh
 : -rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
 : -rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
 : -rwxr-xr-x 1 wtd wtd    41 May  9 19:56 .profile
-
-Compile the dotfiles into a zip file, to make it easier to copy elsewhere.
-
-#+BEGIN_SRC shell :results output
-rm -f dotfiles.zip
-zip -r dotfiles.zip dotfiles/
-#+END_SRC
-
-#+RESULTS:
-:   adding: dotfiles/ (stored 0%)
-:   adding: dotfiles/.bashrc (deflated 53%)
-:   adding: dotfiles/.profile (stored 0%)
-:   adding: dotfiles/.gemrc (deflated 21%)
-:   adding: dotfiles/.dircolors.ansi-dark (deflated 64%)
-:   adding: dotfiles/.git-completion.bash (deflated 72%)
-:   adding: dotfiles/dotfile-setup.sh (deflated 25%)
 
 * Setup: R
 
@@ -118,97 +103,78 @@ cd ~/dotfiles/
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-rsync -avz --times dotfiles.zip music:
+rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
 : sending incremental file list
-: dotfiles.zip
+: ./
+: dotfile-setup.sh
 :
-: sent 1,242 bytes  received 245 bytes  594.80 bytes/sec
-: total size is 24,087  speedup is 16.20
+: sent 388 bytes  received 44 bytes  172.80 bytes/sec
+: total size is 73,982  speedup is 171.25
 
-#+BEGIN_SRC shell :dir /music: :results output
-unzip -o dotfiles.zip
-cd dotfiles
+#+BEGIN_SRC shell :dir /music:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
-: Archive:  dotfiles.zip
-:   inflating: dotfiles/.bashrc
-:  extracting: dotfiles/.profile
-:   inflating: dotfiles/.gemrc
-:   inflating: dotfiles/.dircolors.ansi-dark
-:   inflating: dotfiles/.git-completion.bash
-:   inflating: dotfiles/dotfile-setup.sh
 
 ** pair
 
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-rsync -avz --times dotfiles.zip pair:
+rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
 : sending incremental file list
-: dotfiles.zip
+: ./
+: dotfile-setup.sh
 :
-: sent 23,535 bytes  received 35 bytes  5,237.78 bytes/sec
-: total size is 24,089  speedup is 1.02
+: sent 388 bytes  received 44 bytes  123.43 bytes/sec
+: total size is 73,982  speedup is 171.25
 
-#+BEGIN_SRC shell :dir /pair: :results output
-unzip -o dotfiles.zip
-cd dotfiles
+#+BEGIN_SRC shell :dir /pair:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
-: Archive:  dotfiles.zip
-:    creating: dotfiles/
-:   inflating: dotfiles/.bashrc
-:  extracting: dotfiles/.profile
-:   inflating: dotfiles/.gemrc
-:   inflating: dotfiles/.dircolors.ansi-dark
-:   inflating: dotfiles/.git-completion.bash
-:   inflating: dotfiles/dotfile-setup.sh
 
 ** vm1
 
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-rsync -avz --times dotfiles.zip vm1:
+rsync -avz --times $dotfiles_dir/ vm1:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
-: sending incremental file list
-: dotfiles.zip
-:
-: sent 23,535 bytes  received 233 bytes  9,507.20 bytes/sec
-: total size is 24,089  speedup is 1.01
+#+begin_example
+sending incremental file list
+./
+.bashrc
+.dircolors.ansi-dark
+.gemrc
+.git-completion.bash
+.profile
+dotfile-setup.sh
 
-#+BEGIN_SRC shell :dir /vm1: :results output
-unzip -o dotfiles.zip
-cd dotfiles
+sent 579 bytes  received 793 bytes  548.80 bytes/sec
+total size is 73,982  speedup is 53.92
+#+end_example
+
+#+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
-: Archive:  dotfiles.zip
-:    creating: dotfiles/
-:   inflating: dotfiles/.bashrc
-:  extracting: dotfiles/.profile
-:   inflating: dotfiles/.gemrc
-:   inflating: dotfiles/.dircolors.ansi-dark
-:   inflating: dotfiles/.git-completion.bash
-:   inflating: dotfiles/dotfile-setup.sh
 
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $script_directory/ vm1:$script_directory/
+rsync -avz --times $script_dir/ vm1:$script_dir/
 #+END_SRC
 
 *** Install
@@ -223,36 +189,34 @@ rsync -avz --times $script_directory/ vm1:$script_directory/
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-rsync -avz --times dotfiles.zip wdenton:
+rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
-: sending incremental file list
-: dotfiles.zip
-:
-: sent 23,535 bytes  received 233 bytes  15,845.33 bytes/sec
-: total size is 24,089  speedup is 1.01
+#+begin_example
+sending incremental file list
+./
+.bashrc
+.dircolors.ansi-dark
+.gemrc
+.git-completion.bash
+.profile
+dotfile-setup.sh
 
-#+BEGIN_SRC shell :dir /wdenton: :results output
-unzip -o dotfiles.zip
-cd dotfiles
+sent 579 bytes  received 793 bytes  914.67 bytes/sec
+total size is 73,982  speedup is 53.92
+#+end_example
+
+#+BEGIN_SRC shell :dir /wdenton:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
-: Archive:  dotfiles.zip
-:    creating: dotfiles/
-:   inflating: dotfiles/.bashrc
-:  extracting: dotfiles/.profile
-:   inflating: dotfiles/.gemrc
-:   inflating: dotfiles/.dircolors.ansi-dark
-:   inflating: dotfiles/.git-completion.bash
-:   inflating: dotfiles/dotfile-setup.sh
 
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $script_directory/ wdenton:$script_directory/
+rsync -avz --times $script_dir/ wdenton:$script_dir/
 #+END_SRC
 
 *** Install
