@@ -16,4 +16,9 @@ sink(file = paste('~/R/history/r-log-', strftime(Sys.time(), '%F %H:%M:%OS9'), s
 ## Automatically convert strings to factor variables in a data.frame?
 options(stringsAsFactors = FALSE)
 
+## Override q() to not save by default.  Same as saying q("no").
+q <- function (save="no", ...) {
+    quit(save=save, ...)
+}
+
 options(prompt="ℝ> ")
