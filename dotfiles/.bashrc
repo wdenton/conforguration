@@ -172,7 +172,7 @@ fi
 ####
 
 # Quick command-line Wikipedia lookup
-wp () {
+function wp () {
     terms=$@
     lynx "https://en.wikipedia.org/wiki/$terms"
     # w3m "http://en.wikipedia.org/wiki/$terms"
@@ -186,13 +186,17 @@ function tree() {
 # "alert" alias for long running commands.  Eg: sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
 # Swap file $1 with $2
 function swap() {
     local TMPFILE=tmp.$$
     mv $1 $TMPFILE
     mv $2 $1
     mv $TMPFILE $2
+}
+
+# "| order" is very handy for counting duplicated lines in a file or listing
+function order() {
+    sort | uniq -c | sort -rn
 }
 
 ####
