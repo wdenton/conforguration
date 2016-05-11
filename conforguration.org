@@ -62,7 +62,9 @@ The first line of requirements may be needed for R 3.3.  The ~topicmodels~ packa
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
+sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev
 sudo apt-get install libgsl0-dev
+mkdir -p ~/R/history/
 #+END_SRC
 
 ** Installing
@@ -106,7 +108,7 @@ cd ~/dotfiles/
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 #+END_SRC
 
@@ -129,7 +131,7 @@ rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 #+END_SRC
 
@@ -166,19 +168,11 @@ rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ ares:$dotfiles_dir/
 #+END_SRC
 
-#+RESULTS:
-: sending incremental file list
-: ./
-: .tmux.conf
-:
-: sent 481 bytes  received 50 bytes  354.00 bytes/sec
-: total size is 76,297  speedup is 143.69
-
-#+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /ares:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -192,27 +186,17 @@ rsync -avz --times $script_dir/ ares:$script_dir/
 
 *** Install
 
-#+BEGIN_SRC shell :dir /ares:conforguration_scripts/ :results output
+#+BEGIN_SRC shell :dir /ares:conforguration_scripts/ :results silent
 ./r-install-from-source.sh
 #+END_SRC
-
-#+RESULTS:
 
 ** vm1
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ vm1:$dotfiles_dir/
 #+END_SRC
-
-#+RESULTS:
-: sending incremental file list
-: ./
-: .tmux.conf
-:
-: sent 481 bytes  received 50 bytes  354.00 bytes/sec
-: total size is 76,297  speedup is 143.69
 
 #+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -228,7 +212,7 @@ rsync -avz --times $script_dir/ vm1:$script_dir/
 
 *** Install
 
-#+BEGIN_SRC shell :dir /vm1:conforguration_scripts/ :results output
+#+BEGIN_SRC shell :dir /vm1:conforguration_scripts/ :results silent
 ./r-install-from-source.sh
 #+END_SRC
 
@@ -238,18 +222,9 @@ rsync -avz --times $script_dir/ vm1:$script_dir/
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 #+END_SRC
-
-#+RESULTS:
-: sending incremental file list
-: ./
-: .bashrc
-: dotfile-setup.sh
-:
-: sent 423 bytes  received 117 bytes  360.00 bytes/sec
-: total size is 73,974  speedup is 136.99
 
 #+BEGIN_SRC shell :dir /wdenton:dotfiles/ :results output
 ./dotfile-setup.sh
@@ -265,7 +240,7 @@ rsync -avz --times $script_dir/ wdenton:$script_dir/
 
 *** Install
 
-#+BEGIN_SRC shell :dir /wdenton:conforguration_scripts/ :results output
+#+BEGIN_SRC shell :dir /wdenton:conforguration_scripts/ :results silent
 ./r-install-from-source.sh
 #+END_SRC
 
