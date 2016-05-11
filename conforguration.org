@@ -148,21 +148,48 @@ rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results output
+#+BEGIN_SRC shell :results silent
 rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /shell:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+** ares
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+rsync -avz --times $dotfiles_dir/ ares:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
 : sending incremental file list
 : ./
-: .bashrc
-: dotfile-setup.sh
+: .tmux.conf
 :
-: sent 387 bytes  received 120 bytes  338.00 bytes/sec
-: total size is 73,974  speedup is 145.91
+: sent 481 bytes  received 50 bytes  354.00 bytes/sec
+: total size is 76,297  speedup is 143.69
 
-#+BEGIN_SRC shell :dir /shell:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
 ./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+*** Synchronize install scripts
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $script_dir/ ares:$script_dir/
+#+END_SRC
+
+*** Install
+
+#+BEGIN_SRC shell :dir /ares:conforguration_scripts/ :results output
+./r-install-from-source.sh
 #+END_SRC
 
 #+RESULTS:
