@@ -135,15 +135,6 @@ rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 #+END_SRC
 
-#+RESULTS:
-: sending incremental file list
-: ./
-: .bashrc
-: dotfile-setup.sh
-:
-: sent 423 bytes  received 117 bytes  216.00 bytes/sec
-: total size is 73,974  speedup is 136.99
-
 #+BEGIN_SRC shell :dir /pair:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC

@@ -9,6 +9,8 @@ export PAGER=less
 export EDITOR=pico
 export VISUAL=emacsclient
 
+export WWW_HOME=https://duckduckgo.com/
+
 ####
 #### Command history
 ####
