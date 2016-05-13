@@ -129,7 +129,6 @@ PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 
 alias e="emacsclient --no-wait"
 alias f='finger -l'
-alias gitlog="git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
 alias grep='grep --color=auto'
 alias more='less'
 alias mroe='more'
