@@ -39,17 +39,21 @@ ls -al $dotfiles_dir
 
 #+RESULTS:
 #+begin_example
-total 108
-drwxr-xr-x 2 wdenton wdenton  4096 May 11 10:14 .
-drwxr-xr-x 5 wdenton wdenton  4096 May 11 10:05 ..
--rwxr-xr-x 1 wdenton wdenton  5887 May 11 10:05 .bashrc
--rw-r--r-- 1 wdenton wdenton 10242 May 11 10:05 .dircolors.ansi-dark
--rwxr-xr-x 1 wdenton wdenton   195 May 11 10:05 dotfile-setup.sh
--rw-r--r-- 1 wdenton wdenton   118 May 11 10:05 .gemrc
--rw-r--r-- 1 wdenton wdenton 57491 May 11 10:05 .git-completion.bash
--rwxr-xr-x 1 wdenton wdenton    41 May 11 10:05 .profile
--rw-r--r-- 1 wdenton wdenton   692 May 11 10:14 .Rprofile
--rw-r--r-- 1 wdenton wdenton  1245 May 11 10:05 .tmux.conf
+total 232
+drwxr-xr-x 2 wtd wtd  4096 May 13 10:15 .
+drwxr-xr-x 5 wtd wtd  4096 May 11 21:45 ..
+-rw-r--r-- 1 wtd wtd    12 May 11 20:50 .bash_profile
+-rwxr-xr-x 1 wtd wtd  5836 May 12 22:26 .bashrc
+-rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
+-rwxr-xr-x 1 wtd wtd   220 May 11 20:51 dotfile-setup.sh
+-rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
+-rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
+-rw-r--r-- 1 wtd wtd   424 May 12 22:24 .gitconfig
+-rw------- 1 wtd wtd 14374 May 11 21:23 .lynxrc
+-rw-r--r-- 1 wtd wtd    71 May 11 20:50 .nanorc
+-rwxr-xr-x 1 wtd wtd    41 May  9 19:56 .profile
+-rw-r--r-- 1 wtd wtd   818 May 11 20:50 .Rprofile
+-rw-r--r-- 1 wtd wtd  1332 May 11 20:50 .tmux.conf
 #+end_example
 
 * Setup: R

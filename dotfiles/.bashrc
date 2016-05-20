@@ -239,6 +239,9 @@ dired() {
 #### $PATH
 ####
 
+# Make sure rootly path is there
+PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+
 # Emacs is run from source in /usr/local/src/emacs
 PATH=/usr/local/src/emacs/src:$PATH
 
