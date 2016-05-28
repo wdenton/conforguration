@@ -3,7 +3,6 @@
 ####
 
 umask 022
-export LANG=en_CA.UTF-8
 
 PAGER=less
 EDITOR=nano
