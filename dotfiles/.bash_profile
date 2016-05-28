@@ -1,2 +1,3 @@
-export LANG=en_CA.UTF-8
+## I just put everything in my bashrc.
+
 source ~/.bashrc

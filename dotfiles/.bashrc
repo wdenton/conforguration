@@ -5,9 +5,9 @@
 umask 022
 export LANG=en_CA.UTF-8
 
-export PAGER=less
-export EDITOR=pico
-export VISUAL=emacsclient
+PAGER=less
+EDITOR=nano
+VISUAL=nano
 
 export WWW_HOME=https://duckduckgo.com/
 
@@ -101,7 +101,7 @@ fi
 
 # ┌─[marcus]─[/usr/local/src/sonic-pi]
 # └─> $
-export PS1="\342\224\214\342\224\200[\h]\342\224\200[\w]\n\342\224\224\342\224\200> \\$ "
+PS1="\342\224\214\342\224\200[\h]\342\224\200[\w]\n\342\224\224\342\224\200> \\$ "
 
 PS1="${PROMPT_COLOUR}${PS1}${NO_COLOUR}"
 
