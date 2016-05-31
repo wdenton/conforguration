@@ -4,7 +4,7 @@ dotfiles_dir='dotfiles'
 unset RVERSION
 declare -a RVERSION=( '3.3.0' )
 cd /usr/local/src/R
-curl -O http://cran.utstat.utoronto.ca/src/base/R-3/R-$RVERSION.tar.gz
+curl -O https://cran.hafro.is/src/base/R-3/R-$RVERSION.tar.gz
 tar xzvf R-$RVERSION.tar.gz
 cd R-$RVERSION
 ./configure
