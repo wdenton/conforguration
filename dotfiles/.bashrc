@@ -5,8 +5,8 @@
 umask 022
 
 PAGER=less
-EDITOR=nano
-VISUAL=nano
+export EDITOR=nano
+export VISUAL=nano
 
 export WWW_HOME=https://duckduckgo.com/
 
