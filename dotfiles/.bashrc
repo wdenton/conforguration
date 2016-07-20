@@ -133,7 +133,7 @@ alias more='less'
 alias mroe='more'
 alias o='libreoffice'
 alias pi='alpine -i'
-alias pico='pico -z'
+alias please='sudo'
 alias ww="curl http://wttr.in/yyz"
 alias x='xdg-open'
 
