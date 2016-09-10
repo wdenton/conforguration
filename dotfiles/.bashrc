@@ -151,6 +151,9 @@ alias la='ls -aF'
 alias ll='ls -lF'
 alias lsort='ls -lrS'
 
+# And some unaliases.  rm is rm, not rm -i
+unalias rm
+
 # Android stuff
 alias android-connect='mtpfs -o allow_other /media/Nexus7'
 alias android-disconnect='fusermount -u /media/Nexus7'
