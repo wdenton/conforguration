@@ -41,13 +41,14 @@ ls -al $dotfiles_dir
 
 #+RESULTS:
 #+begin_example
-total 232
-drwxr-xr-x 2 wtd wtd  4096 May 28 11:12 .
-drwxr-xr-x 5 wtd wtd  4096 May 27 20:17 ..
--rw-r--r-- 1 wtd wtd    57 May 28 11:11 .bash_profile
--rwxr-xr-x 1 wtd wtd  5878 May 28 11:12 .bashrc
+total 244
+drwxr-xr-x 2 wtd wtd  4096 Sep 10 10:44 .
+drwxr-xr-x 5 wtd wtd  4096 Sep 10 10:45 ..
+-rw-r--r-- 1 wtd wtd   121 May 30 20:03 .bash_logout
+-rw-r--r-- 1 wtd wtd    42 May 28 11:26 .bash_profile
+-rw-r--r-- 1 wtd wtd  5922 Sep 10 10:44 .bashrc
 -rw-r--r-- 1 wtd wtd 10242 May  9 19:56 .dircolors.ansi-dark
--rwxr-xr-x 1 wtd wtd   242 May 27 20:16 dotfile-setup.sh
+-rwxr-xr-x 1 wtd wtd   242 May 31 19:29 dotfile-setup.sh
 -rw-r--r-- 1 wtd wtd   118 May  9 19:56 .gemrc
 -rw-r--r-- 1 wtd wtd 57491 May  9 19:56 .git-completion.bash
 -rw-r--r-- 1 wtd wtd   424 May 12 22:24 .gitconfig
