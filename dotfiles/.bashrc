@@ -134,6 +134,7 @@ alias mroe='more'
 alias o='libreoffice'
 alias pi='alpine -i'
 alias please='sudo'
+alias rm="rm" # In case rm -i is set system-wide
 alias ww="curl http://wttr.in/yyz"
 alias x='xdg-open'
 
@@ -150,9 +151,6 @@ alias l='ls -F'
 alias la='ls -aF'
 alias ll='ls -lF'
 alias lsort='ls -lrS'
-
-# And some unaliases.  rm is rm, not rm -i
-unalias rm
 
 # Android stuff
 alias android-connect='mtpfs -o allow_other /media/Nexus7'
