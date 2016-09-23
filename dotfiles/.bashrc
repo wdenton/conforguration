@@ -195,6 +195,15 @@ function swap() {
     mv $TMPFILE $2
 }
 
+# Handy way to watch a file grow
+function monitor() {
+    while [ 1 ]; do
+	clear
+	tail $1
+	sleep 10
+    done
+}
+
 # "| order" is very handy for counting duplicated lines in a file or listing
 function order() {
     sort | uniq -c | sort -rn
