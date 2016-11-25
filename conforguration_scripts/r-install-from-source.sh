@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset RVERSION
-declare -a RVERSION=( '3.3.0' )
+declare -a RVERSION=( '3.3.2' )
 cd /usr/local/src/R
 curl -O https://cran.hafro.is/src/base/R-3/R-$RVERSION.tar.gz
 tar xzvf R-$RVERSION.tar.gz

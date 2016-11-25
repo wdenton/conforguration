@@ -81,7 +81,7 @@ mkdir -p /usr/local/src/R
 Change the version number as needed.
 
 #+NAME: RVERSION
-| 3.3.0 |
+| 3.3.2 |
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var RVERSION=RVERSION
 cd /usr/local/src/R
