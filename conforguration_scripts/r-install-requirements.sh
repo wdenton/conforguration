@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
-sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev
-sudo apt-get install libgsl0-dev
+sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev
+sudo apt-get install libgsl-dev
 mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R

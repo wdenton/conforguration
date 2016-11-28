@@ -253,6 +253,7 @@ PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 
 # Emacs is run from source in /usr/local/src/emacs
 PATH=/usr/local/src/emacs/src:$PATH
+alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
 
 # Running R from source in /usr/local/src/R
 PATH=/usr/local/src/R:$PATH
