@@ -261,9 +261,9 @@ PATH=/usr/local/src/R:$PATH
 # I put ircii's irc in ~/.irc/
 PATH=$PATH:~/.irc/
 
-# RVM
-PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Ruby: I'm using rbenv instead of RVM now
+PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init -)"
 
 # My own scripts, and finally, the current directory.
 PATH=$PATH:~/bin/:.
