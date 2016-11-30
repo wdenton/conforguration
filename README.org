@@ -10,7 +10,7 @@ Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
 * How does it work?
 
-Run ~M-x org-babel-tangle~ on [[file:conforguration.org][conforguration.org]] to generate installation scripts in the ~conforguration_scripts/~ and ~dotfiles/~ directories.
+Run ~M-x org-babel-tangle~ (=C-c C-v t=) on [[file:conforguration.org][conforguration.org]] to generate installation scripts in the ~conforguration_scripts/~ and ~dotfiles/~ directories.
 
 ** Dotfiles
 

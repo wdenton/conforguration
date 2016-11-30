@@ -100,11 +100,11 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
 #+END_SRC
 
-* Setup: Ruby
+* Setup: Ruby (with rbenv)
 
 ** Requirements
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
+#+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
 #+END_SRC
 
@@ -117,7 +117,7 @@ TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 #+NAME: RUBY_VERSION
 | 2.3.3 |
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
