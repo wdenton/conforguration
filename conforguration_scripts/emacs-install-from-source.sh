@@ -18,5 +18,3 @@ make
 # My config
 cd
 git clone git@github.com:wdenton/.emacs.d.git
-# Install use-package
-emacs -q --batch -l ~/.emacs.d/setup/bootstrap.el

@@ -72,7 +72,7 @@ sudo apt-get build-dep emacs24
 
 ** Installation
 
-First get the source for Emacs and compile it, then get the source for Org and compile it.  Download my Emacs configuration and run the special script that just installs [[https://github.com/jwiegley/use-package][use-package]], with is enough to let my =init.el= install everything else I want.
+First get the source for Emacs and compile it, then get the source for Org and compile it.
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 cd /usr/local/src/
@@ -90,9 +90,9 @@ make
 # My config
 cd
 git clone git@github.com:wdenton/.emacs.d.git
-# Install use-package
-emacs -q --batch -l ~/.emacs.d/setup/bootstrap.el
 #+END_SRC
+
+Running =emacs= the first time will download and install all the packages I want.
 
 * Setup: R
 
