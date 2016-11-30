@@ -92,7 +92,9 @@ cd
 git clone git@github.com:wdenton/.emacs.d.git
 #+END_SRC
 
-Running =emacs= the first time will download and install all the packages I want.
+When prompted about a location to use to store abbrev definitions, say no, so you won't overwrite the file already there.
+
+Running =emacs= the first time will download and install all the packages I want, but also throw an error about =custom.el=.  Quit and restart and everything should work.
 
 * Setup: R
 
