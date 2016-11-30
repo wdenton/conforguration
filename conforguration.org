@@ -71,6 +71,7 @@ The first line of requirements may be needed for R 3.3.  The ~topicmodels~ packa
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev
+sudo apt-get build-dep r-base
 sudo apt-get install libgsl-dev
 mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R
@@ -80,23 +81,51 @@ mkdir -p /usr/local/src/R
 
 Change the version number as needed.
 
-#+NAME: RVERSION
+#+NAME: R_VERSION
 | 3.3.2 |
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var RVERSION=RVERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
 cd /usr/local/src/R
-curl -O https://cran.hafro.is/src/base/R-3/R-$RVERSION.tar.gz
-tar xzvf R-$RVERSION.tar.gz
-cd R-$RVERSION
+curl -O https://cran.hafro.is/src/base/R-3/R-$R_VERSION.tar.gz
+tar xzvf R-$R_VERSION.tar.gz
+cd R-$R_VERSION
 ./configure
 make && make check
 cd ..
 rm R Rscript
-ln -s R-$RVERSION/bin/R R
-ln -s R-$RVERSION/bin/Rscript Rscript
+ln -s R-$R_VERSION/bin/R R
+ln -s R-$R_VERSION/bin/Rscript Rscript
 PACKAGE_LIST="dplyr readr tidyr ggplot2 devtools roxygen2 lubridate shiny knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
 ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
+#+END_SRC
+
+* Setup: Ruby
+
+** Requirements
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
+sudo apt-get build-dep ruby
+#+END_SRC
+
+** Installation
+
+Change the version number as needed.
+
+TODO: Don't delete =rbenv=, skip cloning it if it's already there.
+
+#+NAME: RUBY_VERSION
+| 2.3.3 |
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+rm -rf ~/.rbenv/
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+source ~/.bashrc
+rbenv install --verbose $RUBY_VERSION
+rbenv global $RUBY_VERSION
+gem install marc nokogiri sqlite3 rubocop backup bundler jekyll
+echo "Now run bundler install where needed."
 #+END_SRC
 
 * Machines
