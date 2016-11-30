@@ -17,6 +17,8 @@ mkdir -p $script_dir
 mkdir -p $dotfiles_dir
 #+END_SRC
 
+TODO: Create and chown =/usr/local/src/= if it's not there.
+
 * Setup: Dotfiles
 
 Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).  The setup script, that symlinks everything, is also in there.
@@ -60,6 +62,38 @@ drwxr-xr-x 5 wdenton wdenton  4096 Oct 13 12:37 ..
 -rw------- 1 wdenton wdenton  1332 May 11 13:50 .tmux.conf
 #+end_example
 
+* Setup: Emacs
+
+** Requirements
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
+sudo apt-get build-dep emacs24
+#+END_SRC
+
+** Installation
+
+First get the source for Emacs and compile it, then get the source for Org and compile it.  Download my Emacs configuration and run the special script that just installs [[https://github.com/jwiegley/use-package][use-package]], with is enough to let my =init.el= install everything else I want.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+cd /usr/local/src/
+# Emacs
+git clone git://git.savannah.gnu.org/emacs.git
+cd emacs
+./autogen.sh
+./configure
+make
+# Org
+cd /usr/local/src/
+git clone git://orgmode.org/org-mode.git
+cd org-mode
+make
+# My config
+cd
+git clone git@github.com:wdenton/.emacs.d.git
+# Install use-package
+emacs -q --batch -l ~/.emacs.d/setup/bootstrap.el
+#+END_SRC
+
 * Setup: R
 
 ** Requirements
@@ -77,7 +111,7 @@ mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R
 #+END_SRC
 
-** Installing
+** Installation
 
 Change the version number as needed.
 
