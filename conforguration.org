@@ -74,7 +74,7 @@ sudo apt-get build-dep emacs24
 
 First get the source for Emacs and compile it, then get the source for Org and compile it.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
 # Emacs
 git clone git://git.savannah.gnu.org/emacs.git

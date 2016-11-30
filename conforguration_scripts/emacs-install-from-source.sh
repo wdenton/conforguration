@@ -1,8 +1,6 @@
 #!/bin/bash
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
-unset RUBY_VERSION
-declare -a RUBY_VERSION=( '2.3.3' )
 cd /usr/local/src/
 # Emacs
 git clone git://git.savannah.gnu.org/emacs.git
