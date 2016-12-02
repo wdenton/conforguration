@@ -16,3 +16,4 @@ make
 # My config
 cd
 git clone git@github.com:wdenton/.emacs.d.git
+echo "Now run emacs, and say no when asked about a location for abbref_defs."

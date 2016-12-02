@@ -20,9 +20,29 @@ Dotfiles are copied to ~$HOME/dotfiles/~ and symlinks are made from your home di
 
 ** Installing applications and packages
 
-Sync the scripts to remote servers, then run the scripts on those remote servers.
+Sync the scripts to remote servers, then run the scripts on those remote servers.  Or run them locally!
 
 The nice things about this is that either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
+
+* How to install Emacs from scratch the Conforguration way
+
+Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.
+
+#+BEGIN_SRC shell :eval no
+cd
+git clone git@github.com:wdenton/.emacs.d.git
+mkdir -p src
+cd src
+git clone git@github.com:wdenton/conforguration.git
+cd conforguration/dotfiles
+./dotfile-setup.sh
+cd ../scripts
+./initialize.sh
+./emacs-install-requirements.sh
+./emacs-install-from-source.sh
+#+END_SRC
+
+Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!  If you don't want to go that far, skip the =.emacs.d= repository download, but make sure your PATH is set up to point to Emacs in the right place under =/usr/local/src/=.
 
 * Why?
 

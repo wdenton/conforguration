@@ -4,20 +4,18 @@
 
 #+PROPERTY: header-args :var script_dir="conforguration_scripts", dotfiles_dir="dotfiles"
 
-This has my dotfiles and helper scripts to install R from source.
+This has my dotfiles and helper scripts to install Emacs, R and Ruby from source.  There may be more in the future.
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
 
 * Initialize
 
-Make the ~conforguration_scripts/~ and ~dotfiles/~ directories on this machine.  (Doing this at the start is easier than using ~:mkdirp yes~ on the tangled blocks.)
+Create =/usr/local/src/= and make it owned by oneself (on Debian-like systems, at least). This is where all source code will be downloaded and compiled.
 
-#+BEGIN_SRC shell :results silent
-mkdir -p $script_dir
-mkdir -p $dotfiles_dir
+#+BEGIN_SRC shell :tangle conforguration_scripts/initialize.sh :shebang "#!/bin/bash"
+sudo mkdir -p /usr/local/src/
+sudo chown $USER:$USER /usr/local/src
 #+END_SRC
-
-TODO: Create and chown =/usr/local/src/= if it's not there.
 
 * Setup: Dotfiles
 
@@ -43,23 +41,24 @@ ls -al $dotfiles_dir
 
 #+RESULTS:
 #+begin_example
-total 144
-drwxr-xr-x 2 wdenton wdenton  4096 Oct 13 12:37 .
-drwxr-xr-x 5 wdenton wdenton  4096 Oct 13 12:37 ..
--rw------- 1 wdenton wdenton   121 May 30 10:43 .bash_logout
--rw------- 1 wdenton wdenton    42 May 30 10:31 .bash_profile
--rw-r--r-- 1 wdenton wdenton  6028 Sep 23 11:47 .bashrc
--rw------- 1 wdenton wdenton 10242 May 11 10:05 .dircolors.ansi-dark
--rwxr-xr-x 1 wdenton wdenton   242 Oct 13 12:37 dotfile-setup.sh
--rw------- 1 wdenton wdenton   118 May 30 12:45 .gemrc
--rw------- 1 wdenton wdenton 57491 May 11 10:05 .git-completion.bash
--rw------- 1 wdenton wdenton   424 May 16 09:55 .gitconfig
--rw------- 1 wdenton wdenton 14374 May 16 09:55 .lynxrc
--rw------- 1 wdenton wdenton    71 May 11 16:48 .nanorc
--rw------- 1 wdenton wdenton   818 May 11 12:00 .Rprofile
--rw-r--r-- 1 wdenton wdenton   112 Oct 13 12:34 .rubocop.yml
--rw------- 1 wdenton wdenton    84 May 30 10:31 .signature
--rw------- 1 wdenton wdenton  1332 May 11 13:50 .tmux.conf
+total 268
+drwxr-xr-x 2 wtd wtd  4096 Dec  1 21:30 .
+drwxr-xr-x 5 wtd wtd  4096 Dec  1 21:33 ..
+-rw-r--r-- 1 wtd wtd   121 May 30  2016 .bash_logout
+-rw-r--r-- 1 wtd wtd    42 May 28  2016 .bash_profile
+-rw-r--r-- 1 wtd wtd  6002 Nov 29 19:41 .bashrc
+-rw-r--r-- 1 wtd wtd 10242 Oct 18 14:39 .dircolors.ansi-dark
+-rwxr-xr-x 1 wtd wtd   242 Dec  1 21:30 dotfile-setup.sh
+-rw-r--r-- 1 wtd wtd   118 May  9  2016 .gemrc
+-rw-r--r-- 1 wtd wtd 57491 Oct 18 14:39 .git-completion.bash
+-rw-r--r-- 1 wtd wtd   424 May 12  2016 .gitconfig
+-rw-r--r-- 1 wtd wtd 14374 Oct 18 14:39 .lynxrc
+-rw-r--r-- 1 wtd wtd    71 May 11  2016 .nanorc
+-rw-r--r-- 1 wtd wtd   818 May 11  2016 .Rprofile
+-rw-r--r-- 1 wtd wtd   112 Oct 13 18:00 .rubocop.yml
+-rw------- 1 wtd wtd    84 May 27  2016 .signature
+-rw-r--r-- 1 wtd wtd   227 Nov 29 19:41 .signature.work
+-rw-r--r-- 1 wtd wtd  1332 May 11  2016 .tmux.conf
 #+end_example
 
 * Setup: Emacs
@@ -90,11 +89,12 @@ make
 # My config
 cd
 git clone git@github.com:wdenton/.emacs.d.git
+echo "Now run emacs, and say no when asked about a location for abbref_defs."
 #+END_SRC
 
-When prompted about a location to use to store abbrev definitions, say no, so you won't overwrite the file already there.
+Running =emacs= the first time will download and install all the packages needed, but some setting about =abbrevs= is misordered so it will ask a question it doesn't need to ask.  Saying no makes everything work.
 
-Running =emacs= the first time will download and install all the packages I want, but also throw an error about =custom.el=.  Quit and restart and everything should work.
+It's probably best to quit Emacs and restart after this, but you don't actually need to.
 
 * Setup: R
 
