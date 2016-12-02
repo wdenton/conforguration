@@ -36,6 +36,7 @@ cd src
 git clone git@github.com:wdenton/conforguration.git
 cd conforguration/dotfiles
 ./dotfile-setup.sh
+source ~/.bashrc
 cd ../scripts
 ./initialize.sh
 ./emacs-install-requirements.sh
