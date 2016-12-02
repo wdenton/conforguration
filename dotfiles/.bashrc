@@ -208,6 +208,11 @@ function order() {
     sort | uniq -c | sort -rn
 }
 
+# Wipe all metadata from one or more images
+function exifwipe {
+    exiftool -all= $*
+}
+
 ####
 #### Completions
 ####
