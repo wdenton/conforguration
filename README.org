@@ -30,6 +30,7 @@ Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do 
 
 #+BEGIN_SRC shell :eval no
 cd
+sudo apt-get install git
 git clone git@github.com:wdenton/.emacs.d.git
 mkdir -p src
 cd src
