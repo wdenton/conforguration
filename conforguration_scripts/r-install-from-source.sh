@@ -16,3 +16,4 @@ ln -s R-$R_VERSION/bin/Rscript Rscript
 PACKAGE_LIST="dplyr readr tidyr ggplot2 devtools roxygen2 testthat lubridate shiny knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
 ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
+./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
