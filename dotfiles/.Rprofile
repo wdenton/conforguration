@@ -21,4 +21,10 @@ q <- function (save="no", ...) {
     quit(save=save, ...)
 }
 
+## No menu popup, use the console
+options(menu.graphics=FALSE)
+
+## Tab completion on library() and require()
+utils::rc.settings(ipck=TRUE)
+
 options(prompt="ℝ> ")
