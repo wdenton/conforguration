@@ -270,6 +270,10 @@ PATH=$PATH:~/.irc/
 PATH=$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
 
+# Go (go help gopath)
+export GOPATH=~/.gopath/
+PATH=$PATH:$GOPATH/bin/
+
 # My own scripts, and finally, the current directory.
 PATH=$PATH:~/bin/:.
 
