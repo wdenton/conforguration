@@ -225,6 +225,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+# The Fuck (https://github.com/nvbn/thefuck)
+eval "$(thefuck --alias)"
+
 ####
 #### Solarized theme
 ####
