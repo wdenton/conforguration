@@ -213,6 +213,13 @@ function exifwipe {
     exiftool -all= $*
 }
 
+# Sum a list of numbers
+# E.g.
+# $ for I in *txt; do cat $I | wc -l; done | colsum
+function colsum {
+    paste -s -d+ | bc --
+}
+
 ####
 #### Completions
 ####
