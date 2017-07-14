@@ -271,8 +271,8 @@ alias e="emacsclient --no-wait"
 PATH=/usr/local/src/R:$PATH
 
 # Zotero 5.0 ... if this becomes a package I won't need to
-p# manage it manually
-alias zotero="/usr/local/src/zotero/zotero/zotero"
+# manage it manually
+alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
 
 # I put ircii's irc in ~/.irc/
 PATH=$PATH:~/.irc/
