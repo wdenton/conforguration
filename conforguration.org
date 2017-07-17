@@ -110,7 +110,7 @@ sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libs
 sudo apt-get build-dep r-base
 sudo apt-get install libgsl-dev
 mkdir -p ~/R/history/
-mkdir -p /usr/local/src/R
+sudo mkdir -p /usr/local/src/R
 #+END_SRC
 
 ** Installation
@@ -118,7 +118,7 @@ mkdir -p /usr/local/src/R
 Change the version number as needed.
 
 #+NAME: R_VERSION
-| 3.3.2 |
+| 3.4.1 |
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
 cd /usr/local/src/R
@@ -133,7 +133,7 @@ ln -s R-$R_VERSION/bin/R R
 ln -s R-$R_VERSION/bin/Rscript Rscript
 PACKAGE_LIST="dplyr readr tidyr ggplot2 devtools RCurl roxygen2 testthat lubridate shiny knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
-./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
+## ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
 ./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 #+END_SRC
 
@@ -152,7 +152,7 @@ Change the version number as needed.
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
 #+NAME: RUBY_VERSION
-| 2.3.3 |
+| 2.4.1 |
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/
@@ -187,7 +187,7 @@ cd ~/dotfiles/
 rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /music:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wtd@music:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -215,7 +215,7 @@ rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /shell:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wtd@shell:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -255,7 +255,7 @@ rsync -avz --times $script_dir/ ares:$script_dir/
 rsync -avz --times $dotfiles_dir/ vm1:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /vm1:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wdenton@vm1:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -283,7 +283,7 @@ rsync -avz --times $script_dir/ vm1:$script_dir/
 rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /wdenton:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wdenton@wdenton:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -297,8 +297,39 @@ rsync -avz --times $script_dir/ wdenton:$script_dir/
 
 *** Install
 
-#+BEGIN_SRC shell :dir /wdenton:conforguration_scripts/ :results silent
+#+BEGIN_SRC shell :dir /scp:wdenton@wdenton:conforguration_scripts/ :results silent
 ./r-install-from-source.sh
+#+END_SRC
+
+#+RESULTS:
+
+** orez
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ orez:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:wdenton@orez:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+*** Synchronize install scripts
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $script_dir/ orez:$script_dir/
+#+END_SRC
+
+*** Install
+
+#+BEGIN_SRC shell :dir /orez:conforguration_scripts/ :results silent
+./r-install-requirements.sh
+./r-install-from-source.sh
+./rbenv-install-requirements.sh
+./rbenv-install-from-source.sh
 #+END_SRC
 
 #+RESULTS:

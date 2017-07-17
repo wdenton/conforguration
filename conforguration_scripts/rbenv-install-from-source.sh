@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '2.3.3' )
+declare -a RUBY_VERSION=( '2.4.1' )
 rm -rf ~/.rbenv/
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build

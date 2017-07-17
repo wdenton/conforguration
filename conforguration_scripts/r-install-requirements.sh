@@ -6,4 +6,4 @@ sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libs
 sudo apt-get build-dep r-base
 sudo apt-get install libgsl-dev
 mkdir -p ~/R/history/
-mkdir -p /usr/local/src/R
+sudo mkdir -p /usr/local/src/R
