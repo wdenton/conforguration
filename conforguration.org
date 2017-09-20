@@ -163,7 +163,7 @@ Change the version number as needed.
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
 #+NAME: RUBY_VERSION
-| 2.4.1 |
+| 2.4.2 |
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/

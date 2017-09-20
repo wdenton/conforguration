@@ -5,7 +5,7 @@ unset R_VERSION
 declare -a R_VERSION=( '3.4.1' )
 cd /usr/local/src/R
 
-# Wipe this version if it is there already
+# Wipe this version if it is there already (just in case)
 rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
 
 # Download and uncompress
