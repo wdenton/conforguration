@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset R_VERSION
-declare -a R_VERSION=( '3.4.1' )
+declare -a R_VERSION=( '3.4.2' )
 cd /usr/local/src/R
 
 # Wipe this version if it is there already (just in case)
