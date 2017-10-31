@@ -24,7 +24,8 @@ ln -s R-$R_VERSION/bin/R R
 ln -s R-$R_VERSION/bin/Rscript Rscript
 
 # Install all the packages I want available by default
-PACKAGE_LIST="tidyverse devtools RCurl roxygen2 testthat lubridate hms shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
+PACKAGE_LIST="tidyverse devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
 ## ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
 ./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
+./Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
