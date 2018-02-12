@@ -118,7 +118,7 @@ sudo mkdir -p /usr/local/src/R
 Change the version number as needed.
 
 #+NAME: R_VERSION
-| 3.4.2 |
+| 3.4.3 |
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
 cd /usr/local/src/R
