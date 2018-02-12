@@ -105,7 +105,7 @@ PATH needs to include ~/usr/local/src/R~, but my ~bashrc~ has that configured al
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
-sudo apt-get install libbz2-dev liblzma-dev libpcre3-dev fonts-inconsolata
+sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev
 sudo apt-get build-dep r-base
 sudo apt-get install libgsl-dev
@@ -144,7 +144,6 @@ ln -s R-$R_VERSION/bin/Rscript Rscript
 # Install all the packages I want available by default
 PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
 for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
-## ./Rscript --vanilla -e "devtools::install_github('rstudio/shinyapps')"
 ./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 ./Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
 #+END_SRC
