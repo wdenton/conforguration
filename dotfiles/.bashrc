@@ -268,7 +268,9 @@ alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
 alias e="emacsclient --no-wait"
 
 # Running R from source in /usr/local/src/R
-PATH=/usr/local/src/R:$PATH
+if [ -f /usr/local/src/R/R ] ; then
+    PATH=/usr/local/src/R:$PATH
+fi
 
 # Zotero 5.0 ... if this becomes a package I won't need to
 # manage it manually

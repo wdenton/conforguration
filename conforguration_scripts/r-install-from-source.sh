@@ -3,28 +3,9 @@ script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset R_VERSION
 declare -a R_VERSION=( '3.4.3' )
-cd /usr/local/src/R
+<<r_source_code_present_and_compiled>>
+sudo make install
 
-# Wipe this version if it is there already (just in case)
-rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
-
-# Download and uncompress
-curl -O https://cran.hafro.is/src/base/R-3/R-$R_VERSION.tar.gz
-tar xzvf R-$R_VERSION.tar.gz
-
-# Compile
-cd R-$R_VERSION
-./configure
-make && make check
-
-# Set up aliases
-cd ..
-rm R Rscript
-ln -s R-$R_VERSION/bin/R R
-ln -s R-$R_VERSION/bin/Rscript Rscript
-
-# Install all the packages I want available by default
-PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
-for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
-./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-./Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
+echo "Wrap in su here"
+RSCRIPT=Rscript
+<<r_install_packages>>

@@ -2,6 +2,9 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
+#+STARTUP: showall entitiespretty inlineimages
+#+OPTIONS: toc:nil ^:nil
+
 #+PROPERTY: header-args :var script_dir="conforguration_scripts", dotfiles_dir="dotfiles"
 
 This has my dotfiles and helper scripts to install Emacs, R and Ruby from source.  There may be more in the future.
@@ -98,6 +101,11 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 
 * Setup: R
 
+Change the version number as needed.
+
+#+NAME: R_VERSION
+| 3.4.3 |
+
 ** Requirements
 
 PATH needs to include ~/usr/local/src/R~, but my ~bashrc~ has that configured already.
@@ -106,46 +114,70 @@ The first line of requirements may be needed for R 3.3.  The ~topicmodels~ packa
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre3-dev fonts-inconsolata
-sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev
+sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev
 sudo apt-get build-dep r-base
-sudo apt-get install libgsl-dev
 mkdir -p ~/R/history/
-sudo mkdir -p /usr/local/src/R
+mkdir -p /usr/local/src/R
 #+END_SRC
 
-** Installation
+** Common code
 
-Change the version number as needed.
+#+BEGIN_SRC :shell :noweb-ref r_source_code_present_and_compiled
+R_SRC=/usr/local/src/R
+cd $R_SRC
 
-#+NAME: R_VERSION
-| 3.4.3 |
+# Do not: wipe this version if it is there already (just in case)
+# rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
-cd /usr/local/src/R
+if ! [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
+  echo "Downloading and compiling R ..."
+  sleep 1
+  # Download and uncompress
+  curl -O https://cran.hafro.is/src/base/R-3/R-${R_VERSION}.tar.gz
+  tar xzvf R-$R_VERSION.tar.gz
+  # Compile
+  cd R-$R_VERSION
+  ./configure
+  make && make check
+else
+  echo "Using existing R-${R_VERSION} source ..."
+  sleep 1
+fi
+#+END_SRC
 
-# Wipe this version if it is there already (just in case)
-rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
+#+BEGIN_SRC shell :noweb-ref r_install_packages
+PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
+for PKG in $PACKAGE_LIST; do $RSCRIPT --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
+$RSCRIPT --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
+$RSCRIPT --vanilla -e "devtools::install_github('tidyverse/hms')"
+#+END_SRC
 
-# Download and uncompress
-curl -O https://cran.hafro.is/src/base/R-3/R-$R_VERSION.tar.gz
-tar xzvf R-$R_VERSION.tar.gz
+** Install for personal use
 
-# Compile
-cd R-$R_VERSION
-./configure
-make && make check
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
 
 # Set up aliases
-cd ..
-rm R Rscript
-ln -s R-$R_VERSION/bin/R R
-ln -s R-$R_VERSION/bin/Rscript Rscript
+cd $R_SRC
+rm -f R Rscript
+ln -s R-${R_VERSION}/bin/R R
+ln -s R-${R_VERSION}/bin/Rscript Rscript
 
-# Install all the packages I want available by default
-PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
-for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
-./Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-./Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
+source ~/.bashrc
+RSCRIPT=./Rscript
+
+<<r_install_packages>>
+#+END_SRC
+
+** Install system-wide
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+sudo make install
+
+echo "Wrap in su here"
+RSCRIPT=Rscript
+<<r_install_packages>>
 #+END_SRC
 
 * Setup: Ruby
@@ -194,7 +226,6 @@ sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul
 
 echo "Now run bundler install where needed."
 #+END_SRC
-
 
 * Machines
 
