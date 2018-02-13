@@ -148,24 +148,24 @@ for PKG in $PACKAGE_LIST; do ./Rscript --vanilla -e "install.packages('$PKG', re
 ./Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
 #+END_SRC
 
-* Setup: Ruby (with rbenv)
+* Setup: Ruby
+
+#+NAME: RUBY_VERSION
+| 2.5.0 |
 
 ** Requirements
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-requirements.sh :shebang "#!/bin/bash"
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
 #+END_SRC
 
-** Installation
+** Install rbenv for personal use
 
 Change the version number as needed.
 
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
-#+NAME: RUBY_VERSION
-| 2.5.0 |
-
-#+BEGIN_SRC shell :tangle conforguration_scripts/rbenv-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-rbenv-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
@@ -175,6 +175,26 @@ rbenv global $RUBY_VERSION
 gem install marc nokogiri sqlite3 rubocop backup bundler jekyll t
 echo "Now run bundler install where needed."
 #+END_SRC
+
+** Install Ruby system-wide
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+mkdir -p /usr/local/src/ruby
+cd /usr/local/src/ruby
+
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.5/ruby-${RUBY_VERSION}.tar.gz
+tar xzvf ruby-${RUBY_VERSION}.tar.gz
+cd ruby-${RUBY_VERSION}
+
+./configure
+make
+
+sudo make install
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul
+
+echo "Now run bundler install where needed."
+#+END_SRC
+
 
 * Machines
 
