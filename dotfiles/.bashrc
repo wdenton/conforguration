@@ -278,8 +278,11 @@ alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
 PATH=$PATH:~/.irc/
 
 # Ruby: I'm using rbenv instead of RVM now
-PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init -)"
+# If rbenv isn't there, just default to system Ruby
+if [ -d ~/.rbenv/ ] ; then
+    PATH=$HOME/.rbenv/bin:$PATH
+    eval "$(rbenv init -)"
+fi
 
 # Go (go help gopath)
 export GOPATH=~/.gopath/
