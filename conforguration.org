@@ -123,8 +123,8 @@ mkdir -p /usr/local/src/R
 ** Common code
 
 #+BEGIN_SRC :shell :noweb-ref r_source_code_present_and_compiled
-R_SRC=/usr/local/src/R
-cd $R_SRC
+SCRIPTS_DIR=$PWD
+cd /usr/local/src/R
 
 # Do not: wipe this version if it is there already (just in case)
 # rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
@@ -145,39 +145,41 @@ else
 fi
 #+END_SRC
 
-#+BEGIN_SRC shell :noweb-ref r_install_packages
-PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels"
-for PKG in $PACKAGE_LIST; do $RSCRIPT --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done
-$RSCRIPT --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-$RSCRIPT --vanilla -e "devtools::install_github('tidyverse/hms')"
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
+PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels";
+for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done;
+Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')";
+Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
 #+END_SRC
 
 ** Install for personal use
+
+Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then source ~.bashrc~ to refresh ~$PATH~ to notice them and put that ~Rscript~ first, which makes the package installation work.
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 <<r_source_code_present_and_compiled>>
 
 # Set up aliases
-cd $R_SRC
+cd ..
 rm -f R Rscript
 ln -s R-${R_VERSION}/bin/R R
 ln -s R-${R_VERSION}/bin/Rscript Rscript
 
 source ~/.bashrc
-RSCRIPT=./Rscript
 
-<<r_install_packages>>
+cd $SCRIPTS_DIR
+./r-install-packages.sh
 #+END_SRC
 
 ** Install system-wide
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-from-source.sh :shebang "#!/bin/bash" :var R_VERSION=R_VERSION
+R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 <<r_source_code_present_and_compiled>>
 sudo make install
 
-echo "Wrap in su here"
-RSCRIPT=Rscript
-<<r_install_packages>>
+sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 #+END_SRC
 
 * Setup: Ruby
@@ -389,7 +391,7 @@ rsync -avz --times $script_dir/ orez:$script_dir/
 
 #+BEGIN_SRC shell :dir /orez:conforguration_scripts/ :results silent
 ./r-install-requirements.sh
-./r-install-from-source.sh
+./r-install-system.sh
 ./ruby-install-requirements.sh
 ./ruby-install-from-source.sh
 #+END_SRC

@@ -23,14 +23,6 @@ else
   echo "Using existing R-${R_VERSION} source ..."
   sleep 1
 fi
+sudo make install
 
-# Set up aliases
-cd ..
-rm -f R Rscript
-ln -s R-${R_VERSION}/bin/R R
-ln -s R-${R_VERSION}/bin/Rscript Rscript
-
-source ~/.bashrc
-
-cd $SCRIPTS_DIR
-./r-install-packages.sh
+sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
