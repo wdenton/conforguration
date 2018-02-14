@@ -69,7 +69,7 @@ drwxr-xr-x 5 wdenton wdenton  4096 Feb 13 10:56 ..
 ** Requirements
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
-sudo apt-get build-dep emacs24
+sudo apt-get build-dep emacs
 #+END_SRC
 
 ** Installation
@@ -79,23 +79,23 @@ First get the source for Emacs and compile it, then get the source for Org and c
 #+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
 # Emacs
-git clone git://git.savannah.gnu.org/emacs.git
+git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
 ./configure
 make
 # Org
 cd /usr/local/src/
-git clone git://orgmode.org/org-mode.git
+git clone https://code.orgmode.org/bzg/org-mode.git
 cd org-mode
 make
 # My config
 cd
 git clone git@github.com:wdenton/.emacs.d.git
-echo "Now run emacs, and say no when asked about a location for abbref_defs."
+echo "Now run emacs, and say no when asked about a location for abbrev_defs."
 #+END_SRC
 
-Running =emacs= the first time will download and install all the packages needed, but some setting about =abbrevs= is misordered so it will ask a question it doesn't need to ask.  Saying no makes everything work.
+Running ~emacs~ the first time will download and install all the packages needed, but some setting about =abbrevs= is misordered so it will ask a question it doesn't need to ask.  Saying no makes everything work.
 
 It's probably best to quit Emacs and restart after this, but you don't actually need to.
 
@@ -108,7 +108,7 @@ Change the version number as needed.
 
 ** Requirements
 
-PATH needs to include ~/usr/local/src/R~, but my ~bashrc~ has that configured already.
+For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~, but my [[file:dotfiles/.bashrc][bashrc]] will set that up if it's there.
 
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
@@ -121,6 +121,8 @@ mkdir -p /usr/local/src/R
 #+END_SRC
 
 ** Common code
+
+Whether R is being installed system-wide or just for personal use, this code will be run.
 
 #+BEGIN_SRC :shell :noweb-ref r_source_code_present_and_compiled
 SCRIPTS_DIR=$PWD
@@ -195,11 +197,9 @@ sudo apt-get build-dep ruby
 
 ** Install rbenv for personal use
 
-Change the version number as needed.
-
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-rbenv-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-rbenv.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
@@ -212,7 +212,7 @@ echo "Now run bundler install where needed."
 
 ** Install Ruby system-wide
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-from-source.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
