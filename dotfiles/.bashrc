@@ -259,6 +259,9 @@ dired() {
 #### $PATH
 ####
 
+# Do /usr/local/bin first
+PATH=/usr/local/bin:$PATH
+
 # Make sure rootly path is there
 PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 
@@ -287,7 +290,7 @@ if [ -d ~/.rbenv/ ] ; then
 fi
 
 # Go (go help gopath)
-export GOPATH=~/.gopath/
+export GOPATH=~/.gopath
 PATH=$PATH:$GOPATH/bin/
 
 # My own scripts, and finally, the current directory.
