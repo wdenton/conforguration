@@ -7,6 +7,8 @@
 
 #+PROPERTY: header-args :var script_dir="conforguration_scripts", dotfiles_dir="dotfiles"
 
+# Could work with https://github.com/cbowdon/daemons.el/blob/master/README.org ?
+
 This has my dotfiles and helper scripts to install Emacs, R and Ruby from source.  There may be more in the future.
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
