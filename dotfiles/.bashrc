@@ -213,6 +213,14 @@ function exifwipe {
     exiftool -all= $*
 }
 
+# My SanDisk Clip Sport can't play 24-bit FLAC files
+function sansify() {
+    for FILE in "$@"; do
+	sox "${FILE}" --bits 16 "16-${FILE}"
+	rm "$FILE"
+    done
+}
+
 # Sum a list of numbers
 # E.g.
 # $ for I in *txt; do cat $I | wc -l; done | colsum
