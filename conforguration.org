@@ -150,7 +150,7 @@ fi
 #+END_SRC
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
-PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels gtools";
+PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels xlsx";
 for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done;
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')";
 Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
