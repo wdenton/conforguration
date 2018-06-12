@@ -1,6 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
-dotfiles_dir='dotfiles'
 cd /usr/local/src/
 # Emacs
 git clone https://git.savannah.gnu.org/git/emacs.git
