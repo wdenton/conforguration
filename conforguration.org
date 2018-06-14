@@ -5,7 +5,7 @@
 #+STARTUP: showall entitiespretty inlineimages
 #+OPTIONS: toc:nil ^:nil
 
-#+PROPERTY: header-args :var script_dir="conforguration_scripts", dotfiles_dir="dotfiles"
+#+PROPERTY: header-args :var script_dir="conforguration_scripts" :var dotfiles_dir="dotfiles"
 
 # Could work with https://github.com/cbowdon/daemons.el/blob/master/README.org ?
 

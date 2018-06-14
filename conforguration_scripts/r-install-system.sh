@@ -1,4 +1,8 @@
 #!/bin/bash
+script_dir='conforguration_scripts'
+dotfiles_dir='dotfiles'
+unset R_VERSION
+declare -a R_VERSION=( '3.4.3' )
 SCRIPTS_DIR=$PWD
 cd /usr/local/src/R
 
