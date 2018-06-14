@@ -140,7 +140,7 @@ alias x='xdg-open'
 # ls
 export BLOCKSIZE=1024
 
-if [[ `uname` == "FreeBSD" ]] ; then
+if [[ $(uname) == "FreeBSD" ]] ; then
     alias ls='ls -G'
 else
     alias ls='ls --color=auto'
@@ -162,7 +162,7 @@ alias android-disconnect='fusermount -u /media/Nexus7'
 # Puts wtd@hostname (or whatever) in the titlebar of an xterm.
 # For it to change when you login to another
 # machine, it needs to be in your .bashrc there too.
-if [ $TERM = 'xterm' ] || [ $TERM = 'rxvt' ] || [ $TERM = 'xterm-256color' ]
+if [ "$TERM" = 'xterm' ] || [ "$TERM" = 'rxvt' ] || [ "$TERM" = 'xterm-256color' ]
 then
     export PROMPT_COMMAND='echo -ne "\033]2;"`whoami`@`hostname -s`"\007"'
 fi
@@ -189,16 +189,16 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Swap file $1 with $2
 function swap() {
     local TMPFILE=tmp.$$
-    mv $1 $TMPFILE
-    mv $2 $1
-    mv $TMPFILE $2
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
 }
 
 # Handy way to watch a file grow
 function monitor() {
-    while [ 1 ]; do
+    while true ; do
 	clear
-	tail $1
+	tail "$1"
 	sleep 10
     done
 }
@@ -210,7 +210,7 @@ function order() {
 
 # Wipe all metadata from one or more images
 function exifwipe {
-    exiftool -all= $*
+    exiftool -all= "$*"
 }
 
 # My SanDisk Clip Sport can't play 24-bit FLAC files
@@ -247,7 +247,7 @@ fi
 # Apply a solarized theme to xterms. Helps with color ls listings, etc.
 # See https://github.com/seebi/dircolors-solarized
 # I'm using dircolors.ansi-dark
-eval `dircolors ~/.dircolors.ansi-dark`
+eval $(dircolors ~/.dircolors.ansi-dark)
 
 # Also use solarized theme in GNOME terminal
 # See https://github.com/sigurdga/gnome-terminal-colors-solarized
@@ -300,6 +300,9 @@ fi
 # Go (go help gopath)
 export GOPATH=~/.gopath
 PATH=$PATH:$GOPATH/bin/
+
+# Pip
+PATH=$PATH:~/.local/bin/
 
 # My own scripts, and finally, the current directory.
 PATH=$PATH:~/bin/:.
