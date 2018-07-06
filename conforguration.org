@@ -106,7 +106,7 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 Change the version number as needed.
 
 #+NAME: R_VERSION
-| 3.4.3 |
+| 3.5.1 |
 
 ** Requirements
 
