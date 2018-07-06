@@ -146,10 +146,10 @@ else
     alias ls='ls --color=auto'
 fi
 
-alias l='ls -F'
-alias la='ls -aF'
-alias ll='ls -lF'
-alias lsort='ls -lrS'
+alias l='ls --classify --quoting-style=literal'
+alias la='l --all'
+alias ll='l -l'
+alias lsort='l -l -S --reverse'
 
 # Android stuff
 alias android-connect='mtpfs -o allow_other /media/Nexus7'
