@@ -72,6 +72,9 @@ drwxr-xr-x 5 wdenton wdenton  4096 Feb 13 10:56 ..
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
+## On Linux Mint, at least, these are not installed when the above is done.  Curious.
+## On other systems, it can't hurt.
+sudo apt-get install texinfo install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
 #+END_SRC
 
 ** Installation
@@ -258,6 +261,207 @@ rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
 #+END_SRC
 
 #+RESULTS:
+
+
+#+END_SRC
+
+** Installation
+
+First get the source for Emacs and compile it, then get the source for Org and compile it.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash"
+cd /usr/local/src/
+# Emacs
+git clone https://git.savannah.gnu.org/git/emacs.git
+cd emacs
+./autogen.sh
+./configure
+make
+# Org
+cd /usr/local/src/
+git clone https://code.orgmode.org/bzg/org-mode.git
+cd org-mode
+make
+# My config
+cd
+git clone git@github.com:wdenton/.emacs.d.git
+echo "Now run emacs, and say no when asked about a location for abbrev_defs."
+#+END_SRC
+
+Running ~emacs~ the first time will download and install all the packages needed, but some setting about =abbrevs= is misordered so it will ask a question it doesn't need to ask.  Saying no makes everything work.
+
+It's probably best to quit Emacs and restart after this, but you don't actually need to.
+
+* Setup: R
+
+Change the version number as needed.
+
+#+NAME: R_VERSION
+| 3.5.1 |
+
+** Requirements
+
+For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~, but my [[file:dotfiles/.bashrc][bashrc]] will set that up if it's there.
+
+The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
+sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre3-dev fonts-inconsolata
+sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev
+sudo apt-get build-dep r-base
+mkdir -p ~/R/history/
+mkdir -p /usr/local/src/R
+#+END_SRC
+
+** Common code
+
+Whether R is being installed system-wide or just for personal use, this code will be run.
+
+#+BEGIN_SRC :shell :noweb-ref r_source_code_present_and_compiled
+SCRIPTS_DIR=$PWD
+cd /usr/local/src/R
+
+# Do not: wipe this version if it is there already (just in case)
+# rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
+
+if ! [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
+  echo "Downloading and compiling R ..."
+  sleep 1
+  # Download and uncompress
+  curl -O https://cran.hafro.is/src/base/R-3/R-${R_VERSION}.tar.gz
+  tar xzvf R-$R_VERSION.tar.gz
+  # Compile
+  cd R-$R_VERSION
+  ./configure
+  make && make check
+else
+  echo "Using existing R-${R_VERSION} source ..."
+  sleep 1
+fi
+#+END_SRC
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
+PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels xlsx lintr";
+for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done;
+Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')";
+Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
+#+END_SRC
+
+** Install for personal use
+
+Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then source ~.bashrc~ to refresh ~$PATH~ to notice them and put that ~Rscript~ first, which makes the package installation work.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+
+# Set up aliases
+cd ..
+rm -f R Rscript
+ln -s R-${R_VERSION}/bin/R R
+ln -s R-${R_VERSION}/bin/Rscript Rscript
+
+source ~/.bashrc
+
+cd $SCRIPTS_DIR
+./r-install-packages.sh
+#+END_SRC
+
+** Install system-wide
+
+R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+sudo make install
+
+sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
+#+END_SRC
+
+* Setup: Ruby
+
+#+NAME: RUBY_VERSION
+| 2.5.0 |
+
+** Requirements
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
+sudo apt-get build-dep ruby
+#+END_SRC
+
+** Install rbenv for personal use
+
+TODO: Don't delete =rbenv=, skip cloning it if it's already there.
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-rbenv.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+rm -rf ~/.rbenv/
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+source ~/.bashrc
+rbenv install --verbose $RUBY_VERSION
+rbenv global $RUBY_VERSION
+gem install marc nokogiri sqlite3 rubocop backup bundler jekyll t rubyul
+echo "Now run bundler install where needed."
+#+END_SRC
+
+** Install Ruby system-wide
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+mkdir -p /usr/local/src/ruby
+cd /usr/local/src/ruby
+
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.5/ruby-${RUBY_VERSION}.tar.gz
+tar xzvf ruby-${RUBY_VERSION}.tar.gz
+cd ruby-${RUBY_VERSION}
+
+./configure
+make
+
+sudo make install
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul
+
+echo "Now run bundler install where needed."
+#+END_SRC
+
+* Machines
+
+** localhost
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results output
+cp -r dotfiles ~/
+cd ~/dotfiles/
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+** music
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:wtd@music:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+*** Synchronize install scripts
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $script_dir/ music:$script_dir/
+#+END_SRC
+
+*** Install
+
+#+BEGIN_SRC shell :dir /music:conforguration_scripts/ :results silent
+./emacs-install-requirements.sh
+./emacs-install-from-source.sh
+#+END_SRC
 
 ** pair
 

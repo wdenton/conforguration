@@ -216,7 +216,7 @@ function exifwipe {
 # My SanDisk Clip Sport can't play 24-bit FLAC files
 function sansify() {
     for FILE in "$@"; do
-	sox "${FILE}" --bits 16 "16-${FILE}"
+	sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
 	rm "$FILE"
     done
 }
