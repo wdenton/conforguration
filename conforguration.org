@@ -216,6 +216,16 @@ gem install marc nokogiri sqlite3 rubocop backup bundler jekyll t rubyul
 echo "Now run bundler install where needed."
 #+END_SRC
 
+To upgrade rbenv:
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-upgrade-rbenv.sh :shebang "#!/bin/bash"
+cd ~/.rbenv/
+git pull
+cd plugins/ruby-build
+git pull
+#+END_SRC
+
+
 ** Install Ruby system-wide
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
