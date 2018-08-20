@@ -193,7 +193,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 * Setup: Ruby
 
 #+NAME: RUBY_VERSION
-| 2.5.0 |
+| 2.5.1 |
 
 ** Requirements
 
