@@ -212,7 +212,7 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 source ~/.bashrc
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-gem install marc nokogiri sqlite3 rubocop backup bundler jekyll t rubyul
+gem install marc nokogiri sqlite3 rubocop backup bundler jekyll t rubyul docopt
 echo "Now run bundler install where needed."
 #+END_SRC
 
@@ -224,7 +224,6 @@ git pull
 cd plugins/ruby-build
 git pull
 #+END_SRC
-
 
 ** Install Ruby system-wide
 
@@ -240,7 +239,7 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt
 
 echo "Now run bundler install where needed."
 #+END_SRC
