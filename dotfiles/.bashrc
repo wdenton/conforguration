@@ -4,7 +4,6 @@
 
 umask 022
 
-PAGER=less
 export EDITOR=nano
 export VISUAL=nano
 
@@ -128,8 +127,6 @@ PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 
 alias f='finger -l'
 alias grep='grep --color=auto'
-alias more='less'
-alias mroe='more'
 alias o='libreoffice'
 alias pi='alpine -i'
 alias please='sudo'
@@ -166,6 +163,21 @@ if [ "$TERM" = 'xterm' ] || [ "$TERM" = 'rxvt' ] || [ "$TERM" = 'xterm-256color'
 then
     export PROMPT_COMMAND='echo -ne "\033]2;"`whoami`@`hostname -s`"\007"'
 fi
+
+####
+#### Paging and less and more
+####
+
+# Requires GNU source-highlight
+# $ sudo apt install libsource-highlight-common source-highlight
+
+alias more='less'
+alias mroe='more'
+
+export PAGER=less
+
+export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+export LESS=' -R '
 
 ####
 #### Small command-line functions and helpers
