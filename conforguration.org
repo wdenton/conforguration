@@ -313,6 +313,20 @@ rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
 
 #+RESULTS:
 
+** shell2
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ shell2:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:wtd@shell2:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
 ** ares
 
 *** Dotfiles
