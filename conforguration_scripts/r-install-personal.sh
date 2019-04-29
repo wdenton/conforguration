@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset R_VERSION
-declare -a R_VERSION=( '3.5.1' )
+declare -a R_VERSION=( '3.6.0' )
 SCRIPTS_DIR=$PWD
 cd /usr/local/src/R
 
