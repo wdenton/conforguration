@@ -147,7 +147,7 @@ if ! [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
   tar xzvf R-$R_VERSION.tar.gz
   # Compile
   cd R-$R_VERSION
-  ./configure
+  ./configure --enable-R-shlib
   make && make check
 else
   echo "Using existing R-${R_VERSION} source ..."
