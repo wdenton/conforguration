@@ -250,6 +250,12 @@ function vpm() {
 	"BBC Radio Four Extra")
 	    mpv http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4extra_mf_p
 	    ;;
+	"CBC Radio One")
+	    mpv http://cbc_r1_tor.akacast.akamaistream.net/7/632/451661/v1/rc.akacast.akamaistream.net/cbc_r1_tor
+	    ;;
+	"CBC Radio Two")
+	    mpv http://cbc_r2_tor.akacast.akamaistream.net/7/364/451661/v1/rc.akacast.akamaistream.net/cbc_r2_tor
+	    ;;
 	"Radio Aporee")
 	    mpv http://radio.aporee.org:8000/aporee_high.m3u
 	    ;;
