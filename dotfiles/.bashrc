@@ -238,8 +238,7 @@ function vpm() {
     NAME=$1
     if [ -z "$NAME" ]
     then
-	echo "Specify stream to play"
-	exit
+	echo "Specify stream to play ('type vpm' to see list)"
     fi
     case $NAME in
 	"BBC Radio Three")
