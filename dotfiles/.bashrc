@@ -233,47 +233,6 @@ function sansify() {
     done
 }
 
-# Listen to streaming sources directly (vpm is mpv backwards)
-function vpm() {
-    NAME=$1
-    if [ -z "$NAME" ]
-    then
-	echo "Specify stream to play ('type vpm' to see list)"
-    fi
-    case $NAME in
-	"BBC Radio Three")
-	    mpv http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p
-	    ;;
-	"BBC Radio Four")
-	    mpv http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4fm_mf_p
-	    ;;
-	"BBC Radio Four Extra")
-	    mpv http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4extra_mf_p
-	    ;;
-	"CBC Radio One")
-	    mpv http://cbc_r1_tor.akacast.akamaistream.net/7/632/451661/v1/rc.akacast.akamaistream.net/cbc_r1_tor
-	    ;;
-	"CBC Radio Two")
-	    mpv http://cbc_r2_tor.akacast.akamaistream.net/7/364/451661/v1/rc.akacast.akamaistream.net/cbc_r2_tor
-	    ;;
-	"Radio Aporee")
-	    mpv http://radio.aporee.org:8000/aporee_high.m3u
-	    ;;
-	"Resonance FM")
-	    mpv http://54.77.136.103:8000/resonance
-	    ;;
-	"Resonance Extra")
-	    mpv http://54.77.136.103:8000/resonance-extra
-	    ;;
-	"Soundart Radio")
-	    mpv http://icecast.commedia.org.uk:8000/soundart.mp3
-	    ;;
-	"WWOZ")
-	    mpv https://wwoz-sc.streamguys1.com/wwoz-hi.mp3
-	    ;;
-    esac
-}
-
 # Sum a list of numbers
 # E.g.
 # $ for I in *txt; do cat $I | wc -l; done | colsum
