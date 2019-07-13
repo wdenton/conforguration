@@ -112,7 +112,7 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 Change the version number as needed.
 
 #+NAME: R_VERSION
-| 3.6.0 |
+| 3.6.1 |
 
 ** Requirements
 
@@ -156,11 +156,13 @@ fi
 #+END_SRC
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
-PACKAGE_LIST="tidyverse readxl devtools RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis seriation igraph arules arulesViz tm wordcloud cluster fpc topicmodels xlsx lintr fs ggrepel geonames maps mapproj ggridges";
+PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
+xlsx lintr fs ggrepel ggridges hms docopt \
+arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \
+geonames maps mapproj rgeos sf maptools OpenStreetMap"
 for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done;
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-Rscript --vanilla -e "devtools::install_github('docopt/docopt.R')"
-Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
+# Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
 #+END_SRC
 
 ** Install for personal use
