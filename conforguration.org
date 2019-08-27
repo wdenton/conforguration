@@ -263,6 +263,20 @@ cd ~/dotfiles/
 
 #+RESULTS:
 
+** media
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ media:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:pi@media:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
 ** music
 
 *** Dotfiles
