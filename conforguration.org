@@ -75,6 +75,7 @@ drwxr-xr-x 5 wdenton wdenton  4096 Nov 28 13:17 ..
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
+sudo apt-get intall libjansson-dev valgrind
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
 sudo apt-get install texinfo install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
