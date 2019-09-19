@@ -347,15 +347,15 @@ rsync -avz --times $dotfiles_dir/ shell2:$dotfiles_dir/
 
 #+RESULTS:
 
-** wdenton
+** wdenton2
 
 *** Dotfiles
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
+rsync -avz --times $dotfiles_dir/ wdenton2:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /scp:wdenton@wdenton:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wdenton@wdenton2:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -364,7 +364,7 @@ rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $script_dir/ wdenton:$script_dir/
+rsync -avz --times $script_dir/ wdenton2:$script_dir/
 #+END_SRC
 
 *** Install
