@@ -199,7 +199,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 * Setup: Ruby
 
 #+NAME: RUBY_VERSION
-| 2.6.3 |
+| 2.6.4 |
 
 ** Requirements
 
@@ -237,7 +237,7 @@ git pull
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
-curl -LO https://cache.ruby-lang.org/pub/ruby/2.5/ruby-${RUBY_VERSION}.tar.gz
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.6/ruby-${RUBY_VERSION}.tar.gz
 tar xzvf ruby-${RUBY_VERSION}.tar.gz
 cd ruby-${RUBY_VERSION}
 
@@ -347,15 +347,15 @@ rsync -avz --times $dotfiles_dir/ shell2:$dotfiles_dir/
 
 #+RESULTS:
 
-** wdenton
+** wdenton2
 
 *** Dotfiles
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
+rsync -avz --times $dotfiles_dir/ wdenton2:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /scp:wdenton@wdenton:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wdenton@wdenton2:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
@@ -364,7 +364,7 @@ rsync -avz --times $dotfiles_dir/ wdenton:$dotfiles_dir/
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $script_dir/ wdenton:$script_dir/
+rsync -avz --times $script_dir/ wdenton2:$script_dir/
 #+END_SRC
 
 *** Install

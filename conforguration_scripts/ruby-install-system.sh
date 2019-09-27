@@ -2,11 +2,11 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '2.6.3' )
+declare -a RUBY_VERSION=( '2.6.4' )
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
-curl -LO https://cache.ruby-lang.org/pub/ruby/2.5/ruby-${RUBY_VERSION}.tar.gz
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.6/ruby-${RUBY_VERSION}.tar.gz
 tar xzvf ruby-${RUBY_VERSION}.tar.gz
 cd ruby-${RUBY_VERSION}
 
