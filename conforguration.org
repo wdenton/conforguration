@@ -123,7 +123,7 @@ The first line of requirements may be needed for R 3.3.  The ~topicmodels~ packa
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre3-dev fonts-inconsolata
-sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev
+sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev libcurl4-openssl-dev
 sudo apt-get build-dep r-base
 mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R
@@ -205,6 +205,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
+sudo apt-get install libreadline-dev
 #+END_SRC
 
 ** Install rbenv for personal use
@@ -370,7 +371,7 @@ rsync -avz --times $script_dir/ wdenton2:$script_dir/
 *** Install
 
 #+BEGIN_SRC shell :dir /scp:wdenton@wdenton:conforguration_scripts/ :results silent
-./r-install-from-source.sh
+./ruby-install-rbenv.sh
 #+END_SRC
 
 #+RESULTS:
