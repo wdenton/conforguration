@@ -28,6 +28,8 @@ Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this
 
 If you need some special environment variables on a machine, put them in ~.bash.$HOSTNAME.rc~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
+To get the dotfiles set up on the command line, run ~dotfiles/local-dotfile-setup.sh~.  That will copy everything into place.
+
 #+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
 DOTFILES=".[a-zA-Z]*"
 for DOTFILE in $DOTFILES; do
@@ -39,6 +41,12 @@ ln -s ~/.bash_profile ~/.profile
 #+END_SRC
 
 #+RESULTS:
+
+#+BEGIN_SRC shell :tangle dotfiles/local-dotfile-setup.sh :shebang "#!/bin/sh" :eval no
+cp -r ../dotfiles/ ~/
+cd ~/dotfiles/
+./dotfile-setup.sh
+#+END_SRC
 
 #+BEGIN_SRC shell :results output
 ls -al $dotfiles_dir
@@ -258,9 +266,7 @@ echo "Now run bundler install where needed."
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-cp -r dotfiles ~/
-cd ~/dotfiles/
-./dotfile-setup.sh
+dotfiles/local-dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
