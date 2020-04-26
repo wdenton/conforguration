@@ -121,7 +121,7 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 Change the version number as needed.
 
 #+NAME: R_VERSION
-| 3.6.1 |
+| 4.0.0 |
 
 ** Requirements
 
@@ -130,7 +130,7 @@ For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~,
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
-sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre3-dev fonts-inconsolata
+sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre2-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev libcurl4-openssl-dev
 sudo apt-get build-dep r-base
 mkdir -p ~/R/history/
@@ -145,23 +145,32 @@ Whether R is being installed system-wide or just for personal use, this code wil
 SCRIPTS_DIR=$PWD
 cd /usr/local/src/R
 
-# Do not: wipe this version if it is there already (just in case)
-# rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
+# If the source has been untarred already, wipe that directory
+# because we want to start fresh.
+if [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
+  echo "Removing old source directory ..."
+  rm -r R-${R_VERSION}
+fi
 
-if ! [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
-  echo "Downloading and compiling R ..."
-  sleep 1
-  # Download and uncompress
-  curl -O https://cran.hafro.is/src/base/R-3/R-${R_VERSION}.tar.gz
-  tar xzvf R-$R_VERSION.tar.gz
-  # Compile
-  cd R-$R_VERSION
-  ./configure --enable-R-shlib
-  make && make check
+# If the source tarball is there, use it, otherwise download.
+if ! [ -f "R-${R_VERSION}.tar.gz" ]; then
+  echo "Downloading R-${R_VERSION} tarball ..."
+  # Need to know the major version number, so we can get to e.g. base/R-4
+  R_MAJOR=${R_VERSION:0:1}
+  curl -O https://cran.hafro.is/src/base/R-${R_MAJOR}/R-${R_VERSION}.tar.gz
 else
-  echo "Using existing R-${R_VERSION} source ..."
+  echo "Using existing R-${R_VERSION} tarball ..."
   sleep 1
 fi
+
+# Now uncompress, configure and compile.
+echo "Uncompressing ..."
+tar xzvf R-$R_VERSION.tar.gz
+
+echo "Compiling ..."
+cd R-$R_VERSION
+./configure --enable-R-shlib
+make && make check
 #+END_SRC
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"

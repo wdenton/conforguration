@@ -2,27 +2,36 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset R_VERSION
-declare -a R_VERSION=( '3.6.1' )
+declare -a R_VERSION=( '4.0.0' )
 SCRIPTS_DIR=$PWD
 cd /usr/local/src/R
 
-# Do not: wipe this version if it is there already (just in case)
-# rm -rf R-$R_VERSION.tar.gz R-$R_VERSION
+# If the source has been untarred already, wipe that directory
+# because we want to start fresh.
+if [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
+  echo "Removing old source directory ..."
+  rm -r R-${R_VERSION}
+fi
 
-if ! [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
-  echo "Downloading and compiling R ..."
-  sleep 1
-  # Download and uncompress
-  curl -O https://cran.hafro.is/src/base/R-3/R-${R_VERSION}.tar.gz
-  tar xzvf R-$R_VERSION.tar.gz
-  # Compile
-  cd R-$R_VERSION
-  ./configure --enable-R-shlib
-  make && make check
+# If the source tarball is there, use it, otherwise download.
+if ! [ -f "R-${R_VERSION}.tar.gz" ]; then
+  echo "Downloading R-${R_VERSION} tarball ..."
+  # Need to know the major version number, so we can get to e.g. base/R-4
+  R_MAJOR=${R_VERSION:0:1}
+  curl -O https://cran.hafro.is/src/base/R-${R_MAJOR}/R-${R_VERSION}.tar.gz
 else
-  echo "Using existing R-${R_VERSION} source ..."
+  echo "Using existing R-${R_VERSION} tarball ..."
   sleep 1
 fi
+
+# Now uncompress, configure and compile.
+echo "Uncompressing ..."
+tar xzvf R-$R_VERSION.tar.gz
+
+echo "Compiling ..."
+cd R-$R_VERSION
+./configure --enable-R-shlib
+make && make check
 sudo make install
 
 sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
