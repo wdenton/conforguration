@@ -221,8 +221,10 @@ function order() {
 }
 
 # Wipe all metadata from one or more images
-function exifwipe {
-    exiftool -all= "$*"
+function exifwipe() {
+    for FILE in "$@"; do
+	exiftool -all= "$FILE"
+    done
 }
 
 # My SanDisk Clip Sport can't play 24-bit FLAC files
