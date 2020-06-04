@@ -3,3 +3,6 @@ Style/StringLiterals:
   SupportedStyles:
     - single_quotes
     - double_quotes
+
+AllCops:
+  NewCops: enable
