@@ -320,6 +320,19 @@ rsync -avz --times $script_dir/ music:$script_dir/
 ./emacs-install-requirements.sh
 ./emacs-install-from-source.sh
 #+END_SRC
+** studio
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:wtd@studio:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
 
 ** pair
 
