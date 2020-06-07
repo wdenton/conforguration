@@ -131,6 +131,7 @@ alias o='libreoffice'
 alias pi='alpine -i'
 alias please='sudo'
 alias rm="rm" # In case rm -i is set system-wide
+alias scp="scp -p"
 alias ww="curl http://wttr.in/yyz"
 alias x='xdg-open'
 
