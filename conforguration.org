@@ -275,7 +275,8 @@ echo "Now run bundler install where needed."
 *** Dotfiles
 
 #+BEGIN_SRC shell :results output
-dotfiles/local-dotfile-setup.sh
+cd dotfiles
+local-dotfile-setup.sh
 #+END_SRC
 
 #+RESULTS:
