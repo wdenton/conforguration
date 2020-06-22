@@ -150,8 +150,8 @@ alias ll='l -l'
 alias lsort='l -l -S --reverse'
 
 # Android stuff
-alias android-connect='mtpfs -o allow_other /media/Nexus7'
-alias android-disconnect='fusermount -u /media/Nexus7'
+# alias android-connect='mtpfs -o allow_other /media/Nexus7'
+# alias android-disconnect='fusermount -u /media/Nexus7'
 
 ####
 #### xterm title
@@ -318,6 +318,9 @@ PATH=$PATH:$GOPATH/bin/
 
 # Pip
 PATH=$PATH:~/.local/bin/
+
+# Rust
+PATH=$PATH:~/.cargo/bin/
 
 # My own scripts, and finally, the current directory.
 PATH=$PATH:~/bin/:.
