@@ -166,6 +166,14 @@ then
 fi
 
 ####
+#### w
+####
+
+# Make w columns wider (very useful for hostnames)
+export PROCPS_FROMLEN=40
+export PROCPS_USERLEN=12
+
+####
 #### Paging and less and more
 ####
 
