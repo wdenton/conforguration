@@ -343,7 +343,7 @@ rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
 rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /pair:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:pair:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
