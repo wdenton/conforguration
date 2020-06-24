@@ -171,9 +171,6 @@ export PROCPS_USERLEN=12
 #### More or less
 ####
 
-# Requires GNU source-highlight
-# $ sudo apt install libsource-highlight-common source-highlight
-
 alias more='less'
 alias mroe='more'
 
@@ -185,7 +182,7 @@ export PAGER=less
 # graphics files.
 # eval "$(lessfile)"
 
-export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+export LESSOPEN="| ~/.lessfilter %s"
 export LESS=' -R '
 
 ####

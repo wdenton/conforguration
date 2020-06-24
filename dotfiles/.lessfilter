@@ -2,12 +2,15 @@
 
 # Pygments: https://pygments.org/
 # sudo apt install python-pygments
-
+#
 # Full list of what pygmentize can handle can be seen with
 # pygmentize -L lexers
 
 # GNU source-highlight: https://www.gnu.org/software/src-highlite/
 # sudo apt install source-highlight
+
+# Poppler: https://poppler.freedesktop.org/
+# sudo apt install poppler-utils
 
 # Rules:
 # Prefer pygmentize, but if it's not there, use source-highlight if it's installed.
@@ -24,10 +27,10 @@ case "$1" in
 	    source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i "$1"
 	fi ;;
     *.pdf)
-	if [ -x "`which pdftotext`" ]; then pdftotext -layout "$1" -
-	else echo "No pdftotext available"; fi ;;
+	if command -v pdftotext > /dev/null 2&>1 ; then pdftotext -layout "$1" -
+	else echo "No pdftotext available; try installing poppler-utils"; fi ;;
     *)
-	# We don't handle this format.
+	# Pass through to lessfile for all the magic it can do (see .bashrc)
 	exit 1
 esac;
 
