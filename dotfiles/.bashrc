@@ -34,12 +34,6 @@ shopt -s checkwinsize
 #### Misc
 ####
 
-# "Modify the way the contents of a file are displayed in less. What
-# this means is that less can automatically open up tar files,
-# uncompress gzipped files, and even display something reasonable for
-# graphics files.
-eval "$(lessfile)"
-
 ####
 #### Prompt
 ####
@@ -174,7 +168,7 @@ export PROCPS_FROMLEN=40
 export PROCPS_USERLEN=12
 
 ####
-#### Paging and less and more
+#### More or less
 ####
 
 # Requires GNU source-highlight
@@ -184,6 +178,12 @@ alias more='less'
 alias mroe='more'
 
 export PAGER=less
+
+# "Modify the way the contents of a file are displayed in less. What
+# this means is that less can automatically open up tar files,
+# uncompress gzipped files, and even display something reasonable for
+# graphics files.
+# eval "$(lessfile)"
 
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export LESS=' -R '
@@ -226,120 +226,120 @@ function monitor() {
 
 # "| order" is very handy for counting duplicated lines in a file or listing
 function order() {
-    sort | uniq -c | sort -rn
-}
+     sort | uniq -c | sort -rn
+ }
 
-# Wipe all metadata from one or more images
-function exifwipe() {
-    for FILE in "$@"; do
-	exiftool -all= "$FILE"
-    done
-}
+ # Wipe all metadata from one or more images
+ function exifwipe() {
+     for FILE in "$@"; do
+	 exiftool -all= "$FILE"
+     done
+ }
 
-# My SanDisk Clip Sport can't play 24-bit FLAC files
-function sansify() {
-    for FILE in "$@"; do
-	sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
-	rm "$FILE"
-    done
-}
+ # My SanDisk Clip Sport can't play 24-bit FLAC files
+ function sansify() {
+     for FILE in "$@"; do
+	 sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
+	 rm "$FILE"
+     done
+ }
 
-# Sum a list of numbers
-# E.g.
-# $ for I in *txt; do cat $I | wc -l; done | colsum
-function colsum {
-    paste -s -d+ | bc --
-}
+ # Sum a list of numbers
+ # E.g.
+ # $ for I in *txt; do cat $I | wc -l; done | colsum
+ function colsum {
+     paste -s -d+ | bc --
+ }
 
-####
-#### Completions
-####
+ ####
+ #### Completions
+ ####
 
-# Git.  Can be found as part of Git source.
-source ~/.git-completion.bash
+ # Git.  Can be found as part of Git source.
+ source ~/.git-completion.bash
 
-# Bash.  Requires bash-completion package.
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
+ # Bash.  Requires bash-completion package.
+ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+     . /etc/bash_completion
+ fi
 
-####
-#### Solarized theme
-####
+ ####
+ #### Solarized theme
+ ####
 
-# Apply a solarized theme to xterms. Helps with color ls listings, etc.
-# See https://github.com/seebi/dircolors-solarized
-# I'm using dircolors.ansi-dark
-eval $(dircolors ~/.dircolors.ansi-dark)
+ # Apply a solarized theme to xterms. Helps with color ls listings, etc.
+ # See https://github.com/seebi/dircolors-solarized
+ # I'm using dircolors.ansi-dark
+ eval $(dircolors ~/.dircolors.ansi-dark)
 
-# Also use solarized theme in GNOME terminal
-# See https://github.com/sigurdga/gnome-terminal-colors-solarized
+ # Also use solarized theme in GNOME terminal
+ # See https://github.com/sigurdga/gnome-terminal-colors-solarized
 
-####
-#### Emacs-related
-####
+ ####
+ #### Emacs-related
+ ####
 
-# Open a dired window for the current directory
-dired() {
-    emacsclient -e "(dired \"$PWD\")"
-}
+ # Open a dired window for the current directory
+ dired() {
+     emacsclient -e "(dired \"$PWD\")"
+ }
 
-# Can also just use "e ." to load . in emacsclient
+ # Can also just use "e ." to load . in emacsclient
 
-####
-#### $PATH
-####
+ ####
+ #### $PATH
+ ####
 
-# Do /usr/local/bin first
-PATH=/usr/local/bin:$PATH
+ # Do /usr/local/bin first
+ PATH=/usr/local/bin:$PATH
 
-# Make sure rootly path is there
-PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+ # Make sure rootly path is there
+ PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 
-# Emacs is run from source in /usr/local/src/emacs
-PATH=/usr/local/src/emacs/src:$PATH
-alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
-alias e="emacsclient --no-wait"
+ # Emacs is run from source in /usr/local/src/emacs
+ PATH=/usr/local/src/emacs/src:$PATH
+ alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
+ alias e="emacsclient --no-wait"
 
-# Running R from source in /usr/local/src/R
-if [ -f /usr/local/src/R/R ] ; then
-    PATH=/usr/local/src/R:$PATH
-fi
+ # Running R from source in /usr/local/src/R
+ if [ -f /usr/local/src/R/R ] ; then
+     PATH=/usr/local/src/R:$PATH
+ fi
 
-# Zotero 5.0 ... if this becomes a package I won't need to
-# manage it manually
-alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
+ # Zotero 5.0 ... if this becomes a package I won't need to
+ # manage it manually
+ alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
 
-# I put ircii's irc in ~/.irc/
-PATH=$PATH:~/.irc/
+ # I put ircii's irc in ~/.irc/
+ PATH=$PATH:~/.irc/
 
-# Ruby: I'm using rbenv instead of RVM now
-# If rbenv isn't there, just default to system Ruby
-if [ -d ~/.rbenv/ ] ; then
-    PATH=$HOME/.rbenv/bin:$PATH
-    eval "$(rbenv init -)"
-fi
+ # Ruby: I'm using rbenv instead of RVM now
+ # If rbenv isn't there, just default to system Ruby
+ if [ -d ~/.rbenv/ ] ; then
+     PATH=$HOME/.rbenv/bin:$PATH
+     eval "$(rbenv init -)"
+ fi
 
-# Go (go help gopath)
-export GOPATH=~/.gopath
-PATH=$PATH:$GOPATH/bin/
+ # Go (go help gopath)
+ export GOPATH=~/.gopath
+ PATH=$PATH:$GOPATH/bin/
 
-# Pip
-PATH=$PATH:~/.local/bin/
+ # Pip
+ PATH=$PATH:~/.local/bin/
 
-# Rust
-PATH=$PATH:~/.cargo/bin/
+ # Rust
+ PATH=$PATH:~/.cargo/bin/
 
-# My own scripts, and finally, the current directory.
-PATH=$PATH:~/bin/:.
+ # My own scripts, and finally, the current directory.
+ PATH=$PATH:~/bin/:.
 
-####
-#### Machine-specific settings
-####
+ ####
+ #### Machine-specific settings
+ ####
 
-# If the machine is named dartagnan, put machine-specific environment
-# variables and settings in ~/.bash.dartagnan.rc
+ # If the machine is named dartagnan, put machine-specific environment
+ # variables and settings in ~/.bash.dartagnan.rc
 
-if [ -f ~/.bash.$HOSTNAME.rc ] ; then
-    . ~/.bash.$HOSTNAME.rc
-fi
+ if [ -f ~/.bash.$HOSTNAME.rc ] ; then
+     . ~/.bash.$HOSTNAME.rc
+ fi
