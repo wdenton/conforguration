@@ -133,14 +133,15 @@ alias x='xdg-open'
 export BLOCKSIZE=1024
 
 if [[ $(uname) == "FreeBSD" ]] ; then
-    alias ls='ls -G'
-else
-    alias ls='ls --color=auto'
+    alias ls='ls -F -G'
+else # Presumably Linux
+    alias ls='ls --classify --color=auto --quoting-style=literal'
 fi
 
-alias l='ls --classify --quoting-style=literal'
+alias l='ls'
 alias la='l --all'
 alias ll='l -l'
+alias lla='l -l --all'
 alias lsort='l -l -S --reverse'
 
 # Android stuff
@@ -267,8 +268,10 @@ function order() {
  # Apply a solarized theme to xterms. Helps with color ls listings, etc.
  # See https://github.com/seebi/dircolors-solarized
  # I'm using dircolors.ansi-dark
- eval $(dircolors ~/.dircolors.ansi-dark)
-
+ if command -v dircolors > /dev/null 2>&1
+ then
+     eval $(dircolors ~/.dircolors.ansi-dark)
+ fi
  # Also use solarized theme in GNOME terminal
  # See https://github.com/sigurdga/gnome-terminal-colors-solarized
 
