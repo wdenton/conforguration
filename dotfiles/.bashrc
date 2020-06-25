@@ -181,7 +181,7 @@ export PAGER=less
 # this means is that less can automatically open up tar files,
 # uncompress gzipped files, and even display something reasonable for
 # graphics files.
-# eval "$(lessfile)"
+eval "$(lessfile)"
 
 if command -v pygmentize > /dev/null 2>&1; then
     export LESSCOLOURIZER="pygmentize -f terminal"
@@ -189,7 +189,7 @@ elif command -v source-highlight > /dev/null 2>&1; then
     export LESSCOLOURIZER="source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i"
 fi
 
-export LESSOPEN="| ~/.lessfilter %s"
+# export LESSOPEN="| ~/.lessfilter %s"
 export LESS=' -R '
 
 ####
