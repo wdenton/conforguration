@@ -29,10 +29,10 @@ if [ -v LESSCOLOURIZER ]; then
 	    if command -v pdftotext > /dev/null 2&>1 ; then pdftotext -layout "$1" -
 	    else echo "No pdftotext available; try installing poppler-utils"; fi ;;
 	*)
-	    # Pass through to lessfile for all the magic it can do (see .bashrc)
+	    # Pass through to lessfile
 	    exit 1
     esac;
 fi
 
-# No further processing by lesspipe necessary
-exit 0
+# Hand whatever is left over to lessfile
+exit 1

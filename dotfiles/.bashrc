@@ -177,19 +177,25 @@ alias mroe='more'
 
 export PAGER=less
 
-# "Modify the way the contents of a file are displayed in less. What
-# this means is that less can automatically open up tar files,
-# uncompress gzipped files, and even display something reasonable for
-# graphics files.
-eval "$(lessfile)"
+# lessfile is a nice incantation that lets less open up tar and gz files
+# and so on and show you what's inside.
+if command -v lessfile > /dev/null 2>&1; then
+    eval "$(lessfile)"
+    # This sets LESSOPEN and will pick up on ~/.lessfilter.
+else
+    # Fall back to do the best we can.
+    export LESSOPEN="| ~/.lessfilter %s"
+fi
 
+# If any syntax highlighters are available, use them.
+# pygmentize does more, but source-highlight is still good.
 if command -v pygmentize > /dev/null 2>&1; then
     export LESSCOLOURIZER="pygmentize -f terminal"
 elif command -v source-highlight > /dev/null 2>&1; then
     export LESSCOLOURIZER="source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i"
 fi
 
-# export LESSOPEN="| ~/.lessfilter %s"
+# Pass through raw ANSI colour escape sequences.  In other words, make colourizing work.
 export LESS=' -R '
 
 ####
