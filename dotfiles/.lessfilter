@@ -26,7 +26,7 @@ if [ -v LESSCOLOURIZER ]; then
 	    Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
 	    $LESSCOLOURIZER "$1" ;;
 	*.pdf)
-	    if command -v pdftotext > /dev/null 2&>1 ; then pdftotext -layout "$1" -
+	    if command -v pdftotext > /dev/null 2>&1 ; then pdftotext -layout "$1" -
 	    else echo "No pdftotext available; try installing poppler-utils"; fi ;;
 	*)
 	    # Pass through to lessfile
