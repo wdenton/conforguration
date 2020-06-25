@@ -43,20 +43,20 @@ shopt -s checkwinsize
 # Colours
 # http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
 RED="\[\033[0;31m\]"
-LIGHT_RED="\[\033[1;31m\]"
-YELLOW="\[\033[1;33m\]"
+# LIGHT_RED="\[\033[1;31m\]"
+# YELLOW="\[\033[1;33m\]"
 GREEN="\[\033[0;32m\]"
-LIGHT_GREEN="\[\033[1;32m\]"
-CYAN="\[\033[0;36m\]"
-LIGHT_CYAN="\[\033[1;36m\]"
+# LIGHT_GREEN="\[\033[1;32m\]"
+# CYAN="\[\033[0;36m\]"
+# LIGHT_CYAN="\[\033[1;36m\]"
 BLUE="\[\033[0;34m\]"
-LIGHT_BLUE="\[\033[1;34m\]"
+# LIGHT_BLUE="\[\033[1;34m\]"
 PURPLE="\[\033[0;35m\]"
 
-WHITE='\e[0;37m'
-LIGHT_GRAY="\[\033[0;37m\]"
-GRAY="\[\033[1;30m\]"
-BLACK="\[\033[0;30m\]"
+# WHITE='\e[0;37m'
+# LIGHT_GRAY="\[\033[0;37m\]"
+# GRAY="\[\033[1;30m\]"
+# BLACK="\[\033[0;30m\]"
 
 NO_COLOUR="\[\033[0m\]"
 
@@ -112,7 +112,7 @@ PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 
 # # I need to remap some keys on marcus, my Lenovo X240
 # if [ -f ~/.Xmodmap ]; then
-# xmodmap ~/.Xmodmap
+#     xmodmap ~/.Xmodmap
 # fi
 
 ####
@@ -204,7 +204,7 @@ export LESS=' -R '
 
 # Quick command-line Wikipedia lookup
 function wp () {
-    terms=$@
+    terms=$*
     lynx "https://en.wikipedia.org/wiki/$terms"
     # w3m "http://en.wikipedia.org/wiki/$terms"
 }
@@ -240,118 +240,120 @@ function order() {
 }
 
 # Wipe all metadata from one or more images
- function exifwipe() {
-     for FILE in "$@"; do
-	 exiftool -all= "$FILE"
-     done
- }
+function exifwipe() {
+    for FILE in "$@"; do
+	exiftool -all= "$FILE"
+    done
+}
 
- # My SanDisk Clip Sport can't play 24-bit FLAC files
- function sansify() {
-     for FILE in "$@"; do
-	 sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
-	 rm "$FILE"
-     done
- }
+# My SanDisk Clip Sport can't play 24-bit FLAC files
+function sansify() {
+    for FILE in "$@"; do
+	sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
+	rm "$FILE"
+    done
+}
 
- # Sum a list of numbers
- # E.g.
- # $ for I in *txt; do cat $I | wc -l; done | colsum
- function colsum {
-     paste -s -d+ | bc --
- }
+# Sum a list of numbers
+# E.g.
+# $ for I in *txt; do cat $I | wc -l; done | colsum
+function colsum {
+    paste -s -d+ | bc --
+}
 
- ####
- #### Completions
- ####
+####
+#### Completions
+####
 
- # Git.  Can be found as part of Git source.
- source ~/.git-completion.bash
+# Git.  Can be found as part of Git source.
+# shellcheck source=/dev/null
+source ~/.git-completion.bash
 
- # Bash.  Requires bash-completion package.
- if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-     . /etc/bash_completion
- fi
+# Bash.  Requires bash-completion package.
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
 
- ####
- #### Solarized theme
- ####
+####
+#### Solarized theme
+####
 
- # Apply a solarized theme to xterms. Helps with color ls listings, etc.
- # See https://github.com/seebi/dircolors-solarized
- # I'm using dircolors.ansi-dark
- if command -v dircolors > /dev/null 2>&1
- then
-     eval $(dircolors ~/.dircolors.ansi-dark)
- fi
- # Also use solarized theme in GNOME terminal
- # See https://github.com/sigurdga/gnome-terminal-colors-solarized
+# Apply a solarized theme to xterms. Helps with color ls listings, etc.
+# See https://github.com/seebi/dircolors-solarized
+# I'm using dircolors.ansi-dark
+if command -v dircolors > /dev/null 2>&1
+then
+    eval "$(dircolors ~/.dircolors.ansi-dark)"
+fi
+# Also use solarized theme in GNOME terminal
+# See https://github.com/sigurdga/gnome-terminal-colors-solarized
 
- ####
- #### Emacs-related
- ####
+####
+#### Emacs-related
+####
 
- # Open a dired window for the current directory
- dired() {
-     emacsclient -e "(dired \"$PWD\")"
- }
+# Open a dired window for the current directory
+dired() {
+    emacsclient -e "(dired \"$PWD\")"
+}
 
- # Can also just use "e ." to load . in emacsclient
+# Can also just use "e ." to load . in emacsclient
 
- ####
- #### $PATH
- ####
+####
+#### $PATH
+####
 
- # Do /usr/local/bin first
- PATH=/usr/local/bin:$PATH
+# Do /usr/local/bin first
+PATH=/usr/local/bin:$PATH
 
- # Make sure rootly path is there
- PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+# Make sure rootly path is there
+PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 
- # Emacs is run from source in /usr/local/src/emacs
- PATH=/usr/local/src/emacs/src:$PATH
- alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
- alias e="emacsclient --no-wait"
+# Emacs is run from source in /usr/local/src/emacs
+PATH=/usr/local/src/emacs/src:$PATH
+alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
+alias e="emacsclient --no-wait"
 
- # Running R from source in /usr/local/src/R
- if [ -f /usr/local/src/R/R ] ; then
-     PATH=/usr/local/src/R:$PATH
- fi
+# Running R from source in /usr/local/src/R
+if [ -f /usr/local/src/R/R ] ; then
+    PATH=/usr/local/src/R:$PATH
+fi
 
- # Zotero 5.0 ... if this becomes a package I won't need to
- # manage it manually
- alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
+# Zotero 5.0 ... if this becomes a package I won't need to
+# manage it manually
+alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
 
- # I put ircii's irc in ~/.irc/
- PATH=$PATH:~/.irc/
+# I put ircii's irc in ~/.irc/
+PATH=$PATH:~/.irc/
 
- # Ruby: I'm using rbenv instead of RVM now
- # If rbenv isn't there, just default to system Ruby
- if [ -d ~/.rbenv/ ] ; then
-     PATH=$HOME/.rbenv/bin:$PATH
-     eval "$(rbenv init -)"
- fi
+# Ruby: I'm using rbenv instead of RVM now
+# If rbenv isn't there, just default to system Ruby
+if [ -d ~/.rbenv/ ] ; then
+    PATH=$HOME/.rbenv/bin:$PATH
+    eval "$(rbenv init -)"
+fi
 
- # Go (go help gopath)
- export GOPATH=~/.gopath
- PATH=$PATH:$GOPATH/bin/
+# Go (go help gopath)
+export GOPATH=~/.gopath
+PATH=$PATH:$GOPATH/bin/
 
- # Pip
- PATH=$PATH:~/.local/bin/
+# Pip
+PATH=$PATH:~/.local/bin/
 
- # Rust
- PATH=$PATH:~/.cargo/bin/
+# Rust
+PATH=$PATH:~/.cargo/bin/
 
- # My own scripts, and finally, the current directory.
- PATH=$PATH:~/bin/:.
+# My own scripts, and finally, the current directory.
+PATH=$PATH:~/bin/:.
 
- ####
- #### Machine-specific settings
- ####
+####
+#### Machine-specific settings
+####
 
- # If the machine is named dartagnan, put machine-specific environment
- # variables and settings in ~/.bash.dartagnan.rc
+# If the machine is named dartagnan, put machine-specific environment
+# variables and settings in ~/.bash.dartagnan.rc
 
- if [ -f ~/.bash.$HOSTNAME.rc ] ; then
-     . ~/.bash.$HOSTNAME.rc
- fi
+if [ -f ~/.bash."$HOSTNAME".rc ] ; then
+    # shellcheck source=/dev/null
+    . ~/.bash.$HOSTNAME.rc
+fi
