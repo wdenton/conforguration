@@ -183,6 +183,12 @@ export PAGER=less
 # graphics files.
 # eval "$(lessfile)"
 
+if command -v pygmentize > /dev/null 2>&1; then
+    export LESSCOLOURIZER="pygmentize -f terminal"
+elif command -v source-highlight > /dev/null 2>&1; then
+    export LESSCOLOURIZER="source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i"
+fi
+
 export LESSOPEN="| ~/.lessfilter %s"
 export LESS=' -R '
 
@@ -224,10 +230,10 @@ function monitor() {
 
 # "| order" is very handy for counting duplicated lines in a file or listing
 function order() {
-     sort | uniq -c | sort -rn
- }
+    sort | uniq -c | sort -rn
+}
 
- # Wipe all metadata from one or more images
+# Wipe all metadata from one or more images
  function exifwipe() {
      for FILE in "$@"; do
 	 exiftool -all= "$FILE"

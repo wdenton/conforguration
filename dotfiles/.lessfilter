@@ -16,23 +16,23 @@
 # Prefer pygmentize, but if it's not there, use source-highlight if it's installed.
 # For PDFs, feed to pdftotext if available
 
-case "$1" in
-    # Could have .bashrc in here, but mine seems to mess it up, perhaps because of escape sequences.
-    # pygmentize can handle many more file types; this is just what I want.
-    .bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.ini|*.js|*.json|*.jsonld|\
-	Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
-	if command -v pygmentize > /dev/null 2>&1; then
-	    pygmentize -f terminal "$1"
-	elif command -v source-highlight > /dev/null 2>&1; then
-	    source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i "$1"
-	fi ;;
-    *.pdf)
-	if command -v pdftotext > /dev/null 2&>1 ; then pdftotext -layout "$1" -
-	else echo "No pdftotext available; try installing poppler-utils"; fi ;;
-    *)
-	# Pass through to lessfile for all the magic it can do (see .bashrc)
-	exit 1
-esac;
+# LESSCOLOURIZER is defined in .bashrc, where possible.
+
+if [ -v LESSCOLOURIZER ]; then
+    case "$1" in
+	# Could have .bashrc in here, but mine seems to mess it up, perhaps because of escape sequences.
+	# pygmentize can handle many more file types; this is just what I want.
+	.bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.ini|*.js|*.json|*.jsonld|\
+	    Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
+	    $LESSCOLOURIZER "$1" ;;
+	*.pdf)
+	    if command -v pdftotext > /dev/null 2&>1 ; then pdftotext -layout "$1" -
+	    else echo "No pdftotext available; try installing poppler-utils"; fi ;;
+	*)
+	    # Pass through to lessfile for all the magic it can do (see .bashrc)
+	    exit 1
+    esac;
+fi
 
 # No further processing by lesspipe necessary
 exit 0
