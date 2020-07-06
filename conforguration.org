@@ -238,7 +238,7 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 source ~/.bashrc
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-gem install marc nokogiri sqlite3 rubocop bundler jekyll rubyul docopt
+gem install marc nokogiri sqlite3 rubocop bundler jekyll rubyul docopt pry pry-doc
 echo "Now run bundler install where needed."
 #+END_SRC
 
@@ -257,7 +257,7 @@ git pull
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
-curl -LO https://cache.ruby-lang.org/pub/ruby/2.6/ruby-${RUBY_VERSION}.tar.gz
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.7/ruby-${RUBY_VERSION}.tar.gz
 tar xzvf ruby-${RUBY_VERSION}.tar.gz
 cd ruby-${RUBY_VERSION}
 
@@ -265,7 +265,7 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc
 
 echo "Now run bundler install where needed."
 #+END_SRC
@@ -292,6 +292,20 @@ rsync -avz --times $dotfiles_dir/ pihole:$dotfiles_dir/
 #+END_SRC
 
 #+BEGIN_SRC shell :dir /scp:pi@pihole:dotfiles/ :results output
+./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+** tor
+
+*** Dotfiles
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $dotfiles_dir/ tor:$dotfiles_dir/
+#+END_SRC
+
+#+BEGIN_SRC shell :dir /scp:pi@tor:dotfiles/ :results output
 ./dotfile-setup.sh
 #+END_SRC
 
