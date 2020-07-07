@@ -19,8 +19,16 @@ HISTCONTROL=ignoreboth
 # Ignore these commands
 HISTIGNORE="ls:[bf]g:exit"
 
+# Number of commands to remember, and the file size of .bash_history.
+HISTSIZE=10000
+HISTFILESIZE=1000000
+
 # Append to the history file, don't overwrite it.
 shopt -s histappend
+
+# Append and reload the history after each command, so the full
+# history is available in all shells simultaneously.
+PROMPT_COMMAND="history -a; history -n"
 
 ####
 #### Window size
