@@ -6,7 +6,7 @@ declare -a RUBY_VERSION=( '2.7.1' )
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
-curl -LO https://cache.ruby-lang.org/pub/ruby/2.6/ruby-${RUBY_VERSION}.tar.gz
+curl -LO https://cache.ruby-lang.org/pub/ruby/2.7/ruby-${RUBY_VERSION}.tar.gz
 tar xzvf ruby-${RUBY_VERSION}.tar.gz
 cd ruby-${RUBY_VERSION}
 
@@ -14,6 +14,6 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc
 
 echo "Now run bundler install where needed."
