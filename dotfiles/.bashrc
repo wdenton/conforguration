@@ -17,7 +17,7 @@ export WWW_HOME=https://duckduckgo.com/
 HISTCONTROL=ignoreboth
 
 # Ignore these commands
-HISTIGNORE="ls:[bf]g:exit"
+HISTIGNORE="cd:df:pwd:[bf]g:exit:history"
 
 # Number of commands to remember, and the file size of .bash_history.
 HISTSIZE=10000

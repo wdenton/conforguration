@@ -10,8 +10,8 @@ options(repos = r)
 rm(r)
 
 ## Junk fills up in this directory ... need to clean out the 0-byte files.
-Sys.setenv(R_HISTSIZE='0')
-sink(file = paste('~/R/history/r-log-', strftime(Sys.time(), '%F %H:%M:%OS9'), sep = ''), split=T)
+Sys.setenv(R_HISTSIZE = '0')
+## sink(file = paste('~/R/history/r-log-', strftime(Sys.time(), '%F %H:%M:%OS9'), sep = ''), split=T)
 
 ## Automatically convert strings to factor variables in a data.frame?
 options(stringsAsFactors = FALSE)
@@ -22,9 +22,9 @@ q <- function (save="no", ...) {
 }
 
 ## No menu popup, use the console
-options(menu.graphics=FALSE)
+options(menu.graphics = FALSE)
 
 ## Tab completion on library() and require()
-utils::rc.settings(ipck=TRUE)
+utils::rc.settings(ipck = TRUE)
 
-options(prompt="ℝ> ")
+## options(prompt="ℝ> ")
