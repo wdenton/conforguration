@@ -179,7 +179,7 @@ make && make check
 PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
 xlsx lintr fs ggrepel ggridges hms docopt skimr\
 arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \
-geonames maps mapproj rgeos sf maptools OpenStreetMap geosphere"
+geonames maps mapproj rgeos sf maptools OpenStreetMap geosphere osmdata"
 for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://cran.hafro.is/'))"; done;
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 # Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
@@ -218,7 +218,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 * Setup: Ruby
 
 #+NAME: RUBY_VERSION
-| 2.7.1 |
+| 2.7.2 |
 
 ** Requirements
 
@@ -379,16 +379,29 @@ rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
 
 #+RESULTS:
 
-** shell2
+** shell3
 
 *** Dotfiles
-
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ shell2:$dotfiles_dir/
+rsync -avz --times $dotfiles_dir/ shell3:$dotfiles_dir/
 #+END_SRC
 
-#+BEGIN_SRC shell :dir /scp:wtd@shell2:dotfiles/ :results output
+#+BEGIN_SRC shell :dir /scp:wtd@shell3:dotfiles/ :results output
 ./dotfile-setup.sh
+#+END_SRC
+
+#+RESULTS:
+
+*** Synchronize install scripts
+
+#+BEGIN_SRC shell :results silent
+rsync -avz --times $script_dir/ shell3:$script_dir/
+#+END_SRC
+
+*** Install
+
+#+BEGIN_SRC shell :dir /scp:wtd@shell3:conforguration_scripts/ :results silent
+./ruby-install-rbenv.sh
 #+END_SRC
 
 #+RESULTS:

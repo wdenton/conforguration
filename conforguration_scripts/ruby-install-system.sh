@@ -2,7 +2,7 @@
 script_dir='conforguration_scripts'
 dotfiles_dir='dotfiles'
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '2.7.1' )
+declare -a RUBY_VERSION=( '2.7.2' )
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
