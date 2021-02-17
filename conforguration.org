@@ -218,7 +218,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 * Setup: Ruby
 
 #+NAME: RUBY_VERSION
-| 2.7.2 |
+| 3.0.0 |
 
 ** Requirements
 
@@ -231,7 +231,7 @@ sudo apt-get install libreadline-dev
 
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-rbenv.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-with-rbenv.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rm -rf ~/.rbenv/
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
