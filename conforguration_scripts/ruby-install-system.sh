@@ -14,6 +14,6 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc
+sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http
 
 echo "Now run bundler install where needed."
