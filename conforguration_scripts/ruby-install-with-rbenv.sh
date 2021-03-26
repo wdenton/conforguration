@@ -9,5 +9,5 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 source ~/.bashrc
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-gem install marc nokogiri sqlite3 rubocop bundler jekyll rubyul docopt pry pry-doc http
+./ruby-install-gems.rb
 echo "Now run bundler install where needed."

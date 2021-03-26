@@ -228,7 +228,7 @@ sudo apt-get build-dep ruby
 sudo apt-get install libreadline-dev
 #+END_SRC
 
-** Install rbenv for personal use
+** Install with rbenv for personal use
 
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
@@ -239,7 +239,7 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 source ~/.bashrc
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-gem install marc nokogiri sqlite3 rubocop bundler jekyll rubyul docopt pry pry-doc http
+./ruby-install-gems.rb
 echo "Now run bundler install where needed."
 #+END_SRC
 
@@ -266,9 +266,14 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http
+sudo ./ruby-install-gems.rb
 
 echo "Now run bundler install where needed."
+#+END_SRC
+** Install gems
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash"
+gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http awesome_print
 #+END_SRC
 
 * Machines
