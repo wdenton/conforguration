@@ -12,6 +12,55 @@
 
 * Bash
 
+My shell is [[https://www.gnu.org/software/bash/][Bash]].  I've looked at other ones, and some do fancy impressive things, but my shell needs are fairly simple.
+
+I've forgotten the intricacies of when a =.profile= is used and how interactive and non-interactive shells handle things differently, but what I have works for me.
+
+** Profile (=.bash_profile=)
+:PROPERTIES:
+:header-args: :tangle /tmp/bash_profile
+:END:
+
+First, I set [[https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html#Locale-Environment-Variables][locale environment variables]] to say I want to use English, specifically Canadian English.
+
+#+begin_src shell
+export LANG=en_CA.UTF-8
+export LC_ALL=en_CA.UTF-8
+#+end_src
+
+If these locales aren't available---perhaps because this is running on a new machine---then I need to run these to configure it.  This is only necessary once.
+
+#+begin_src shell :tangle no
+sudo locale-gen en_CA.UTF-8
+sudo update-locale LANG=en_CA.UTF-8
+#+end_src
+
+Then the =.bashrc= is processed.
+
+#+begin_src shell
+source ~/.bashrc
+#+end_src
+
+** Config =.bashrc=
+
+** Logout (=.bash_logout=)
+:PROPERTIES:
+:header-args: :tangle /tmp/bash_logout
+:END:
+
+"When an interactive login shell exits, or a non-interactive login shell executes the exit builtin command, bash reads and executes commands
+from the file =~/.bash_logout=, if it exists," says the =bash= man page.
+
+The only command I have here is one I pasted in from I don't know where.  It clears the console when I log out, for privacy.  It's been years since I logged in through a console to run X, but who knows.
+
+=SHLVL= is "incremented by one each time an instance of =bash= is started," so this runs if the shell being exited is not a sub-shell of another.
+
+#+begin_src shell
+if [ "$SHLVL" = 1 ]; then
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+fi
+#+end_src
+
 * Git
 
 ** Completion
