@@ -41,7 +41,525 @@ Then the =.bashrc= is processed.
 source ~/.bashrc
 #+end_src
 
-** Config =.bashrc=
+** Config (=.bashrc=)
+:PROPERTIES:
+:header-args: :tangle /tmp/bashrc
+:END:
+
+*** File permissions
+
+Set the default "user file-created mask" to 022, so that by default regular files are created 644 (=-rw-r--r--=) and executables 755 (=-rwxr-xr-x=)
+
+#+begin_src shell
+umask 022
+#+end_src
+
+*** Editing
+
+My preferred editor is Emacs (of course) but I define these so that if someone pops up an editor it doesn't use vi.
+
+#+begin_src shell
+export EDITOR=nano
+export VISUAL=nano
+#+end_src
+
+*** Web
+
+The only thing I ever use that pays attention to =WWW_HOME= is lynx, I think, but [[https://duckduckgo.com/][DuckDuckGo]] is a good default first page to load if something is going to try.
+
+#+begin_src shell
+export WWW_HOME=https://duckduckgo.com/
+#+end_src
+
+*** History
+
+Don't put duplicate lines or lines starting with space in the history.
+
+#+begin_src shell
+HISTCONTROL=ignoreboth
+#+end_src
+
+The commands listed here will be ignored by history.  If I run =cd= and then hit <up>, =cd= doesn't reappear.
+
+#+begin_src shell
+HISTIGNORE="cd:df:pwd:[bf]g:exit:history"
+#+end_src
+
+Set the number of commands to remember, and the file size of =.bash_history=.
+
+#+begin_src shell
+HISTSIZE=10000
+HISTFILESIZE=1000000
+#+end_src
+
+Append to the history file, don't overwrite it.
+
+#+begin_src shell
+shopt -s histappend
+#+end_src
+
+Append and reload the history after each command, so the full history is available in all shells simultaneously.  But watch out!  If I'm being active in different shells at the same time then I need to be careful about which command reappears with <up>.
+
+#+begin_src shell
+PROMPT_COMMAND="history -a; history -n"
+#+end_src
+
+*** Terminals
+
+Check the terminal window size after each command and, if necessary, update the values of LINES and COLUMNS.
+
+#+begin_src shell
+shopt -s checkwinsize
+#+end_src
+
+Puts wtd@hostname (or whatever) in the title bar of the terminal window.  For it to change when you login to another machine, it needs to be in your =.bashrc= there too.  Very handy when using tabs.
+
+#+begin_src shell
+if [ "$TERM" = 'xterm' ] || [ "$TERM" = 'rxvt' ] || [ "$TERM" = 'xterm-256color' ]
+then
+    export PROMPT_COMMAND='echo -ne "\033]2;"`whoami`@`hostname -s`"\007"'
+fi
+#+end_src
+
+*** Solarized theme
+
+Apply a [[https://ethanschoonover.com/solarized/][Solarized]] theme to color ls listings.  Taken from [[https://github.com/seebi/dircolors-solarized][dircolors-solarized]].  I'm using =dircolors.ansi-dark=.
+
+#+begin_src shell
+if command -v dircolors > /dev/null 2>&1
+then
+    eval "$(dircolors ~/.dircolors.ansi-dark)"
+fi
+#+end_src
+# Also use solarized theme in GNOME terminal
+# See https://github.com/sigurdga/gnome-terminal-colors-solarized
+
+*** Prompt
+
+The [[https://xta.github.io/HalloweenBash/][Bash Profile Generator]] is very useful here.  For colours, see also [[https://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html][the colours section]] from this ancient [[https://tldp.org/HOWTO/Bash-Prompt-HOWTO/][Bash Prompt HOWTO]].
+
+First, set a bunch of colours, some of which I don't use.
+
+#+begin_src shell
+RED="\[\033[0;31m\]"
+# LIGHT_RED="\[\033[1;31m\]"
+# YELLOW="\[\033[1;33m\]"
+GREEN="\[\033[0;32m\]"
+# LIGHT_GREEN="\[\033[1;32m\]"
+# CYAN="\[\033[0;36m\]"
+# LIGHT_CYAN="\[\033[1;36m\]"
+BLUE="\[\033[0;34m\]"
+# LIGHT_BLUE="\[\033[1;34m\]"
+PURPLE="\[\033[0;35m\]"
+
+# WHITE='\e[0;37m'
+# LIGHT_GRAY="\[\033[0;37m\]"
+# GRAY="\[\033[1;30m\]"
+# BLACK="\[\033[0;30m\]"
+
+NO_COLOUR="\[\033[0m\]"
+#+end_src
+
+I use a blue prompt on my home machine(s), green on my hosted shell server, and red elsewhere.
+
+#+begin_src shell
+case $HOSTNAME in
+    marcus)
+	PROMPT_COLOUR=$BLUE
+	;;
+    shell3)
+	PROMPT_COLOUR=$GREEN
+	;;
+    ,*)
+	PROMPT_COLOUR=$RED
+esac
+#+end_src
+
+Root is purple.
+
+#+begin_src shell
+if [[ ${EUID} == 0 ]] ; then
+    PROMPT_COLOUR=$PURPLE
+fi
+#+end_src
+
+Now I can define the actual prompt.  Note that =\$= is # if root, $ otherwise; it needs to be escaped.
+
+First a prompt I don't use, but it's good to keep as a reference.
+
+#+begin_example
+┌─[07:47 PM]─[wtd@marcus:~]
+└─> $
+#+end_example
+
+#+begin_src shell :tangle no
+export PS1="\342\224\214\342\224\200[\@]\342\224\200[\u@\h:\w]\n\342\224\224\342\224\200> \\$ "
+#+end_example
+
+Then the prompt I was using until I move this into Org.
+
+#+begin_example
+┌─[marcus]─[~/src/conforguration/dotfiles]
+└─> $
+#+end_example
+
+#+begin_src shell :tangle no
+PS1="\342\224\214\342\224\200[\h]\342\224\200[\w]\n\342\224\224\342\224\200> \\$ "
+#+end_src
+
+I simplified it a bit and discovered I can use Unicode characters instead of those ugly escape characters!
+
+#+begin_example
+┌─[marcus]─[~/src/conforguration/dotfiles]
+└─$
+#+end_example
+
+#+begin_src shell
+PS1="┌─[\h]─[\w]\n└─\\$ "
+#+end_src
+
+Set the prompt to be the colour I want.
+
+#+begin_src shell
+PS1="${PROMPT_COLOUR}${PS1}${NO_COLOUR}"
+#+end_src
+
+Glue the prompt to always go to the first column ([[https://jonisalonen.com/2012/your-bash-prompt-needs-this/][source]]).
+
+#+begin_src shell
+PS1="\[\033[G\]$PS1"
+#+end_src
+
+If I'm in a dumb terminal (when does that happen?) then use a very basic prompt.
+
+#+begin_src shell
+if [[ "$TERM" == "dumb" ]] ; then
+    PS1="$ "
+fi
+#+end_src
+
+Do I ever see a secondary prompt?  I'm not sure.
+
+#+begin_src shell
+PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
+#+end_src
+
+*** Key remapping
+
+I used to need to remap some keys on my Lenovo X240, but whatever the problem was, I figured it out some other way, so this isn't needed.
+
+#+begin_src shell tangle: no
+if [ -f ~/.Xmodmap ]; then
+    xmodmap ~/.Xmodmap
+fi
+#+end_src
+
+*** Command aliases
+
+Also use colours when grepping.
+
+#+begin_src shell
+alias grep='grep --color=auto'
+#+end_src
+
+Call up LibreOffice with just =o file=.
+
+#+begin_src shell
+alias o='libreoffice'
+#+end_src
+
+Open up [[https://alpine.x10host.com/][Alpine]] and go right to the inbox.
+
+#+begin_src shell
+alias pi='alpine -i'
+#+end_src
+
+Be polite.
+
+#+begin_src shell
+alias please='sudo'
+#+end_src
+
+In case =rm -i= is set system-wide.
+
+#+begin_src shell
+alias rm="rm"
+#+end_src
+
+Always preserve timestamps when using =scp=.
+
+#+begin_src shell
+alias scp="scp -p"
+#+end_src
+
+Get the weather with [[https://github.com/chubin/wttr.in][wttr.in]].
+
+#+begin_src shell
+alias ww="curl https://wttr.in/yyz"
+#+end_src
+
+Open any file in the default application with just =x file=.
+
+#+begin_src shell
+alias x='xdg-open'
+#+end_src
+
+*** ls
+
+Count in proper kilobytes.
+
+#+begin_src shell
+export BLOCKSIZE=1024
+#+end_src
+
+Generally I'm on Linux machines, but if I'm on a FreeBSD box it has a different ls with different options, so I need to use a different alias to get colours.
+
+#+begin_src shell
+if [[ $(uname) == "FreeBSD" ]] ; then
+    alias ls='ls -F -G'
+else # Presumably Linux
+    alias ls='ls --classify --color=auto --quoting-style=literal'
+fi
+#+end_src
+
+Various short forms so I never have to actually type both letters of =ls=.
+
+#+begin_src
+alias l='ls'
+alias la='l --all'
+alias ll='l -l'
+alias lla='l -l --all'
+alias lsort='l -l -S --reverse'
+#+end_src
+
+*** w
+
+Make =w= columns wider (very useful for hostnames).
+
+#+begin_src shell
+export PROCPS_FROMLEN=40
+export PROCPS_USERLEN=12
+#+end_src
+
+*** More or less
+
+I always want to use =less=, but I'm used to typing =more=.
+
+#+begin_src shell
+alias more='less'
+alias mroe='more'
+export PAGER=less
+#+end_src
+
+Pass through raw ANSI colour escape sequences.  In other words, make colourizing work.
+
+#+begin_src shell
+export LESS=' -R '
+#+end_src
+
+=Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.
+
+#+begin_src shell
+if command -v lessfile > /dev/null 2>&1; then
+    eval "$(lessfile)"
+    # This sets LESSOPEN and will pick up on ~/.lessfilter.
+else
+    # Fall back to do the best we can.
+    export LESSOPEN="| ~/.lessfilter %s"
+fi
+#+end_src
+
+If any syntax highlighters are available, use them.  =Pygmentize= does more, but =source-highlight= is still good.
+
+#+begin_src shell
+if command -v pygmentize > /dev/null 2>&1; then
+    export LESSCOLOURIZER="pygmentize -f terminal"
+elif command -v source-highlight > /dev/null 2>&1; then
+    export LESSCOLOURIZER="source-highlight --failsafe --infer-lang -f esc --style-file=esc.style -i"
+fi
+#+end_src
+
+*** Small functions and helpers
+
+Pretty-print directory tree.  I never use this, but it could be useful as a reference.
+
+#+begin_src shell
+function tree() {
+    find "${1:-.}" -type d -print | sed -e 's:[ ]*/:|____:g;s:____|: |:g'
+}
+#+end_src
+
+Set an "alert" alias for long running commands.  Use like this: =sleep 10; alert=.
+
+#+begin_src shell
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+#+end_src
+
+Swap file $1 with $2.
+
+#+begin_src shell
+function swap() {
+    local TMPFILE=tmp.$$
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
+#+end_src
+
+Handy way to watch a file grow
+
+#+begin_src shell
+function monitor() {
+    while true ; do
+	clear
+	tail "$1"
+	sleep 10
+    done
+}
+#+end_src
+
+"| order" is very handy for counting duplicated lines in a file or listing.
+
+#+begin_src shell
+function order() {
+    sort | uniq -c | sort -rn
+}
+#+end_src
+
+Wipe all metadata from one or more images.
+
+#+begin_src shell
+function exifwipe() {
+    for FILE in "$@"; do
+	exiftool -all= "$FILE"
+    done
+}
+#+end_src
+
+My SanDisk Clip Sport can't play 24-bit FLAC files, so I need to run =sansify *flac*= to make them 16-bit.
+
+#+begin_src shell
+function sansify() {
+    for FILE in "$@"; do
+	sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
+	rm "$FILE"
+    done
+}
+#+end_src
+
+Sum a list of numbers.
+
+#+begin_src shell
+function colsum {
+    paste -s -d+ | bc --
+}
+#+end_src
+
+#+begin_example
+$ (echo 1; echo 3; echo 5) | colsum
+9
+#+end_example
+
+*** Completions
+
+Git.  Can be found as part of Git source.
+
+#+begin_src shell
+source ~/.git-completion.bash
+#+end_src
+
+Bash.  Requires bash-completion package.
+
+#+begin_src shell
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    source /etc/bash_completion
+fi
+#+end_src
+
+*** PATH
+
+Here I build up the PATH bit by bit.  Put =/usr/local/bin= first (ahead of whatever is inherited from the system setting).
+
+#+begin_src shell
+PATH=/usr/local/bin:$PATH
+#+end_src
+
+Make sure the rootly paths are there.
+
+#+begin_src shell
+PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+#+end_src
+
+Emacs is run from source in =/usr/local/src/emacs=.
+
+#+begin_src shell
+PATH=/usr/local/src/emacs/src:$PATH
+alias emacsclient="/usr/local/src/emacs/lib-src/emacsclient"
+alias e="emacsclient --no-wait"
+#+end_src
+
+I run R from source in =/usr/local/src/R=.
+
+#+begin_src shell
+if [ -f /usr/local/src/R/R ] ; then
+    PATH=/usr/local/src/R:$PATH
+fi
+#+end_src
+
+Zotero needs to be [[https://www.zotero.org/support/installation][installed]] by hand.
+
+#+begin_src shell
+alias zotero="/usr/local/src/zotero/Zotero_linux-x86_64/zotero"
+#+end_src
+
+I put ircii's irc in ~/.irc/.
+
+#+begin_src shell
+PATH=$PATH:~/.irc/
+#+end_src
+
+# Ruby: I'm using rbenv instead of RVM now
+# If rbenv isn't there, just default to system Ruby
+if [ -d ~/.rbenv/ ] ; then
+    PATH=$HOME/.rbenv/bin:$PATH
+    eval "$(rbenv init -)"
+fi
+
+Go (=go help gopath=).
+
+#+begin_src shell
+export GOPATH=~/.gopath
+PATH=$PATH:$GOPATH/bin/
+#+end_src
+
+Pip (from Python).
+
+#+begin_src shell
+PATH=$PATH:~/.local/bin/
+#+end_src
+
+Rust.
+
+#+begin_src shell
+PATH=$PATH:~/.cargo/bin/
+#+end_src
+
+My own scripts, and finally, the current directory.
+
+#+begin_src shell
+PATH=$PATH:~/bin/:.
+#+end_src
+
+*** Local settings
+
+There are some settings that I want just on a particular machine, and this makes that possible.  If the machine is named =dartagnan=, put machine-specific environment variables and settings in =~/.bash.dartagnan.rc=.
+
+#+begin_src shell
+if [ -f ~/.bash."$HOSTNAME".rc ] ; then
+    # shellcheck source=/dev/null
+    . ~/.bash.$HOSTNAME.rc
+fi
+#+end_src
 
 ** Logout (=.bash_logout=)
 :PROPERTIES:
@@ -71,7 +589,7 @@ fi
 
 * R
 
-[[https://www.r-project.org/][R]] "is a free software environment for statistical computing and graphics."  I mainly use R through Emacs, but there are some settings that apply just to how R works that I want defined however R is run.
+[[https://www.r-project.org/][R]]'s web site says it "is a free software environment for statistical computing and graphics," which doesn't adequately describe how awesome it is.  I mainly use R through Emacs, but there are some settings that apply just to how R works that I want defined however R is run.
 
 ** Rprofile (=.Rprofile=)
 :PROPERTIES:
@@ -168,7 +686,7 @@ AwesomePrint.pry!
 
 [[https://github.com/rubocop/rubocop/][Rubocop]] "is a Ruby static code analyzer (a.k.a. linter) and code formatter."
 
-I prefer using "double quotes" when quoting.
+I prefer using "double quotes" when quoting.  Everything else I leave as is.  When needed I can turn off a warning in the code itself.
 
 #+begin_src yaml
 Style/StringLiterals:
