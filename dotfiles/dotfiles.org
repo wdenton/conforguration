@@ -1,0 +1,141 @@
+#+TITLE: Dotfiles
+#+AUTHOR: William Denton
+#+EMAIL: wtd@pobox.com
+
+#+options: num:nil toc:nil ^:nil
+#+startup: fold
+
+* Introduction
+
++ Files completely handled here.
++ Files that are copied in from elsewhere and not tangled from org.
+
+* Bash
+
+* Git
+
+** Completion
+
+** Config (=.gitconfig=)
+
+* LaTeX
+
+* R
+
+[[https://www.r-project.org/][R]] "is a free software environment for statistical computing and graphics."  I mainly use R through Emacs, but there are some settings that apply just to how R works that I want defined however R is run.
+
+** Rprofile (=.Rprofile=)
+:PROPERTIES:
+:header-args: :tangle /tmp/rprofile
+:END:
+
+See also [[https://stackoverflow.com/q/1189759/854346][Expert R users, what's in your .Rprofile?]] from Stack Overflow.
+
+First, hard code a nearby (to me) repo for [[https://cran.r-project.org/][CRAN]] packages.
+
+TODO:  The mirror is also used in [[file:~/src/conforguration/conforguration.org::*Setup: R][Setup: R]] ... maybe I could put it into a bash environment variable in one place and get all the mentions from there?
+
+#+begin_src R
+r <- getOption("repos")
+r["CRAN"] <- c("https://utstat.toronto.edu/cran/")
+options(repos = r)
+rm(r)
+#+end_src
+
+I don't need to keep histories of everything.  I used to log everything to history files but never looked at them and discovered after a while that the directory was filled with 0-byte files.  I'll leave in the command to do that in case it's useful again one day.
+
+#+begin_src R
+Sys.setenv(R_HISTSIZE = '0')
+## sink(file = paste('~/R/history/r-log-', strftime(Sys.time(), '%F %H:%M:%OS9'), sep = ''), split=T)
+#+end_src
+
+Should R automatically convert strings to factor variables in a data.frame?  No!  This is the default in 4.0 and up, but I'll leave it in for now.
+
+#+begin_src R
+options(stringsAsFactors = FALSE)
+#+end_src
+
+Override =q()= to not save by default.  Same as saying =q("no")=.
+
+#+begin_src R
+q <- function (save="no", ...) {
+    quit(save=save, ...)
+}
+#+end_src
+
+No menu popups:  use the console.
+
+#+begin_src R
+options(menu.graphics = FALSE)
+#+end_src
+
+Tab completion on =library()= and =require()=.
+
+#+begin_src R
+utils::rc.settings(ipck = TRUE)
+#+end_src
+
+Set the prompt?  I used to use a fancy "ℝ", but now just the default simple ">".  But I'll leave this here in case I want to go back.
+
+#+begin_src R
+## options(prompt="ℝ> ")
+#+end_src
+
+* Ruby
+
+** Gems (.gemrc)
+:PROPERTIES:
+:header-args: :tangle /tmp/gemrc
+:END:
+
+#+begin_src yaml
+---
+:verbose: true
+:benchmark: false
+:bulk_threshold: 1000
+:update_sources: true
+:backtrace: false
+gem: --no-document
+#+end_src
+
+** Pry (.pryrc)
+:PROPERTIES:
+:header-args: :tangle /tmp/pryrc
+:END:
+
+[[https://pry.github.io/][Pry]] "is a powerful alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing."
+
+The only setting here is to hook in [[https://github.com/awesome-print/awesome_print][awesome_print]] so that by default everything is nicely pretty-printed.
+
+#+begin_src ruby
+require "awesome_print"
+AwesomePrint.pry!
+#+end_src
+
+** Rubocop (.rubocop.yml)
+:PROPERTIES:
+:header-args: :tangle /tmp/rubocop.yml
+:END:
+
+[[https://github.com/rubocop/rubocop/][Rubocop]] "is a Ruby static code analyzer (a.k.a. linter) and code formatter."
+
+I prefer using "double quotes" when quoting.
+
+#+begin_src yaml
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
+
+AllCops:
+  NewCops: enable
+#+end_src
+
+* Shell
+
+** less
+
+* Tmux
+
+* X Windows
