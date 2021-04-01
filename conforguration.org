@@ -225,7 +225,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
-sudo apt-get install libreadline-dev
+sudo apt-get install libreadline-dev libsqlite3-dev
 #+END_SRC
 
 ** Install with rbenv for personal use
