@@ -13,6 +13,6 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo ./ruby-install-gems.rb
+sudo ./ruby-install-gems.sh
 
 echo "Now run bundler install where needed."

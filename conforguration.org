@@ -1336,28 +1336,33 @@ sudo apt-get build-dep ruby
 sudo apt-get install libreadline-dev libsqlite3-dev
 #+END_SRC
 
+** Install (or upgrade) rbenv
+
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
+if [[ -d ~/.rbenv ]]; then
+    # rbenv is already installed, so upgrade it
+    cd ~/.rbenv/
+    git pull
+    cd plugins/ruby-build
+    git pull
+    echo "rbenv upgraded"
+else
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+    source ~/.bashrc
+    echo "rbenv installed"
+fi
+#+END_SRC
+
 ** Install with rbenv for personal use
 
 TODO: Don't delete =rbenv=, skip cloning it if it's already there.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-with-rbenv.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
-rm -rf ~/.rbenv/
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-source ~/.bashrc
+#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-./ruby-install-gems.rb
+./ruby-install-gems.sh
 echo "Now run bundler install where needed."
-#+END_SRC
-
-To upgrade rbenv:
-
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-upgrade-rbenv.sh :shebang "#!/bin/bash"
-cd ~/.rbenv/
-git pull
-cd plugins/ruby-build
-git pull
 #+END_SRC
 
 ** Install Ruby system-wide
@@ -1374,10 +1379,11 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo ./ruby-install-gems.rb
+sudo ./ruby-install-gems.sh
 
 echo "Now run bundler install where needed."
 #+END_SRC
+
 ** Install gems
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash"
@@ -1478,8 +1484,12 @@ rsync -avz --times $script_dir/ music:$script_dir/
 *** Synchronize install scripts
 
 #+BEGIN_SRC shell :results silent
-rsync -avz --times $script_dir/ shell3:$script_dir/
+rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
 #+END_SRC
+
+#+RESULTS:
+:
+: rsync --archive --compress --delete --times conforguration_scripts/ shell3:conforguration_scripts/
 
 *** Install
 
