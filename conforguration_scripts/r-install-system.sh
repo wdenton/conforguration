@@ -1,6 +1,5 @@
 #!/bin/bash
 script_dir='conforguration_scripts'
-dotfiles_dir='dotfiles'
 unset R_VERSION
 declare -a R_VERSION=( '4.0.4' )
 SCRIPTS_DIR=$PWD
