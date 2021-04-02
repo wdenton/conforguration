@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -v LESSCOLOURIZER ]; then
     case "$1" in
-	.bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.ini|*.js|*.json|*.jsonld|\
+	.bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.html|*.ini|*.js|*.json|*.jsonld|\
 	    Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
 	    $LESSCOLOURIZER "$1" ;;
 	*.pdf)

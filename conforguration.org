@@ -24,7 +24,7 @@ sudo chown $USER:$USER /usr/local/src
 
 * Setup: Dotfiles
 
-#+NAME: install-dotfiles
+#+NAME: install-dotfiles-remotely
 #+BEGIN_SRC shell
 rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
 ssh ${hostname} "dotfiles/install-dotfiles.sh"
@@ -252,36 +252,30 @@ local-dotfile-setup.sh
 *** Dotfiles
 
 #+BEGIN_SRC shell :results silent :noweb yes
-<<install-dotfiles>>
+<<install-dotfiles-remotely>>
 #+END_SRC
 
 ** tor
+:PROPERTIES:
+:header-args: :var hostname="tor"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ tor:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:pi@tor:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** music
+:PROPERTIES:
+:header-args: :var hostname="music"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ music:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:wtd@music:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 *** Synchronize install scripts
 
@@ -296,18 +290,15 @@ rsync -avz --times $script_dir/ music:$script_dir/
 ./emacs-install-from-source.sh
 #+END_SRC
 ** studio
+:PROPERTIES:
+:header-args: :var hostname="music"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:wtd@studio:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** pair
 :PROPERTIES:
@@ -317,7 +308,7 @@ rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
 *** Dotfiles
 
 #+BEGIN_SRC shell :results silent :noweb yes
-<<install-dotfiles>>
+<<install-dotfiles-remotely>>
 #+END_SRC
 
 ** shell3
@@ -328,7 +319,7 @@ rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
 *** Dotfiles
 
 #+BEGIN_SRC shell :results silent :noweb yes
-<<install-dotfiles>>
+<<install-dotfiles-remotely>>
 #+END_SRC
 
 *** Synchronize install scripts
@@ -346,18 +337,15 @@ rsync -avz --times $script_dir/ shell3:$script_dir/
 #+RESULTS:
 
 ** wdenton2
+:PROPERTIES:
+:header-args: :var hostname="wdenton2"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ wdenton2:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:wdenton@wdenton2:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 *** Synchronize install scripts
 
@@ -374,18 +362,15 @@ rsync -avz --times $script_dir/ wdenton2:$script_dir/
 #+RESULTS:
 
 ** orez
+:PROPERTIES:
+:header-args: :var hostname="orez"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ orez:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:wdenton@orez:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 *** Synchronize install scripts
 
