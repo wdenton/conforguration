@@ -24,60 +24,15 @@ sudo chown $USER:$USER /usr/local/src
 
 * Setup: Dotfiles
 
-Dotfiles are stored in ~dotfiles/~ in raw form, not tangled in Org (perhaps this will come later).  The setup script, that symlinks everything, is also in there.
+#+NAME: install-dotfiles
+#+BEGIN_SRC shell
+rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
+ssh ${hostname} "dotfiles/install-dotfiles.sh"
+#+END_SRC
 
 If you need some special environment variables on a machine, put them in ~.bash.$HOSTNAME.rc~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
 To get the dotfiles set up on the command line, run ~cd ~dotfiles; ./local-dotfile-setup.sh~.  That will copy everything into place.
-
-#+BEGIN_SRC shell :tangle dotfiles/dotfile-setup.sh :shebang "#!/bin/sh" :eval no
-DOTFILES=".[a-zA-Z]*"
-for DOTFILE in $DOTFILES; do
-  rm -f ~/${DOTFILE}
-  ln -s ~/$dotfiles_dir/${DOTFILE} ~/${DOTFILE}
-done
-rm ~/.profile
-ln -s ~/.bash_profile ~/.profile
-#+END_SRC
-
-#+RESULTS:
-
-#+BEGIN_SRC shell :tangle dotfiles/local-dotfile-setup.sh :shebang "#!/bin/sh" :eval no
-cp -r ../dotfiles/ ~/
-cd ~/dotfiles/
-./dotfile-setup.sh
-#+END_SRC
-
-#+BEGIN_SRC shell :results output
-ls -al $dotfiles_dir
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-total 368
-drwxr-xr-x 2 wdenton wdenton  4096 Jun 24 17:07 .
-drwxr-xr-x 5 wdenton wdenton  4096 Jun 23 16:00 ..
--rw-r--r-- 1 wdenton wdenton  3344 Jul 12  2018 .abcde.conf
--rw-r--r-- 1 wdenton wdenton   121 Dec 13  2016 .bash_logout
--rw-r--r-- 1 wdenton wdenton    42 Dec 13  2016 .bash_profile
--rw-r--r-- 1 wdenton wdenton  7423 Jun 24 10:04 .bashrc
--rw-r--r-- 1 wdenton wdenton 23706 Jan  3  2019 .chktexrc
--rw-r--r-- 1 wdenton wdenton 23700 Jan  3  2019 .chktexrc~
--rw-r--r-- 1 wdenton wdenton 10242 Dec 13  2016 .dircolors.ansi-dark
--rwxr-xr-x 1 wdenton wdenton   242 Jun 24 17:07 dotfile-setup.sh
--rw-r--r-- 1 wdenton wdenton   118 Dec 13  2016 .gemrc
--rw-r--r-- 1 wdenton wdenton 57491 Dec 13  2016 .git-completion.bash
--rw-r--r-- 1 wdenton wdenton   424 Dec 13  2016 .gitconfig
--rwxr-xr-x 1 wdenton wdenton  1274 Jun 24 17:04 .lessfilter
--rwxr-xr-x 1 wdenton wdenton   126 Jun 24 17:07 local-dotfile-setup.sh
--rw-r--r-- 1 wdenton wdenton 14374 Dec 13  2016 .lynxrc
--rw-r--r-- 1 wdenton wdenton    71 Dec 13  2016 .nanorc
--rw-r--r-- 1 wdenton wdenton   958 Jan  4  2017 .Rprofile
--rw-r--r-- 1 wdenton wdenton   140 Jun 13 12:21 .rubocop.yml
--rw-r--r-- 1 wdenton wdenton   233 Oct 22  2019 .signature
--rw-r--r-- 1 wdenton wdenton   284 Oct 22  2019 .signature.work
--rw-r--r-- 1 wdenton wdenton  1310 Jul 24  2017 .tmux.conf
-#+end_example
 
 * Setup: Emacs
 
@@ -290,18 +245,15 @@ local-dotfile-setup.sh
 #+RESULTS:
 
 ** pihole
+:PROPERTIES:
+:header-args: :var hostname="pihole"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ pihole:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:pi@pihole:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** tor
 
@@ -358,45 +310,26 @@ rsync -avz --times $dotfiles_dir/ studio:$dotfiles_dir/
 #+RESULTS:
 
 ** pair
+:PROPERTIES:
+:header-args: :var hostname="pair"
+:END:
 
 *** Dotfiles
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ pair:$dotfiles_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles>>
 #+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:pair:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
-
-** shell
-
-*** Dotfiles
-
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ shell:$dotfiles_dir/
-#+END_SRC
-
-#+BEGIN_SRC shell :dir /scp:wtd@shell:dotfiles/ :results output
-./dotfile-setup.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** shell3
+:PROPERTIES:
+:header-args: :var hostname="shell3"
+:END:
 
 *** Dotfiles
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $dotfiles_dir/ shell3:$dotfiles_dir/
-#+END_SRC
 
-#+BEGIN_SRC shell :dir /scp:wtd@shell3:dotfiles/ :results output
-./dotfile-setup.sh
+#+BEGIN_SRC shell :results silent :noweb yes
+<<install-dotfiles>>
 #+END_SRC
-
-#+RESULTS:
 
 *** Synchronize install scripts
 
