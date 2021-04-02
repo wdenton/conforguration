@@ -470,3 +470,8 @@ rsync -avz --times $script_dir/ orez:$script_dir/
 #+END_SRC
 
 #+RESULTS:
+
+* Similar projects
+
++ [[https://github.com/aldrichtr/tangld][tangld]]
++ https://github.com/webpro/awesome-dotfiles

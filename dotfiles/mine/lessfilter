@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ -v LESSCOLOURIZER ]; then
+    case "$1" in
+	.bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.ini|*.js|*.json|*.jsonld|\
+	    Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
+	    $LESSCOLOURIZER "$1" ;;
+	*.pdf)
+	    if command -v pdftotext > /dev/null 2>&1 ; then pdftotext -layout "$1" -
+	    else echo "No pdftotext available; try installing poppler-utils"; fi ;;
+	*)
+	    # Pass through to lessfile
+	    exit 1
+    esac;
+fi
+
+exit 1

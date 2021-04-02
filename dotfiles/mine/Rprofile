@@ -1,0 +1,19 @@
+r <- getOption("repos")
+r["CRAN"] <- c("https://utstat.toronto.edu/cran/")
+options(repos = r)
+rm(r)
+
+Sys.setenv(R_HISTSIZE = '0')
+## sink(file = paste('~/R/history/r-log-', strftime(Sys.time(), '%F %H:%M:%OS9'), sep = ''), split=T)
+
+options(stringsAsFactors = FALSE)
+
+q <- function (save="no", ...) {
+    quit(save=save, ...)
+}
+
+options(menu.graphics = FALSE)
+
+utils::rc.settings(ipck = TRUE)
+
+## options(prompt="ℝ> ")

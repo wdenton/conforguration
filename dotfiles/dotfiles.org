@@ -10,6 +10,226 @@
 + Files completely handled here.
 + Files that are copied in from elsewhere and not tangled from org.
 
+Note about languages specified in the source blocks:  the language setting is required, but it doesn't have to be a known and supported language.  So in order for the tmuxrc to be tangled, for example, I say it has the language "tmux," which doesn't exist but makes it work.
+
+TODO:  shellcheck the scripts?
+
+* Installing the dotfiles
+
+** Tangle everything
+
+Before anything else, make sure that everything has been tangled, so all the dot files and install scripts are up to date.
+
+#+begin_src elisp
+(org-babel-tangle)
+#+end_src
+
+#+RESULTS:
+| mine/xmodmaprc | mine/tmux.conf | mine/signature.work | mine/signature | mine/pryrc | mine/rubocop.yml | mine/gemrc | mine/Rprofile | mine/nanorc | mine/gitconfig | mine/abcde.conf | mine/lessfilter | mine/bash_logout | mine/bashrc | mine/bash_profile | install-dotfiles.sh |
+
+** Create the install script
+
+Now we can make the install script, which can be run from anywhere.  Don't run it yet---that comes after one more step.
+
+First, move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.
+
+#+begin_src shell :tangle install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+# echo "PWD is " $(pwd)
+#+end_src
+
+The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
+
+(To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
+
+#+BEGIN_SRC shell :tangle install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+for dir in mine imported; do
+    echo $dir
+    cd $dir
+    for file in *; do
+	echo "  " $file
+	rm -f ~/.${file}
+	ln -s ~/dotfiles/${dir}/${file} ~/.${file}
+    done
+    cd ..
+done
+#+END_SRC
+
+Finally, make sure that the =.bash_profile= is the real =.profile=, so no errant leftover =.profile= can get in the way.
+
+#+BEGIN_SRC shell :tangle install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+rm ~/.profile
+ln -s ~/.bash_profile ~/.profile
+#+END_SRC
+
+** Gather the files
+
+Gather all the files into the =~/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.
+
+#+begin_src shell :tangle gather-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+
+mkdir -p ~/dotfiles/mine/
+mkdir -p ~/dotfiles/imported/
+cp -p mine/* ~/dotfiles/mine/
+cp -p imported/* ~/dotfiles/imported/
+cp -p install-dotfiles.sh ~/dotfiles/
+#+end_src
+
+** Install!
+
+The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
+
+#+BEGIN_SRC shell
+./gather-dotfiles.sh
+~/dotfiles/install-dotfiles.sh
+#+END_SRC
+
+* Abcde
+:PROPERTIES:
+:header-args: :tangle mine/abcde.conf
+:END:
+
+Abcde is [[https://abcde.einval.com/wiki/][A Better CD Encoder]].  With one program I can digitize a CD all in one go, and with luck get some metadata from [[https://musicbrainz.org/][MusicBrainz]].  This configuration I [[https://www.andrews-corner.org/abcde/][lifted from Andrew's Corner]] and left alone.  All I want to do is turn the CD into FLAC files, and with this all I have to do is run =abcde= without any options.  Then I use [[https://wiki.gnome.org/Apps/EasyTAG][EasyTAG]] to clean up the metadata.
+
+LOWDISK "conserves disk space by encoding tracks immediately after reading them" (I quote from the man page) which may not be too big a deal, but:  "Note that this option may also help when reading a CD with errors. This is because on a scratchy disk reading is quite timing sensitive and this option reduces the background load on the system which allows the ripping program more precise control."  That's useful.
+
+#+begin_src abcde
+LOWDISK=y
+#+end_src
+
+Where to retrieve track information.
+
+#+begin_src abcde
+CDDBMETHOD=musicbrainz
+#+end_src
+
+Make a local cache of CDDB entries and then volunteer to use these entries when and if they match the CD.
+
+#+begin_src abcde
+CDDBCOPYLOCAL="y"
+CDDBLOCALDIR="$HOME/.cddb"
+CDDBLOCALRECURSIVE="y"
+CDDBUSELOCAL="y"
+#+end_src
+
+Specify the encoder to use for FLAC. In this case flac is the only choice.
+
+#+begin_src abcde
+FLACENCODERSYNTAX=flac
+#+end_src
+
+Specify the path to the selected encoder.  It's in my PATH so I don't need to specify a full path.
+
+#+begin_src abcde
+FLAC=flac
+#+end_src
+
+Specify your required encoding options here. Multiple options can be selected as '--best --another-option' etc. Overall bitrate is about 880 kbs/s with level 8.
+
+#+begin_src abcde
+# FLACOPTS='-s -e -V -8'
+FLACOPTS='--silent --exhaustiv-model-search --verify --compression-level-8'
+#+end_src
+
+Output type for FLAC.
+
+#+begin_src abcde
+OUTPUTTYPE="flac"
+#+end_src
+
+The CD ripping program to use. There are a few choices here: cdda2wav, dagrab, cddafs (Mac OS X only) and flac.
+
+#+begin_src abcde
+CDROMREADERSYNTAX=cdparanoia
+#+end_src
+
+Specify the location of the ripping program and pass any extra options.
+
+#+begin_src abcde
+CDPARANOIA=cdparanoia
+CDPARANOIAOPTS="--never-skip=40"
+#+end_src
+
+Path to the CD identification program.
+
+#+begin_src abcde
+CDDISCID=cd-discid
+#+end_src
+
+The base location for the encoded music files.
+
+#+begin_src abcde
+OUTPUTDIR="$HOME/Music"
+#+end_src
+
+Default actions that abcde will take.
+
+#+begin_src abcde
+ACTIONS=cddb,playlist,read,encode,tag,move,clean
+#+end_src
+
+Decide here how you want the tracks labelled for a standard 'single-artist', multi-track encode and also for a multi-track, 'various-artist' encode:
+
+#+begin_src abcde
+OUTPUTFORMAT='${OUTPUT}/${ARTISTFILE}-${ALBUMFILE}/${TRACKNUM}.${TRACKFILE}'
+VAOUTPUTFORMAT='${OUTPUT}/Various-${ALBUMFILE}/${TRACKNUM}.${ARTISTFILE}-${TRACKFILE}'
+#+end_src
+
+Decide here how you want the tracks labelled for a standard 'single-artist',  single-track encode and also for a single-track 'various-artist' encode.  (Create a single-track encode with 'abcde -1' from the command line.)
+
+#+begin_src abcde
+ONETRACKOUTPUTFORMAT='${OUTPUT}/${ARTISTFILE}-${ALBUMFILE}/${ALBUMFILE}'
+VAONETRACKOUTPUTFORMAT='${OUTPUT}/Various-${ALBUMFILE}/${ALBUMFILE}'
+#+end_src
+
+Create playlists for single and various-artist encodes.
+
+#+begin_src abcde
+PLAYLISTFORMAT='${OUTPUT}/${ARTISTFILE}-${ALBUMFILE}/${ALBUMFILE}.m3u'
+VAPLAYLISTFORMAT='${OUTPUT}/Various-${ALBUMFILE}/${ALBUMFILE}.m3u'
+#+end_src
+
+The man page says, "mungefilename() is an abcde shell function that can be overridden via abcde.conf. It takes CDDB data as $1 and outputs the resulting filename on stdout."  This one takes out dots preceding the album name, and removes other difficult characters.
+
+#+begin_src abcde
+mungefilename ()
+{
+  echo "$@" | sed -e 's/^\.*//' | tr -d ":><|*/\"'?[:cntrl:]"
+}
+#+end_src
+
+Use two encoders simultaneously.
+
+#+begin_src abcde
+MAXPROCS=2
+#+end_src
+
+Number tracks as 01 and 02, not 1 and 2.
+
+#+begin_src abcde
+PADTRACKS=y
+#+end_src
+
+Make output more verbose.  Most verbose is 2.
+
+#+begin_src abcde
+EXTRAVERBOSE=1
+#+end_src
+
+Add a comment?  No.
+
+#+begin_src abcde
+COMMENT=""
+#+end_src
+
+Finally, eject the CD when done.
+
+#+begin_src abcde
+EJECTCD=y
+#+end_src
+
+
 * Bash
 
 My shell is [[https://www.gnu.org/software/bash/][Bash]].  I've looked at other ones, and some do fancy impressive things, but my shell needs are fairly simple.
@@ -18,7 +238,7 @@ I've forgotten the intricacies of when a =.profile= is used and how interactive 
 
 ** Profile (=.bash_profile=)
 :PROPERTIES:
-:header-args: :tangle /tmp/bash_profile
+:header-args: :tangle mine/bash_profile
 :END:
 
 First, I set [[https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html#Locale-Environment-Variables][locale environment variables]] to say I want to use English, specifically Canadian English.
@@ -43,7 +263,7 @@ source ~/.bashrc
 
 ** Config (=.bashrc=)
 :PROPERTIES:
-:header-args: :tangle /tmp/bashrc
+:header-args: :tangle mine/bashrc
 :END:
 
 *** File permissions
@@ -248,7 +468,7 @@ PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 
 I used to need to remap some keys on my Lenovo X240, but whatever the problem was, I figured it out some other way, so this isn't needed.
 
-#+begin_src shell tangle: no
+#+begin_src shell :tangle no
 if [ -f ~/.Xmodmap ]; then
     xmodmap ~/.Xmodmap
 fi
@@ -324,7 +544,7 @@ fi
 
 Various short forms so I never have to actually type both letters of =ls=.
 
-#+begin_src
+#+begin_src shell
 alias l='ls'
 alias la='l --all'
 alias ll='l -l'
@@ -357,7 +577,7 @@ Pass through raw ANSI colour escape sequences.  In other words, make colourizing
 export LESS=' -R '
 #+end_src
 
-=Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.
+=Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.  If it's not installed, fall back to a script I wrote myself (see [[*Lessfilter][Lessfilter]] below).
 
 #+begin_src shell
 if command -v lessfile > /dev/null 2>&1; then
@@ -518,12 +738,14 @@ I put ircii's irc in ~/.irc/.
 PATH=$PATH:~/.irc/
 #+end_src
 
-# Ruby: I'm using rbenv instead of RVM now
-# If rbenv isn't there, just default to system Ruby
+Ruby: I use [[https://github.com/rbenv/rbenv][rbenv]] to handle Ruby.  If rbenv isn't there, it will default to the system Ruby.
+
+#+begin_src shell
 if [ -d ~/.rbenv/ ] ; then
     PATH=$HOME/.rbenv/bin:$PATH
     eval "$(rbenv init -)"
 fi
+#+end_src
 
 Go (=go help gopath=).
 
@@ -556,14 +778,25 @@ There are some settings that I want just on a particular machine, and this makes
 
 #+begin_src shell
 if [ -f ~/.bash."$HOSTNAME".rc ] ; then
-    # shellcheck source=/dev/null
     . ~/.bash.$HOSTNAME.rc
 fi
 #+end_src
 
+** Dircolors (=dircolors.ansi-dark=) (imported)
+
+https://github.com/seebi/dircolors-solarized/blob/master/dircolors.ansi-dark
+
+"Solarized Color Theme for GNU ls (as setup by GNU dircolors)"
+
+https://github.com/seebi/dircolors-solarized
+
+Raw source:  [[https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark][dircolors.ansi-dark]].
+
+Imported copy: [[file:imported/dircolors.ansi-dark][imported/dircolors.ansi-dark]].
+
 ** Logout (=.bash_logout=)
 :PROPERTIES:
-:header-args: :tangle /tmp/bash_logout
+:header-args: :tangle mine/bash_logout
 :END:
 
 "When an interactive login shell exits, or a non-interactive login shell executes the exit builtin command, bash reads and executes commands
@@ -579,13 +812,111 @@ if [ "$SHLVL" = 1 ]; then
 fi
 #+end_src
 
+
 * Git
 
-** Completion
+** Completion (imported)
+
+https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 
 ** Config (=.gitconfig=)
+:PROPERTIES:
+:header-args: :tangle mine/gitconfig
+:END:
+
+TODO:  Expand on what all this means.  Find a better way to handle the editor for cases where I'm on a remote server without Emacs running.
+
+#+begin_src gitconfig
+[include]
+	path = ~/.gitconfig.local
+[color]
+	ui = auto
+	pager = true
+[column]
+	ui = auto
+[core]
+	editor = emacsclient
+[user]
+	name = William Denton
+	email = wtd@pobox.com
+[push]
+	default = current
+[alias]
+	hist = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+#+end_src
 
 * LaTeX
+
+** ChkTeX (=.chktexrc=) (imported)
+
+[[https://www.nongnu.org/chktex/][ChkTex]] is linter for LaTeX.  I think it complained about not having a configuration file when I first ran it, so I copied the default.
+
+TODO:  did i tweak anything?  investigate.  for now, since it's so long and complicated, just leave it here.
+
+Raw source: [[http://git.savannah.nongnu.org/cgit/chktex.git/plain/chktex/chktexrc][chktexrc]].
+
+Imported copy: [[file:imported/chktexrc][imported/chktexrc]].
+
+* Less
+
+** Lessfilter
+:PROPERTIES:
+:header-args: :tangle mine/lessfilter :shebang "#!/bin/bash"
+:END:
+
+See [[*More or less][More or less]] above for where this fits in to the =less= configuration.  This short script enables pre-processing of files before =less= displays them, which allows syntax highlighting and even extracting text from PDFs.  It's pretty amazing when you can run =less foo.pdf= and see what's in the PDF as plain text.
+
+There are some requirements for this to work:
+
++ [[https://pygments.org/][Pygments]] (see what it can handle with =pygmentize -L lexers=)
++ [[https://www.gnu.org/software/src-highlite/][GNU source-highlight]]
++ [[https://poppler.freedesktop.org/][Poppler]] (for =pdftotext=)
+
+To install them on Ubuntu, run this:
+
+#+begin_src shell :tangle no
+sudo apt install python-pygments source-highlight poppler-utils
+#+end_src
+
+=LESSCOLOURIZER= is defined in =.bashrc=.  It will be either =pygmentize= (preferred) or =source-highlight= (fallback, if it's installed).  Whichever is available, use it for everything except PDFs, where we use =pdftotext=.
+
+This case statement defines which program handles which file types.  Pygmentize can handle many more than are here; this is just the ones I want.  My =.bashrc= doesn't get processed correctly, maybe because of escape sequences, so I left it out.
+
+#+begin_src shell
+if [ -v LESSCOLOURIZER ]; then
+    case "$1" in
+	.bash_|*.bat|*.bib|*.c|Changelog|*.diff|Gemfile|*.gemspec|*.h|*.ini|*.js|*.json|*.jsonld|\
+	    Makefile|*.md|*.patch|*.php|*.pl|*.pm|*.py|Rakefile|*.rake|*.rb|*.R|*.Rprofile|*.rss|*.sh|*.sql|*.xsl|*.tex|*.toc|*.yaml|*.yml)
+	    $LESSCOLOURIZER "$1" ;;
+	,*.pdf)
+	    if command -v pdftotext > /dev/null 2>&1 ; then pdftotext -layout "$1" -
+	    else echo "No pdftotext available; try installing poppler-utils"; fi ;;
+	,*)
+	    # Pass through to lessfile
+	    exit 1
+    esac;
+fi
+#+end_src
+
+Finally, if =LESSCOLOURIZER= is not set, hand off to =lessfile=.
+
+#+begin_src shell
+exit 1
+#+end_src
+
+
+* Nano (=.nanorc=)
+:PROPERTIES:
+:header-args: :tangle mine/nanorc
+:END:
+
+#+begin_src nano
+set fill -8
+set nonewlines
+set nowrap
+set softwrap
+set suspend
+#+end_src
 
 * R
 
@@ -593,7 +924,7 @@ fi
 
 ** Rprofile (=.Rprofile=)
 :PROPERTIES:
-:header-args: :tangle /tmp/rprofile
+:header-args: :tangle mine/Rprofile
 :END:
 
 See also [[https://stackoverflow.com/q/1189759/854346][Expert R users, what's in your .Rprofile?]] from Stack Overflow.
@@ -650,9 +981,9 @@ Set the prompt?  I used to use a fancy "ℝ", but now just the default simple ">
 
 * Ruby
 
-** Gems (.gemrc)
+** Gems (=.gemrc=)
 :PROPERTIES:
-:header-args: :tangle /tmp/gemrc
+:header-args: :tangle mine/gemrc
 :END:
 
 #+begin_src yaml
@@ -665,12 +996,12 @@ Set the prompt?  I used to use a fancy "ℝ", but now just the default simple ">
 gem: --no-document
 #+end_src
 
-** Pry (.pryrc)
+** Pry (=.pryrc=)
 :PROPERTIES:
-:header-args: :tangle /tmp/pryrc
+:header-args: :tangle mine/pryrc
 :END:
 
-[[https://pry.github.io/][Pry]] "is a powerful alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing."
+[[https://pry.github.io/][Pry]] "is a powerful alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing."  See also the [[https://github.com/pry/pry/wiki/Pry-rc][pryrc documentation]].
 
 The only setting here is to hook in [[https://github.com/awesome-print/awesome_print][awesome_print]] so that by default everything is nicely pretty-printed.
 
@@ -679,9 +1010,9 @@ require "awesome_print"
 AwesomePrint.pry!
 #+end_src
 
-** Rubocop (.rubocop.yml)
+** Rubocop (=.rubocop.yml=)
 :PROPERTIES:
-:header-args: :tangle /tmp/rubocop.yml
+:header-args: :tangle mine/rubocop.yml
 :END:
 
 [[https://github.com/rubocop/rubocop/][Rubocop]] "is a Ruby static code analyzer (a.k.a. linter) and code formatter."
@@ -699,10 +1030,105 @@ AllCops:
   NewCops: enable
 #+end_src
 
-* Shell
 
-** less
+* Signature
 
-* Tmux
+** Personal
+:PROPERTIES:
+:header-args: :tangle mine/signature
+:END:
 
-* X Windows
+This is my personal sig.
+
+#+begin_src text
+--
+William Denton :: Toronto, Canada   ---   Listening to Art: https://listeningtoart.org/
+https://www.miskatonic.org/         ---   GHG.EARTH: https://ghg.earth/
+Caveat lector.                      ---   STAPLR: https://staplr.org/
+#+end_src
+
+** Work
+:PROPERTIES:
+:header-args: :tangle mine/signature.work
+:END:
+
+This is the sig I use at work.
+
+#+begin_src text
+William Denton  <wdenton@yorku.ca>
+Associate Librarian: Scholarly Analytics / Mathematics & Statistics
+York University (Toronto) https://www.library.yorku.ca/
+
+GHG.EARTH: https://ghg.earth/
+STAPLR: https://staplr.org/
+
+"The library is the mathematician's laboratory." --- Paul Halmos
+#+end_src
+
+
+* Tmux (=.tmux.conf=)
+:PROPERTIES:
+:header-args: :tangle mine/tmux.conf
+:END:
+
+Start window numbering at 1.
+
+#+begin_src tmux
+set -g base-index 1
+#+end_src
+
+Status bar formatting.
+
+#+begin_src tmux
+set -g status-left-length 20
+set -g status-left ""
+set -g status-right "[Session: #S]"
+set -g status-justify centre
+#+end_src
+
+Colours, taken from [[https://github.com/seebi/tmux-colors-solarized][tmux-colors-solarized]].  First, set the terminal type.
+
+#+begin_src tmux
+set -g default-terminal "screen-256color"
+#+end_src
+
+Default statusbar colors.
+
+#+begin_src tmux
+set-option -g status-bg black
+set-option -g status-fg yellow
+#+end_src
+
+Pane number display.
+
+#+begin_src tmux
+set-option -g display-panes-active-colour blue
+set-option -g display-panes-colour brightred
+#+end_src
+
+Clock.
+
+#+begin_src tmux
+set-window-option -g clock-mode-colour green
+#+end_src
+Bell.
+
+#+begin_src tmux
+set-window-option -g window-status-bell-style fg=black,bg=red
+#+end_src
+
+* X
+
+** Xmodmap (=.xmodmaprc=)
+:PROPERTIES:
+:header-args: :tangle mine/xmodmaprc
+:END:
+
+Do I actually need this?  I'm not loading it in.  Is it being caught automatically?
+
+TODO:  Try disabling it and see what happens.
+
+#+begin_src xmodmap
+keysym Home = Insert
+keysym End = Insert
+#+end_src
