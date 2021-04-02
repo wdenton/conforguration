@@ -225,7 +225,7 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
-sudo apt-get install libreadline-dev
+sudo apt-get install libreadline-dev libsqlite3-dev
 #+END_SRC
 
 ** Install with rbenv for personal use
@@ -407,7 +407,7 @@ rsync -avz --times $script_dir/ shell3:$script_dir/
 *** Install
 
 #+BEGIN_SRC shell :dir /scp:wtd@shell3:conforguration_scripts/ :results silent
-./ruby-install-rbenv.sh
+./ruby-install-with-rbenv.sh
 #+END_SRC
 
 #+RESULTS:
@@ -435,7 +435,7 @@ rsync -avz --times $script_dir/ wdenton2:$script_dir/
 *** Install
 
 #+BEGIN_SRC shell :dir /scp:wdenton@wdenton:conforguration_scripts/ :results silent
-./ruby-install-rbenv.sh
+./ruby-install-with-rbenv.sh
 #+END_SRC
 
 #+RESULTS:
