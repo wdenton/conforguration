@@ -571,10 +571,22 @@ alias mroe='more'
 export PAGER=less
 #+end_src
 
+There is no =.lessrc=, so settings go in the =LESS= environment variable.  ([[https://www.topbug.net/blog/2016/09/27/make-gnu-less-more-powerful/][Source]].)
+
++ quit-if-one-screen:  if it all fits on screen, just show it and quit
++ ignore-case:  search are case-insensitive unless a capital letter is used
++ status-column:  show matches or where paging happened
++ LONG_PROMPT:  more verbose prompt
++ RAW-CONTROL-CHARS:  pass through raw ANSI colour escape sequences so colourizing can work
++ HILITE-UNREAD:  indicate first unread line after scrolling
++ tabs=4:  show a tab as four spaces
++ no-init:  don't clear screen after exiting; quit-if-one-screen needs this to be set
++ window=-4:  scroll by window size minus 4 lines, so there's overlap when scrolling
+
 Pass through raw ANSI colour escape sequences.  In other words, make colourizing work.
 
 #+begin_src shell
-export LESS=' -R '
+export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 #+end_src
 
 =Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.  If it's not installed, fall back to a script I wrote myself (see [[*Lessfilter][Lessfilter]] below).

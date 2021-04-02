@@ -110,7 +110,7 @@ alias more='less'
 alias mroe='more'
 export PAGER=less
 
-export LESS=' -R '
+export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 
 if command -v lessfile > /dev/null 2>&1; then
     eval "$(lessfile)"
