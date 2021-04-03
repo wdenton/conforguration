@@ -36,8 +36,6 @@ TODO:  Finish this!
 
 Note about languages specified in the source blocks:  the language setting is required, but it doesn't have to be a known and supported language.  So in order for the tmuxrc to be tangled, for example, I say it has the language "tmux," which doesn't exist but makes it work.
 
-TODO:  shellcheck the scripts?
-
 If you need some special environment variables on a machine, put them in ~.bash.$HOSTNAME.rc~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
 To get the dot files set up on the command line, run ~cd ~dotfiles; ./local-dotfile-setup.sh~.  That will copy everything into place.
@@ -52,13 +50,13 @@ Before anything else, make sure that everything has been tangled, so all the dot
 (org-babel-tangle)
 #+end_src
 
-*** Create the install script
+*** Script to create symlinks for the dot files
 
-First we can make the install script, which can be run from anywhere.  Don't run it yet---that comes after one more step.
+First we can make the symlink script, which can be run from anywhere.  Don't run it yet---that comes after one more step.
 
 Move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
 
-#+begin_src shell :tangle dotfiles/install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 cd "$(dirname "$0")"
 # echo "PWD is " $(pwd)
 #+end_src
@@ -67,7 +65,7 @@ The dot files are in two directories:  =mine= and =imported=.  Go into each dire
 
 (To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
 
-#+BEGIN_SRC shell :tangle dotfiles/install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+BEGIN_SRC shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 for dir in mine imported; do
     echo $dir
     cd $dir
@@ -82,7 +80,7 @@ done
 
 Finally, make sure that the =.bash_profile= is the real =.profile=, so no errant leftover =.profile= can get in the way.
 
-#+BEGIN_SRC shell :tangle dotfiles/install-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+BEGIN_SRC shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 rm ~/.profile
 ln -s ~/.bash_profile ~/.profile
 #+END_SRC
@@ -91,17 +89,17 @@ ln -s ~/.bash_profile ~/.profile
 
 TODO:  Explain.
 
-#+NAME: install-dotfiles-remotely
+#+NAME: link-dotfiles-remotely
 #+BEGIN_SRC shell
 rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
 ssh ${hostname} "dotfiles/install-dotfiles.sh"
 #+END_SRC
 
-*** Gather the files
+*** Script to copy the dot files into =~/dotfiles/=
 
 Gather all the dot files and the install script into the =~/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.
 
-#+begin_src shell :tangle dotfiles/gather-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
 cd "$(dirname "$0")"
 
 mkdir -p ~/dotfiles/mine/ ~/dotfiles/imported/
@@ -115,8 +113,8 @@ cp -p install-dotfiles.sh ~/dotfiles/
 The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
 
 #+BEGIN_SRC shell :results silent
-./gather-dotfiles.sh
-~/dotfiles/install-dotfiles.sh
+./copy-dotfiles.sh
+~/dotfiles/link-dotfiles.sh
 #+END_SRC
 
 ** Abcde
