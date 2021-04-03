@@ -5,10 +5,8 @@
 #+STARTUP: showall entitiespretty inlineimages
 #+OPTIONS: toc:nil ^:nil
 
-#+PROPERTY: header-args :var script_dir="conforguration_scripts"
-
-# Put this back into a variable?  Can I refer to this in :tangle commands?
-# :var dotfiles_dir="dotfiles"
+# These variables are hardcoded now.  Could maybe abstract them out later.
+# +PROPERTY: header-args :var script_dir="conforguration_scripts" :var dotfiles_dir="dotfiles"
 
 # Could work with https://github.com/cbowdon/daemons.el/blob/master/README.org ?
 
@@ -1198,10 +1196,10 @@ You can't build anything from source without making sure all the necessary utili
 
 #+begin_src shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
-sudo apt-get intall libjansson-dev valgrind fonts-firacode
+sudo apt-get install libjansson-dev valgrind fonts-firacode
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
-sudo apt-get install texinfo install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
+sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
 #+end_src
 
 ** Install for personal use
@@ -1575,8 +1573,8 @@ local-dotfile-setup.sh
 
 *** Push scripts
 
-#+begin_src shell :results silent
-rsync -avz --times $script_dir/ wdenton2:$script_dir/
+#+begin_src shell :results silent :noweb yes
+<<copy-conforguration-scripts-remotely>>
 #+end_src
 
 ** orez
@@ -1592,8 +1590,8 @@ rsync -avz --times $script_dir/ wdenton2:$script_dir/
 
 *** Push scripts
 
-#+begin_src shell :results silent
-rsync -avz --times $script_dir/ orez:$script_dir/
+#+begin_src shell :results silent :noweb yes
+<<copy-conforguration-scripts-remotely>>
 #+end_src
 
 * Similar projects
