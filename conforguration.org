@@ -20,25 +20,24 @@ If you're looking at this on GitHub, the BEGIN and END source block wrappers are
 
 Create =/usr/local/src/= and make it owned by oneself (on Debian-like systems, at least). This is where all source code will be downloaded and compiled.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/initialize.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/initialize.sh :shebang "#!/bin/bash"
 sudo mkdir -p /usr/local/src/
 sudo chown $USER:$USER /usr/local/src
-#+END_SRC
+#+end_src
 
 * Dot files
 
 ** Introduction
 
-TODO:  Finish this!
+Almost all of my "dot files" ([[https://en.wikipedia.org/wiki/Run_commands][run command files]], containing configuration instructions for different programs) are in this Org file.  Most lines have a comment explaining what they are for, and when I've cribbed something from some web page or another's dot file (which is frequent), I've credited it where possible.
 
-+ Files completely handled here.
-+ Files that are copied in from elsewhere and not tangled from org.
+There are two kinds of dot files: "mine" and "imported."  Most are "mine," and are handled completely in this Org file.  The "imported" ones are copied completely from elsewhere, usually some software distribution that has one particular file I need.  Right now there are only three imported files:  one is a script that does completion for Git in bash, one makes ls listings be in colour, and the third, which configures a LaTeX linter, really should be under "mine" but it's so long I can't be bothered right now.
 
-Note about languages specified in the source blocks:  the language setting is required, but it doesn't have to be a known and supported language.  So in order for the tmuxrc to be tangled, for example, I say it has the language "tmux," which doesn't exist but makes it work.
+The files that are "mine" are all tangled from this Org file.  The "imported" ones are copied as is.
 
 If you need some special environment variables on a machine, put them in ~.bash.$HOSTNAME.rc~, as described at the bottom of ~.bashrc~.  That's one way of setting up private environment variables that hold passwords or API tokens.
 
-To get the dot files set up on the command line, run ~cd ~dotfiles; ./local-dotfile-setup.sh~.  That will copy everything into place.
+A note about languages specified in the source blocks:  the language setting is required, but it doesn't have to be a known and supported language.  So in order for the =.tmuxrc= to be tangled, for example, I say it has the language "tmux," which doesn't exist but makes it work.
 
 ** Installing the dot files
 
@@ -50,22 +49,41 @@ Before anything else, make sure that everything has been tangled, so all the dot
 (org-babel-tangle)
 #+end_src
 
+*** Script to copy the dot files into =~/dotfiles/=
+
+Gather all the dot files and the install script into the =~/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.  Of course it's possible to run Conforguration on another machine and treat it as localhost when logged in there, instead of pushing to it.
+
+First, move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
+
+#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+#+end_src
+
+Then copy all the files I want from Conforguration into =~/dotfiles/=.
+
+#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
+mkdir -p ~/dotfiles/mine/ ~/dotfiles/imported/
+cp -p mine/* ~/dotfiles/mine/
+cp -p imported/* ~/dotfiles/imported/
+cp -p link-dotfiles.sh ~/dotfiles/
+#+end_src
+
 *** Script to create symlinks for the dot files
 
-First we can make the symlink script, which can be run from anywhere.  Don't run it yet---that comes after one more step.
+Once all the dot files are in =~/dotfiles/=, we need a script to set them up in the home directory.  This is done by making symlinks.
 
-Move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
+First, to be safe, again move into the directory where the script is run.
 
 #+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 cd "$(dirname "$0")"
 # echo "PWD is " $(pwd)
 #+end_src
 
-The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
+The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~/.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
 
 (To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
 
-#+BEGIN_SRC shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 for dir in mine imported; do
     echo $dir
     cd $dir
@@ -76,46 +94,35 @@ for dir in mine imported; do
     done
     cd ..
 done
-#+END_SRC
+#+end_src
 
 Finally, make sure that the =.bash_profile= is the real =.profile=, so no errant leftover =.profile= can get in the way.
 
-#+BEGIN_SRC shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
+#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 rm ~/.profile
 ln -s ~/.bash_profile ~/.profile
-#+END_SRC
+#+end_src
+
+Once this is run you need to open up a new shell, our =source ~/.bashrc=, to see any changes.
 
 *** Noweb for installing remotely
 
 TODO:  Explain.
 
-#+NAME: link-dotfiles-remotely
-#+BEGIN_SRC shell
+#+NAME: install-dotfiles-remotely
+#+begin_src shell
 rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
 ssh ${hostname} "dotfiles/install-dotfiles.sh"
-#+END_SRC
-
-*** Script to copy the dot files into =~/dotfiles/=
-
-Gather all the dot files and the install script into the =~/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.
-
-#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
-cd "$(dirname "$0")"
-
-mkdir -p ~/dotfiles/mine/ ~/dotfiles/imported/
-cp -p mine/* ~/dotfiles/mine/
-cp -p imported/* ~/dotfiles/imported/
-cp -p install-dotfiles.sh ~/dotfiles/
 #+end_src
 
 *** Install!
 
 The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
 
-#+BEGIN_SRC shell :results silent
-./copy-dotfiles.sh
+#+begin_src shell :results silent
+dotfiles/copy-dotfiles.sh
 ~/dotfiles/link-dotfiles.sh
-#+END_SRC
+#+end_src
 
 ** Abcde
 
@@ -1187,92 +1194,121 @@ keysym End = Insert
 
 ** Requirements
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
+You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.
+
+#+begin_src shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
 sudo apt-get intall libjansson-dev valgrind fonts-firacode
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
 sudo apt-get install texinfo install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
-#+END_SRC
+#+end_src
 
-** Install
+** Install for personal use
 
-First get the source for Emacs and compile it, then get the source for Org and compile it.
+First get the source for Emacs and compile it.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/emacs-install-from-source.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
-# Emacs
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
 ./configure
 make
-# Org
+#+end_src
+
+Then do the same for Org.
+
+#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
 git clone https://code.orgmode.org/bzg/org-mode.git
 cd org-mode
 make
-# My config
+#+end_src
+
+Finally, get my Emacs configuration (which is not here in Conforguration).  It will be cloned into =~/.emacs.d/=.  (Requires a GitHub account when done this way.)
+
+#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd
 git clone git@github.com:wdenton/.emacs.d.git
+# Or
+# git clone https://github.com/wdenton/.emacs.d.git
+# if you don't want to use a GitHub account.
 echo "Now run emacs, and say no when asked about a location for abbrev_defs."
-#+END_SRC
+#+end_src
 
 Running ~emacs~ the first time will download and install all the packages needed, but some setting about =abbrevs= is misordered so it will ask a question it doesn't need to ask.  Saying no makes everything work.
 
 It's probably best to quit Emacs and restart after this, but you don't actually need to.
 
+** Update
+
+This is a simple script that pulls down the updated source for Emacs and Org and compiles them.  If something goes wrong with the Emacs compile you might need to do =make clean= or =make distclean= or =make extraclean= and then try again.
+
+#+begin_src shell :tangle conforguration_scripts/emacs-update.sh :shebang "#!/bin/bash"
+cd /usr/local/src/emacs/
+git pull
+./configure && make
+cd ../org-mode/
+make update
+#+end_src
+
 * R
 
-Change the version number as needed.
+For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~, but my bashrc will set that up if it's there.
+
+Change the version number as needed, then tangle and run the install script again.
 
 #+NAME: R_VERSION
 | 4.0.4 |
 
 ** Requirements
 
-TODO:  Add link to bashrc.
-
-For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~, but my bashrc will set that up if it's there.
-
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre2-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev libcurl4-openssl-dev
 sudo apt-get curl build-dep r-base
 mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R
-#+END_SRC
+#+end_src
 
 ** Common code
 
 Whether R is being installed system-wide or just for personal use, this code will be run.
 
-#+BEGIN_SRC :shell :noweb-ref r_source_code_present_and_compiled
-SCRIPTS_DIR=$PWD
+#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
+cd $(dirname "$0")
+SCRIPTS_DIR=$(pwd)
 MIRROR="https://utstat.toronto.edu/cran/"
 cd /usr/local/src/R
+#+end_src
 
-# If the source has been untarred already, wipe that directory
-# because we want to start fresh.
+If the source has been untarred already, wipe that directory because we want to start fresh.
+
+#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
 if [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
   echo "Removing old source directory ..."
   rm -r R-${R_VERSION}
 fi
+#+end_src
 
-# If the source tarball is there, use it, otherwise download.
+If the source tarball is there, use it, otherwise download.  The =R_MAJOR= variable is there because we need to know the major version number, so we can get to e.g. base/R-4 to download 4.0.4.
+
+#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
 if ! [ -f "R-${R_VERSION}.tar.gz" ]; then
   echo "Downloading R-${R_VERSION} tarball ..."
-  # Need to know the major version number, so we can get to e.g. base/R-4
   R_MAJOR=${R_VERSION:0:1}
   curl -O $MIRROR/src/base/R-${R_MAJOR}/R-${R_VERSION}.tar.gz
 else
   echo "Using existing R-${R_VERSION} tarball ..."
-  sleep 1
 fi
+#+end_src
 
-# Now uncompress, configure and compile.
+Now uncompress, configure and compile.  This could take a while.
+
+#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
 echo "Uncompressing ..."
 tar xzvf R-$R_VERSION.tar.gz
 
@@ -1280,9 +1316,11 @@ echo "Compiling ..."
 cd R-$R_VERSION
 ./configure --enable-R-shlib
 make && make check
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
+This next script installs all of the packages I want.  This will also take a while to run, and along the way a lot of dependences will be installed too.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
 PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
 xlsx lintr fs ggrepel ggridges hms docopt skimr\
 arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \
@@ -1290,37 +1328,46 @@ geonames maps mapproj rgeos sf maptools OpenStreetMap geosphere osmdata"
 for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"; done;
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 # Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
-#+END_SRC
+#+end_src
 
 ** Install for personal use
 
 Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then source ~.bashrc~ to refresh ~$PATH~ to notice them and put that ~Rscript~ first, which makes the package installation work.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
-<<r_source_code_present_and_compiled>>
+First, get R downloaded and compiled.
 
-# Set up aliases
-cd ..
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+#+end_src
+
+Next, set up the aliases for it in =/usr/local/src/R/=.  To be sure they work, reload bash to pick up on the PATH.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+cd /usr/local/src/R/
 rm -f R Rscript
 ln -s R-${R_VERSION}/bin/R R
 ln -s R-${R_VERSION}/bin/Rscript Rscript
 
 source ~/.bashrc
+#+end_src
 
+Finally, install the packages.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 cd $SCRIPTS_DIR
 ./r-install-packages.sh
-#+END_SRC
+#+end_src
 
 ** Install system-wide
 
 R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+#+begin_src shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 <<r_source_code_present_and_compiled>>
 sudo make install
 
 sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
-#+END_SRC
+#+end_src
 
 * Ruby
 
@@ -1329,14 +1376,14 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 ** Requirements
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
 sudo apt-get install libreadline-dev libsqlite3-dev
-#+END_SRC
+#+end_src
 
 ** Install (or upgrade) rbenv
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
 if [[ -d ~/.rbenv ]]; then
     # rbenv is already installed, so upgrade it
     echo "Upgrading"
@@ -1350,30 +1397,30 @@ else
     git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
     source ~/.bashrc
 fi
-#+END_SRC
+#+end_src
 
 #+NAME: ruby-rbenv-remotely
-#+BEGIN_SRC shell
+#+begin_src shell
 ssh ${hostname} "conforguration_scripts/ruby-rbenv.sh"
-#+END_SRC
+#+end_src
 
 ** Install with rbenv for personal use
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+begin_src shell :tangle conforguration_scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
 ~/conforguration_scripts/ruby-install-gems.sh
 echo "Now run bundle install where needed."
-#+END_SRC
+#+end_src
 
 #+NAME: ruby-install-personal-remotely
-#+BEGIN_SRC shell
+#+begin_src shell
 ssh ${hostname} "conforguration_scripts/ruby-install-personal.sh"
-#+END_SRC
+#+end_src
 
 ** Install system-wide
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+begin_src shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
@@ -1388,27 +1435,27 @@ sudo make install
 sudo ~/conforguration_scripts/ruby-install-gems.sh
 
 echo "Now run bundle install where needed."
-#+END_SRC
+#+end_src
 
 #+NAME: ruby-install-system-remotely
-#+BEGIN_SRC shell
+#+begin_src shell
 ssh ${hostname} "conforguration_scripts/ruby-install-system.sh"
-#+END_SRC
+#+end_src
 
 ** Install gems
 
-#+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash"
 gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http awesome_print
-#+END_SRC
+#+end_src
 
 No noweb version of this, because it's run by the above scripts.
 
 * Machines
 
 #+NAME: copy-conforguration-scripts-remotely
-#+BEGIN_SRC shell
+#+begin_src shell
 rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
-#+END_SRC
+#+end_src
 
 #+RESULTS: copy-conforguration-scripts-remotely
 
@@ -1416,10 +1463,10 @@ rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:
 
 *** Dot files
 
-#+BEGIN_SRC shell :results output
+#+begin_src shell :results output
 cd dotfiles
 local-dotfile-setup.sh
-#+END_SRC
+#+end_src
 
 #+RESULTS:
 
@@ -1430,9 +1477,9 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 ** tor
 :PROPERTIES:
@@ -1441,9 +1488,9 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 ** music
 :PROPERTIES:
@@ -1452,22 +1499,22 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 *** Push scripts
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<copy-conforguration-scripts-remotely>>
-#+END_SRC
+#+end_src
 
 *** Install Emacs one way
 
-#+BEGIN_SRC shell :dir /music:conforguration_scripts/ :results silent
+#+begin_src shell :dir /music:conforguration_scripts/ :results silent
 ./emacs-install-requirements.sh
-./emacs-install-from-source.sh
-#+END_SRC
+./emac-install-personal.sh
+#+end_src
 
 *** Install Ruby the other way
 
@@ -1483,9 +1530,9 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 ** pair
 :PROPERTIES:
@@ -1494,9 +1541,9 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 ** shell3
 :PROPERTIES:
@@ -1505,15 +1552,15 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 *** Push scripts
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<copy-conforguration-scripts-remotely>>
-#+END_SRC
+#+end_src
 
 ** wdenton2
 :PROPERTIES:
@@ -1522,15 +1569,15 @@ local-dotfile-setup.sh
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 *** Push scripts
 
-#+BEGIN_SRC shell :results silent
+#+begin_src shell :results silent
 rsync -avz --times $script_dir/ wdenton2:$script_dir/
-#+END_SRC
+#+end_src
 
 ** orez
 :PROPERTIES:
@@ -1539,15 +1586,15 @@ rsync -avz --times $script_dir/ wdenton2:$script_dir/
 
 *** Dot files
 
-#+BEGIN_SRC shell :results silent :noweb yes
+#+begin_src shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
-#+END_SRC
+#+end_src
 
 *** Push scripts
 
-#+BEGIN_SRC shell :results silent
+#+begin_src shell :results silent
 rsync -avz --times $script_dir/ orez:$script_dir/
-#+END_SRC
+#+end_src
 
 * Similar projects
 
