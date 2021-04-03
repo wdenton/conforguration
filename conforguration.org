@@ -1185,7 +1185,7 @@ TODO:  Try disabling it and see what happens.
 keysym Home = Insert
 keysym End = Insert
 #+end_src
-* Setup: Emacs
+* Emacs
 
 ** Requirements
 
@@ -1197,7 +1197,7 @@ sudo apt-get intall libjansson-dev valgrind fonts-firacode
 sudo apt-get install texinfo install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
 #+END_SRC
 
-** Installation
+** Install
 
 First get the source for Emacs and compile it, then get the source for Org and compile it.
 
@@ -1224,7 +1224,7 @@ Running ~emacs~ the first time will download and install all the packages needed
 
 It's probably best to quit Emacs and restart after this, but you don't actually need to.
 
-* Setup: R
+* R
 
 Change the version number as needed.
 
@@ -1324,7 +1324,7 @@ sudo make install
 sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 #+END_SRC
 
-* Setup: Ruby
+* Ruby
 
 #+NAME: RUBY_VERSION
 | 3.0.0 |
@@ -1341,31 +1341,39 @@ sudo apt-get install libreadline-dev libsqlite3-dev
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
 if [[ -d ~/.rbenv ]]; then
     # rbenv is already installed, so upgrade it
+    echo "Upgrading"
     cd ~/.rbenv/
     git pull
     cd plugins/ruby-build
     git pull
-    echo "rbenv upgraded"
 else
+    echo "Installing"
     git clone https://github.com/rbenv/rbenv.git ~/.rbenv
     git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
     source ~/.bashrc
-    echo "rbenv installed"
 fi
+#+END_SRC
+
+#+NAME: ruby-rbenv-remotely
+#+BEGIN_SRC shell
+ssh ${hostname} "conforguration_scripts/ruby-rbenv.sh"
 #+END_SRC
 
 ** Install with rbenv for personal use
 
-TODO: Don't delete =rbenv=, skip cloning it if it's already there.
-
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-./ruby-install-gems.sh
-echo "Now run bundler install where needed."
+~/conforguration_scripts/ruby-install-gems.sh
+echo "Now run bundle install where needed."
 #+END_SRC
 
-** Install Ruby system-wide
+#+NAME: ruby-install-personal-remotely
+#+BEGIN_SRC shell
+ssh ${hostname} "conforguration_scripts/ruby-install-personal.sh"
+#+END_SRC
+
+** Install system-wide
 
 #+BEGIN_SRC shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 mkdir -p /usr/local/src/ruby
@@ -1379,9 +1387,14 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo ./ruby-install-gems.sh
+sudo ~/conforguration_scripts/ruby-install-gems.sh
 
-echo "Now run bundler install where needed."
+echo "Now run bundle install where needed."
+#+END_SRC
+
+#+NAME: ruby-install-system-remotely
+#+BEGIN_SRC shell
+ssh ${hostname} "conforguration_scripts/ruby-install-system.sh"
 #+END_SRC
 
 ** Install gems
@@ -1390,11 +1403,20 @@ echo "Now run bundler install where needed."
 gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http awesome_print
 #+END_SRC
 
+No noweb version of this, because it's run by the above scripts.
+
 * Machines
+
+#+NAME: copy-conforguration-scripts-remotely
+#+BEGIN_SRC shell
+rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
+#+END_SRC
+
+#+RESULTS: copy-conforguration-scripts-remotely
 
 ** localhost
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results output
 cd dotfiles
@@ -1408,7 +1430,7 @@ local-dotfile-setup.sh
 :header-args: :var hostname="pihole"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
@@ -1419,7 +1441,7 @@ local-dotfile-setup.sh
 :header-args: :var hostname="tor"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
@@ -1430,30 +1452,38 @@ local-dotfile-setup.sh
 :header-args: :var hostname="music"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
 #+END_SRC
 
-*** Synchronize install scripts
+*** Push scripts
 
-#+BEGIN_SRC shell :results silent
-rsync -avz --times $script_dir/ music:$script_dir/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<copy-conforguration-scripts-remotely>>
 #+END_SRC
 
-*** Install
+*** Install Emacs one way
 
 #+BEGIN_SRC shell :dir /music:conforguration_scripts/ :results silent
 ./emacs-install-requirements.sh
 ./emacs-install-from-source.sh
 #+END_SRC
+
+*** Install Ruby the other way
+
+#+begin_src shell :results silent :noweb yes
+<<ruby-rbenv-remotely>>
+<<ruby-install-personal-remotely>>
+#+end_src
+
 ** studio
 :PROPERTIES:
 :header-args: :var hostname="music"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
@@ -1464,7 +1494,7 @@ rsync -avz --times $script_dir/ music:$script_dir/
 :header-args: :var hostname="pair"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
@@ -1475,82 +1505,51 @@ rsync -avz --times $script_dir/ music:$script_dir/
 :header-args: :var hostname="shell3"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
 #+END_SRC
 
-*** Synchronize install scripts
+*** Push scripts
 
-#+BEGIN_SRC shell :results silent
-rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
+#+BEGIN_SRC shell :results silent :noweb yes
+<<copy-conforguration-scripts-remotely>>
 #+END_SRC
-
-#+RESULTS:
-:
-: rsync --archive --compress --delete --times conforguration_scripts/ shell3:conforguration_scripts/
-
-*** Install
-
-#+BEGIN_SRC shell :dir /scp:wtd@shell3:conforguration_scripts/ :results silent
-./ruby-install-with-rbenv.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** wdenton2
 :PROPERTIES:
 :header-args: :var hostname="wdenton2"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
 #+END_SRC
 
-*** Synchronize install scripts
+*** Push scripts
 
 #+BEGIN_SRC shell :results silent
 rsync -avz --times $script_dir/ wdenton2:$script_dir/
 #+END_SRC
-
-*** Install
-
-#+BEGIN_SRC shell :dir /scp:wdenton@wdenton:conforguration_scripts/ :results silent
-./ruby-install-with-rbenv.sh
-#+END_SRC
-
-#+RESULTS:
 
 ** orez
 :PROPERTIES:
 :header-args: :var hostname="orez"
 :END:
 
-*** Dotfiles
+*** Dot files
 
 #+BEGIN_SRC shell :results silent :noweb yes
 <<install-dotfiles-remotely>>
 #+END_SRC
 
-*** Synchronize install scripts
+*** Push scripts
 
 #+BEGIN_SRC shell :results silent
 rsync -avz --times $script_dir/ orez:$script_dir/
 #+END_SRC
-
-*** Install
-
-#+BEGIN_SRC shell :dir /orez:conforguration_scripts/ :results silent
-./r-install-requirements.sh
-./r-install-system.sh
-./ruby-install-requirements.sh
-./ruby-install-from-source.sh
-#+END_SRC
-
-#+RESULTS:
 
 * Similar projects
 
