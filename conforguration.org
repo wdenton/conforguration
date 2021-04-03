@@ -1318,6 +1318,26 @@ make && make check
 
 This next script installs all of the packages I want.  This will also take a while to run, and along the way a lot of dependences will be installed too.
 
+TODO:  Tidy up the package installation
+
+# Put it all into a table, then loop through and install the packages.
+
+# #+NAME: numbers
+# | one   |
+# | two   |
+# | three |
+
+# #+begin_src shell :results output :var n=numbers
+# for i in "${n[@]}"; do
+#     echo $i
+# done
+# #+end_src
+
+# #+RESULTS:
+# : one
+# : two
+# : three
+
 #+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
 PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
 xlsx lintr fs ggrepel ggridges hms docopt skimr\
