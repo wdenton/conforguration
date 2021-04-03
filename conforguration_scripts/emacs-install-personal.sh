@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
@@ -7,13 +6,11 @@ cd emacs
 ./configure
 make
 
-script_dir='conforguration_scripts'
 cd /usr/local/src/
 git clone https://code.orgmode.org/bzg/org-mode.git
 cd org-mode
 make
 
-script_dir='conforguration_scripts'
 cd
 git clone git@github.com:wdenton/.emacs.d.git
 # Or

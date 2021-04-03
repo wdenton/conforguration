@@ -1,9 +1,7 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 cd "$(dirname "$0")"
 # echo "PWD is " $(pwd)
 
-script_dir='conforguration_scripts'
 for dir in mine imported; do
     echo $dir
     cd $dir
@@ -15,6 +13,5 @@ for dir in mine imported; do
     cd ..
 done
 
-script_dir='conforguration_scripts'
 rm ~/.profile
 ln -s ~/.bash_profile ~/.profile

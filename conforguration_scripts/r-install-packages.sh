@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
 xlsx lintr fs ggrepel ggridges hms docopt skimr\
 arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \

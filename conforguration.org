@@ -110,7 +110,7 @@ TODO:  Explain.
 #+NAME: install-dotfiles-remotely
 #+begin_src shell
 rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
-ssh ${hostname} "dotfiles/install-dotfiles.sh"
+ssh ${hostname} "dotfiles/link-dotfiles.sh"
 #+end_src
 
 *** Install!
@@ -1462,11 +1462,33 @@ rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:
 *** Dot files
 
 #+begin_src shell :results output
-cd dotfiles
-local-dotfile-setup.sh
+dotfiles/copy-dotfiles.sh
+dotfiles/link-dotfiles.sh
 #+end_src
 
 #+RESULTS:
+#+begin_example
+mine
+   abcde.conf
+   bash_logout
+   bash_profile
+   bashrc
+   gemrc
+   gitconfig
+   lessfilter
+   nanorc
+   pryrc
+   Rprofile
+   rubocop.yml
+   signature
+   signature.work
+   tmux.conf
+   xmodmaprc
+imported
+   chktexrc
+   dircolors.ansi-dark
+   git-completion.bash
+#+end_example
 
 ** pihole
 :PROPERTIES:

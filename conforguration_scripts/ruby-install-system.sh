@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 unset RUBY_VERSION
 declare -a RUBY_VERSION=( '3.0.0' )
 mkdir -p /usr/local/src/ruby

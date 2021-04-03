@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 unset R_VERSION
 declare -a R_VERSION=( '4.0.4' )
 cd $(dirname "$0")

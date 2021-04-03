@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 unset R_VERSION
 declare -a R_VERSION=( '4.0.4' )
 cd $(dirname "$0")
@@ -25,7 +24,6 @@ cd R-$R_VERSION
 ./configure --enable-R-shlib
 make && make check
 
-script_dir='conforguration_scripts'
 unset R_VERSION
 declare -a R_VERSION=( '4.0.4' )
 cd /usr/local/src/R/
@@ -35,7 +33,6 @@ ln -s R-${R_VERSION}/bin/Rscript Rscript
 
 source ~/.bashrc
 
-script_dir='conforguration_scripts'
 unset R_VERSION
 declare -a R_VERSION=( '4.0.4' )
 cd $SCRIPTS_DIR

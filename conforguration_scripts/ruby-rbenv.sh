@@ -1,5 +1,4 @@
 #!/bin/bash
-script_dir='conforguration_scripts'
 if [[ -d ~/.rbenv ]]; then
     # rbenv is already installed, so upgrade it
     echo "Upgrading"
