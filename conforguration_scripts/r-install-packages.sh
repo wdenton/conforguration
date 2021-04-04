@@ -1,8 +1,7 @@
 #!/bin/bash
-PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
-xlsx lintr fs ggrepel ggridges hms docopt skimr\
-arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \
-geonames maps mapproj rgeos sf maptools OpenStreetMap geosphere osmdata"
-for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"; done;
+PACKAGE_LIST="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis wordcloud xlsx"
+for PKG in $PACKAGE_LIST
+do
+    Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"
+done
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-# Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"

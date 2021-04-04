@@ -1316,37 +1316,75 @@ cd R-$R_VERSION
 make && make check
 #+end_src
 
-This next script installs all of the packages I want.  This will also take a while to run, and along the way a lot of dependences will be installed too.
+** Packages
 
-TODO:  Tidy up the package installation
+There are quite a few R packages I want installed by default, including of course the [[https://www.tidyverse.org/][Tidyverse]], which I greatly admire.  The packages are all in this next table.  Add to (and resort) as needed.
 
-# Put it all into a table, then loop through and install the packages.
+#+NAME: r_packages
+| RCurl         |
+| arules        |
+| arulesViz     |
+| cluster       |
+| devtools      |
+| docopt        |
+| flexdashboard |
+| fpc           |
+| fs            |
+| geonames      |
+| geosphere     |
+| ggrepel       |
+| ggridges      |
+| ggvis         |
+| hms           |
+| igraph        |
+| knitr         |
+| lintr         |
+| lubridate     |
+| mapproj       |
+| maps          |
+| maptools      |
+| osmdata       |
+| readxl        |
+| remotes       |
+| rgeos         |
+| roxygen2      |
+| seriation     |
+| sf            |
+| shiny         |
+| skimr         |
+| testthat      |
+| tidyverse     |
+| tm            |
+| topicmodels   |
+| usethis       |
+| xlsx          |
 
-# #+NAME: numbers
-# | one   |
-# | two   |
-# | three |
+Now we need to transform that list into some shell commands.  First, we're going to turn the list into a shell variable, PACKAGE_LIST, with a neat [[https://stackoverflow.com/a/9429887/854346][array join tip]] I saw on Stack Overflow.  This code block sets up the variable in another code block.  (Make sure the name =packages-list-variable= is set or the noweb tangling won't work.)
 
-# #+begin_src shell :results output :var n=numbers
-# for i in "${n[@]}"; do
-#     echo $i
-# done
-# #+end_src
-
-# #+RESULTS:
-# : one
-# : two
-# : three
-
-#+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash"
-PACKAGE_LIST="tidyverse readxl devtools usethis remotes RCurl roxygen2 testthat lubridate shiny flexdashboard knitr ggvis \
-xlsx lintr fs ggrepel ggridges hms docopt skimr\
-arules arulesViz tm wordcloud cluster fpc topicmodels seriation igraph \
-geonames maps mapproj rgeos sf maptools OpenStreetMap geosphere osmdata"
-for PKG in $PACKAGE_LIST; do Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"; done;
-Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
-# Rscript --vanilla -e "devtools::install_github('tidyverse/hms')"
+#+begin_src shell :results output :var pkgs=r_packages :results code
+echo -n 'PACKAGE_LIST="'
+IFS=" " ; echo -n "${pkgs[*]}"
+echo -n '"'
 #+end_src
+
+#+NAME: packages-list-variable
+#+RESULTS:
+#+begin_src shell
+PACKAGE_LIST="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
+#+end_src
+
+And the above code block is included in the one below with noweb.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash" :noweb yes
+<<packages-list-variable>>
+for PKG in $PACKAGE_LIST
+do
+    Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"
+done
+Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
+#+end_src
+
+When tangled, the script will have the full PACKAGE_LIST definition with all the packages, and it loops through them all, installing one by one (with dependencies, where required).  There are a lot of packages, so this will take a while.
 
 ** Install for personal use
 
