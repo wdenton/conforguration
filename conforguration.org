@@ -1432,6 +1432,8 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 ** Requirements
 
+Make sure some necessities are in place before trying to build from source.
+
 #+begin_src shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
 sudo apt-get install libreadline-dev libsqlite3-dev
@@ -1439,10 +1441,11 @@ sudo apt-get install libreadline-dev libsqlite3-dev
 
 ** Install (or upgrade) rbenv
 
+This script installs [[https://github.com/rbenv/rbenv][rbenv]] if it isn't already in place; if it is, it updates it.  It checks to see if =~/.rbenv/= exists; if it does, =rbenv= is installed, so it just tries to update it; if not, it installs it.
+
 #+begin_src shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
 if [[ -d ~/.rbenv ]]; then
-    # rbenv is already installed, so upgrade it
-    echo "Upgrading"
+    echo "Upgrade if possible"
     cd ~/.rbenv/
     git pull
     cd plugins/ruby-build
@@ -1454,6 +1457,8 @@ else
     source ~/.bashrc
 fi
 #+end_src
+
+This can be called with noweb by source blocks below to install =rbenv= on a remote machine.
 
 #+NAME: ruby-rbenv-remotely
 #+begin_src shell
@@ -1500,11 +1505,44 @@ ssh ${hostname} "conforguration_scripts/ruby-install-system.sh"
 
 ** Install gems
 
-#+begin_src shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash"
-gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http awesome_print
+This works like the R packages do.  First, a list of gems I want installed by default.
+
+#+NAME: ruby_gems
+| awesome_print |
+| bundler       |
+| docopt        |
+| http          |
+| marc          |
+| nokogiri      |
+| pry           |
+| pry-doc       |
+| rubocop       |
+| rubyul        |
+| sqlite3       |
+
+Now transform that list into some shell commands into a shell variable, GEM_LIST.  This code block generates the next one.
+
+#+begin_src shell :results output :var gems=ruby_gems :results code
+echo -n 'GEM_LIST="'
+IFS=" " ; echo -n "${gems[*]}"
+echo -n '"'
 #+end_src
 
-No noweb version of this, because it's run by the above scripts.
+#+NAME: gem-list-variable
+#+RESULTS:
+#+begin_src shell
+GEM_LIST="awesome_print bundler docopt http marc nokogiri pry pry-doc rubocop rubyul sqlite3"
+#+end_src
+
+And the above code block is included in the one below with noweb.
+
+#+begin_src shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash" :noweb yes
+<<gem-list-variable>>
+for gem in $GEM_LIST
+do
+    gem install $gem
+done
+#+end_src
 
 * Machines
 

@@ -1,7 +1,6 @@
 #!/bin/bash
 if [[ -d ~/.rbenv ]]; then
-    # rbenv is already installed, so upgrade it
-    echo "Upgrading"
+    echo "Upgrade if possible"
     cd ~/.rbenv/
     git pull
     cd plugins/ruby-build

@@ -1,2 +1,6 @@
 #!/bin/bash
-gem install marc nokogiri sqlite3 rubocop bundler rubyul docopt pry pry-doc http awesome_print
+GEM_LIST="awesome_print bundler docopt http marc nokogiri pry pry-doc rubocop rubyul sqlite3"
+for gem in $GEM_LIST
+do
+    gem install $gem
+done
