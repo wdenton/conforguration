@@ -157,13 +157,6 @@ function exifwipe() {
     done
 }
 
-function sansify() {
-    for FILE in "$@"; do
-	sox "${FILE}" --bits 16 --rate 44.1k "16-${FILE}"
-	rm "$FILE"
-    done
-}
-
 function colsum {
     paste -s -d+ | bc --
 }

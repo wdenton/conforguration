@@ -37,7 +37,7 @@ git clone git@github.com:wdenton/conforguration.git
 # git clone https://github.com/wdenton/conforguration.git
 cd conforguration/dotfiles
 ./copy-dotfiles.sh
-./link-dotfiles.sh
+~/dotfiles/link-dotfiles.sh
 source ~/.bashrc
 cd ../conforguration_scripts
 ./initialize.sh
@@ -54,6 +54,8 @@ Because [[https://www.ansible.com/][Ansible]] and similar configuration manageme
 * What next?
 
 I don't know, but if you're interested, have at it.
+
+There are a lot of dot files in [[https://github.com/webpro/awesome-dotfiles][awesome-dotfiles]], and it seems [[https://github.com/aldrichtr/tangld][tangld]] is a similar project to this.  There will be things to be learned from any related projects.
 
 * License
 
