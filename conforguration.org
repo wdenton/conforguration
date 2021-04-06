@@ -14,6 +14,8 @@ This has my dot files and helper scripts to install Emacs, R and Ruby from sourc
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
 
+Related:  There are a lot of dot files in [[https://github.com/webpro/awesome-dotfiles][awesome-dotfiles]], and it seems [[https://github.com/aldrichtr/tangld][tangld]] is a similar project to this.
+
 * Initialize
 
 Create =/usr/local/src/= and make it owned by oneself (on Debian-like systems, at least). This is where all source code will be downloaded and compiled.
@@ -573,11 +575,17 @@ export BLOCKSIZE=1024
 
 Generally I'm on Linux machines, but if I'm on a FreeBSD box it has a different ls with different options, so I need to use a different alias to get colours.
 
+On the Linux boxes:
+
++ classify: "append indicator (one of */=>@|) to entries" (to indicate directories, symlinks, etc.)
++ color: make the output in color (always)
++ quoting-style: show filenames as they are, so =File One.txt=, not ='File One.txt'= or =File\ One.txt=.  I'll put things in quotes if needed.
+
 #+begin_src shell
 if [[ $(uname) == "FreeBSD" ]] ; then
     alias ls='ls -F -G'
 else # Presumably Linux
-    alias ls='ls --classify --color=auto --quoting-style=literal'
+    alias ls='ls --classify --color --quoting-style=literal'
 fi
 #+end_src
 
@@ -1272,7 +1280,7 @@ mkdir -p ~/R/history/
 mkdir -p /usr/local/src/R
 #+end_src
 
-** Common code
+** Noweb setup
 
 Whether R is being installed system-wide or just for personal use, this code will be run.
 
@@ -1314,6 +1322,45 @@ echo "Compiling ..."
 cd R-$R_VERSION
 ./configure --enable-R-shlib
 make && make check
+#+end_src
+
+** Install for personal use
+
+Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then source ~.bashrc~ to refresh ~$PATH~ to notice them and put that ~Rscript~ first, which makes the package installation work.
+
+First, get R downloaded and compiled.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+#+end_src
+
+Next, set up the aliases for it in =/usr/local/src/R/=.  To be sure they work, reload bash to pick up on the PATH.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+cd /usr/local/src/R/
+rm -f R Rscript
+ln -s R-${R_VERSION}/bin/R R
+ln -s R-${R_VERSION}/bin/Rscript Rscript
+
+source ~/.bashrc
+#+end_src
+
+Finally, install the packages.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+cd $SCRIPTS_DIR
+./r-install-packages.sh
+#+end_src
+
+** Install system-wide
+
+R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
+
+#+begin_src shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+<<r_source_code_present_and_compiled>>
+sudo make install
+
+sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 #+end_src
 
 ** Packages
@@ -1359,10 +1406,10 @@ There are quite a few R packages I want installed by default, including of cours
 | usethis       |
 | xlsx          |
 
-Now we need to transform that list into some shell commands.  First, we're going to turn the list into a shell variable, PACKAGE_LIST, with a neat [[https://stackoverflow.com/a/9429887/854346][array join tip]] I saw on Stack Overflow.  This code block sets up the variable in another code block.  (Make sure the name =packages-list-variable= is set or the noweb tangling won't work.)
+Now we need to transform that list into some shell commands.  First, we're going to turn the list into a shell variable, =package_list=, with a neat [[https://stackoverflow.com/a/9429887/854346][array join tip]] I saw on Stack Overflow.  This code block sets up the variable in another code block.  (Make sure the name =packages-list-variable= is set or the noweb tangling won't work.)
 
 #+begin_src shell :results output :var pkgs=r_packages :results code
-echo -n 'PACKAGE_LIST="'
+echo -n 'package_list="'
 IFS=" " ; echo -n "${pkgs[*]}"
 echo -n '"'
 #+end_src
@@ -1370,60 +1417,21 @@ echo -n '"'
 #+NAME: packages-list-variable
 #+RESULTS:
 #+begin_src shell
-PACKAGE_LIST="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
+package_list="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
 #+end_src
 
 And the above code block is included in the one below with noweb.
 
 #+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash" :noweb yes
 <<packages-list-variable>>
-for PKG in $PACKAGE_LIST
+for pkg in $package_list
 do
-    Rscript --vanilla -e "install.packages('$PKG', repos=c('https://utstat.toronto.edu/cran/'))"
+    Rscript --vanilla -e "install.packages('$pkg', repos=c('https://utstat.toronto.edu/cran/'))"
 done
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 #+end_src
 
-When tangled, the script will have the full PACKAGE_LIST definition with all the packages, and it loops through them all, installing one by one (with dependencies, where required).  There are a lot of packages, so this will take a while.
-
-** Install for personal use
-
-Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then source ~.bashrc~ to refresh ~$PATH~ to notice them and put that ~Rscript~ first, which makes the package installation work.
-
-First, get R downloaded and compiled.
-
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
-<<r_source_code_present_and_compiled>>
-#+end_src
-
-Next, set up the aliases for it in =/usr/local/src/R/=.  To be sure they work, reload bash to pick up on the PATH.
-
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
-cd /usr/local/src/R/
-rm -f R Rscript
-ln -s R-${R_VERSION}/bin/R R
-ln -s R-${R_VERSION}/bin/Rscript Rscript
-
-source ~/.bashrc
-#+end_src
-
-Finally, install the packages.
-
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
-cd $SCRIPTS_DIR
-./r-install-packages.sh
-#+end_src
-
-** Install system-wide
-
-R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
-
-#+begin_src shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
-<<r_source_code_present_and_compiled>>
-sudo make install
-
-sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
-#+end_src
+When tangled, the script will have the full =package_list= definition with all the packages, and it loops through them all, installing one by one (with dependencies, where required).  There are a lot of packages, so this will take a while.
 
 * Ruby
 
@@ -1546,19 +1554,21 @@ done
 
 * Machines
 
+** Noweb setup
+
+This one call to =rsync= will push the Conforguration scripts to a remote host.  The =${hostname}= variable is defined in the PROPERTIES for each host's subheading below (except localhost, because here we can copy files directly), and the script is run with noweb.
+
 #+NAME: copy-conforguration-scripts-remotely
 #+begin_src shell
 rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
 #+end_src
-
-#+RESULTS: copy-conforguration-scripts-remotely
 
 ** localhost
 
 *** Dot files
 
 #+begin_src shell :results output
-dotfiles/copy-dotfiles.sh
+dotfiles/copy-dotfiles.shd
 dotfiles/link-dotfiles.sh
 #+end_src
 
@@ -1586,28 +1596,6 @@ imported
    git-completion.bash
 #+end_example
 
-** pihole
-:PROPERTIES:
-:header-args: :var hostname="pihole"
-:END:
-
-*** Dot files
-
-#+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
-** tor
-:PROPERTIES:
-:header-args: :var hostname="tor"
-:END:
-
-*** Dot files
-
-#+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
 ** music
 :PROPERTIES:
 :header-args: :var hostname="music"
@@ -1625,23 +1613,80 @@ imported
 <<copy-conforguration-scripts-remotely>>
 #+end_src
 
-*** Install Emacs one way
+*** Install Emacs remotely one way
 
-#+begin_src shell :dir /music:conforguration_scripts/ :results silent
-./emacs-install-requirements.sh
-./emac-install-personal.sh
+#+begin_src shell :dir /scp:wtd@music:conforguration_scripts/ :results silent
+# ./emacs-install-requirements.sh
+./emacs-install-personal.sh
 #+end_src
 
-*** Install Ruby the other way
+*** Install Ruby remotely the other way
 
 #+begin_src shell :results silent :noweb yes
 <<ruby-rbenv-remotely>>
+#+end_src
+
+#+begin_src shell :results silent :noweb yes
 <<ruby-install-personal-remotely>>
+#+end_src
+
+
+*** Testing
+
+#+name: one
+#+begin_src shell
+echo "one"
+sleep 10
+#+end_src
+
+#+RESULTS:
+: one
+
+#+name: two
+#+begin_src shell
+echo "two three"
+sleep 10
+#+end_src
+
+#+RESULTS: two
+: two three
+
+# :dir /music:
+
+#+begin_src shell  :results output :noweb yes
+<<one>>
+<<two>>
+#+end_src
+
+#+RESULTS:
+: one
+: two three
+
+** pihole
+:PROPERTIES:
+:header-args: :var hostname="pihole"
+:END:
+
+*** Dot files
+
+#+begin_src shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
 #+end_src
 
 ** studio
 :PROPERTIES:
 :header-args: :var hostname="music"
+:END:
+
+*** Dot files
+
+#+begin_src shell :results silent :noweb yes
+<<install-dotfiles-remotely>>
+#+end_src
+
+** tor
+:PROPERTIES:
+:header-args: :var hostname="tor"
 :END:
 
 *** Dot files
@@ -1711,8 +1756,3 @@ imported
 #+begin_src shell :results silent :noweb yes
 <<copy-conforguration-scripts-remotely>>
 #+end_src
-
-* Similar projects
-
-+ [[https://github.com/aldrichtr/tangld][tangld]]
-+ https://github.com/webpro/awesome-dotfiles

@@ -94,7 +94,7 @@ export BLOCKSIZE=1024
 if [[ $(uname) == "FreeBSD" ]] ; then
     alias ls='ls -F -G'
 else # Presumably Linux
-    alias ls='ls --classify --color=auto --quoting-style=literal'
+    alias ls='ls --classify --color --quoting-style=literal'
 fi
 
 alias l='ls'
