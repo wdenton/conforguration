@@ -2,8 +2,6 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
-# This is under the GPL v3.  See COPYING for details.
-
 * Conforguration
 
 Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
@@ -12,11 +10,11 @@ Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
 Run ~M-x org-babel-tangle~ (=C-c C-v t=) on [[file:conforguration.org][conforguration.org]] to generate installation scripts in the ~conforguration_scripts/~ and ~dotfiles/~ directories.
 
-** Dotfiles
+** Dot files
 
-Raw dotfiles are in ~dotfiles/~. Because they start with a dot (e.g. ~.bashrc~) they are not visible to ~ls~ normally, so use ~ls -a~ to see them.
+Raw dot files are in ~dotfiles/~.  There are two types:  "mine" (most of them) or "imported" (a few copied verbatim from elsewhere).
 
-Dotfiles are copied to ~$HOME/dotfiles/~ and symlinks are made from your home directory to there.
+Dot files are copied to ~$HOME/dotfiles/~ and symlinks are made from your home directory to there.
 
 ** Installing applications and packages
 
@@ -26,7 +24,7 @@ The nice things about this is that either locally or remotely, you can use ~C-c 
 
 * How to install Emacs from scratch the Conforguration way
 
-Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.
+Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.  (Work on Debian, Ubuntu and related systems.
 
 #+BEGIN_SRC shell :eval no
 cd
@@ -35,13 +33,16 @@ git clone git@github.com:wdenton/.emacs.d.git
 mkdir -p src
 cd src
 git clone git@github.com:wdenton/conforguration.git
+# Or if you don't want to use a GitHub account:
+# git clone https://github.com/wdenton/conforguration.git
 cd conforguration/dotfiles
-./dotfile-setup.sh
+./copy-dotfiles.sh
+./link-dotfiles.sh
 source ~/.bashrc
-cd ../scripts
+cd ../conforguration_scripts
 ./initialize.sh
 ./emacs-install-requirements.sh
-./emacs-install-from-source.sh
+./emacs-install-personal.sh
 #+END_SRC
 
 Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!  If you don't want to go that far, skip the =.emacs.d= repository download, but make sure your PATH is set up to point to Emacs in the right place under =/usr/local/src/=.
@@ -53,8 +54,6 @@ Because [[https://www.ansible.com/][Ansible]] and similar configuration manageme
 * What next?
 
 I don't know, but if you're interested, have at it.
-
-There is a lot of duplication.  Perhaps there is a nice way to tidy that up.
 
 * License
 

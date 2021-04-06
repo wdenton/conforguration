@@ -13,7 +13,6 @@ make
 
 cd
 git clone git@github.com:wdenton/.emacs.d.git
-# Or
+# Or if you don't want to use a GitHub account:
 # git clone https://github.com/wdenton/.emacs.d.git
-# if you don't want to use a GitHub account.
 echo "Now run emacs, and say no when asked about a location for abbrev_defs."
