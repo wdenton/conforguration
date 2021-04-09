@@ -33,9 +33,104 @@ They all do the same thing.
 
 This only needs to be done once per machine, to create =/usr/local/src/= and make it owned by oneself (on Debian-like systems, at least). This is where all source code will be downloaded and compiled.
 
-#+begin_src shell :tangle conforguration_scripts/initialize.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/initialize.sh :shebang "#!/bin/bash"
 sudo mkdir -p /usr/local/src/
 sudo chown $USER:$USER /usr/local/src
+mkdir -p ~/conforg/dotfiles/mine/ ~/conforg/dotfiles/imported/ ~/conforg/scripts/
+#+end_src
+
+* Installing
+
+** Dot files
+
+*** Script to copy the dot files
+
+Gather all the dot files and the install script into the =~/conforg/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.  Of course it's possible to run Conforguration on another machine and treat it as localhost when logged in there, instead of pushing to it.
+
+First, move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
+
+#+begin_src shell :tangle install/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+#+end_src
+
+Then copy all the files I want from Conforguration into =~/conforg/dotfiles/=.
+
+#+begin_src shell :tangle install/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd ../conforg/
+cp -pr dotfiles/* ~/conforg/dotfiles/
+#+end_src
+
+*** Script to create symlinks for the dot files
+
+Once all the dot files are in =~/conforg/dotfiles/=, we need a script to set them up in the home directory.  This is done by making symlinks.
+
+First, to be safe, again move into the directory where the script is run.
+
+#+begin_src shell :tangle conforg/dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+# echo "PWD is " $(pwd)
+#+end_src
+
+The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~/.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
+
+(To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
+
+#+begin_src shell :tangle conforg/dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
+for dir in mine imported; do
+    echo $dir
+    cd $dir
+    for file in *; do
+	echo "  " $file
+	rm -f ~/.${file}
+	ln -s ~/conforg/dotfiles/${dir}/${file} ~/.${file}
+    done
+    cd ..
+done
+#+end_src
+
+Finally, make sure that the =.bash_profile= is the real =.profile=, so no errant leftover =.profile= can get in the way.
+
+#+begin_src shell :tangle conforg/dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
+rm ~/.profile
+ln -s ~/.bash_profile ~/.profile
+#+end_src
+
+Once this is run you need to open up a new shell, our =source ~/.bashrc=, to see any changes.
+
+** Scripts
+
+*** Script to copy the scripts
+
+#+begin_src shell :tangle install/copy-scripts.sh :shebang "#!/bin/bash" :eval no
+cd "$(dirname "$0")"
+#+end_src
+
+Then copy all the files I want from Conforguration into =~/dotfiles/=.
+
+#+begin_src shell :tangle install/copy-scripts.sh :shebang "#!/bin/bash" :eval no
+cd ../conforg/
+cp -p scripts/* ~/conforg/scripts/
+#+end_src
+
+** Noweb for installing remotely
+
+TODO:  Explain.
+
+#+NAME: install-conforg-remotely
+#+begin_src shell
+rsync --archive --compress --delete ~/conforg/ ${hostname}:conforg/
+ssh ${hostname} "conforg/dotfiles/link-dotfiles.sh"
+#+end_src
+
+** Install!
+
+The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
+
+#+begin_src shell :dir install/ :tangle install/install.sh :shebang "#!/bin/bash" :results silent
+cd "$(dirname "$0")"
+./copy-dotfiles.sh
+~/conforg/dotfiles/link-dotfiles.sh
+./copy-scripts.sh
 #+end_src
 
 * Dot files
@@ -52,88 +147,11 @@ If you need some special environment variables on a machine, put them in ~.bash.
 
 A note about languages specified in the source blocks:  the language setting is required, but it doesn't have to be a known and supported language.  So in order for the =.tmuxrc= to be tangled, for example, I say it has the language "tmux," which doesn't exist but makes it work.
 
-** Installing the dot files
-
-*** Script to copy the dot files into =~/dotfiles/=
-
-Gather all the dot files and the install script into the =~/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.  Of course it's possible to run Conforguration on another machine and treat it as localhost when logged in there, instead of pushing to it.
-
-First, move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
-
-#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
-cd "$(dirname "$0")"
-#+end_src
-
-Then copy all the files I want from Conforguration into =~/dotfiles/=.
-
-#+begin_src shell :tangle dotfiles/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
-mkdir -p ~/dotfiles/mine/ ~/dotfiles/imported/
-cp -p mine/* ~/dotfiles/mine/
-cp -p imported/* ~/dotfiles/imported/
-cp -p link-dotfiles.sh ~/dotfiles/
-#+end_src
-
-*** Script to create symlinks for the dot files
-
-Once all the dot files are in =~/dotfiles/=, we need a script to set them up in the home directory.  This is done by making symlinks.
-
-First, to be safe, again move into the directory where the script is run.
-
-#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
-cd "$(dirname "$0")"
-# echo "PWD is " $(pwd)
-#+end_src
-
-The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~/.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
-
-(To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
-
-#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
-for dir in mine imported; do
-    echo $dir
-    cd $dir
-    for file in *; do
-	echo "  " $file
-	rm -f ~/.${file}
-	ln -s ~/dotfiles/${dir}/${file} ~/.${file}
-    done
-    cd ..
-done
-#+end_src
-
-Finally, make sure that the =.bash_profile= is the real =.profile=, so no errant leftover =.profile= can get in the way.
-
-#+begin_src shell :tangle dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
-rm ~/.profile
-ln -s ~/.bash_profile ~/.profile
-#+end_src
-
-Once this is run you need to open up a new shell, our =source ~/.bashrc=, to see any changes.
-
-*** Noweb for installing remotely
-
-TODO:  Explain.
-
-#+NAME: install-dotfiles-remotely
-#+begin_src shell
-rsync --archive --compress --delete ~/dotfiles/ ${hostname}:dotfiles/
-ssh ${hostname} "dotfiles/link-dotfiles.sh"
-#+end_src
-
-*** Install!
-
-The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
-
-#+begin_src shell :results silent
-dotfiles/copy-dotfiles.sh
-~/dotfiles/link-dotfiles.sh
-#+end_src
-
 ** Abcde
 
 *** Config (=.abcde.conf=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/abcde.conf
+:header-args: :tangle conforg/dotfiles/mine/abcde.conf
 :END:
 
 Abcde is [[https://abcde.einval.com/wiki/][A Better CD Encoder]].  With one program I can digitize a CD all in one go, and with luck get some metadata from [[https://musicbrainz.org/][MusicBrainz]].  This configuration I [[https://www.andrews-corner.org/abcde/][lifted from Andrew's Corner]] and left alone.  All I want to do is turn the CD into FLAC files, and with this all I have to do is run =abcde= without any options.  Then I use [[https://wiki.gnome.org/Apps/EasyTAG][EasyTAG]] to clean up the metadata.
@@ -284,7 +302,7 @@ I've forgotten the intricacies of when a =.profile= is used and how interactive 
 
 *** Profile (=.bash_profile=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/bash_profile
+:header-args: :tangle conforg/dotfiles/mine/bash_profile
 :END:
 
 First, I set [[https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html#Locale-Environment-Variables][locale environment variables]] to say I want to use English, specifically Canadian English.
@@ -309,7 +327,7 @@ source ~/.bashrc
 
 *** Config (=.bashrc=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/bashrc
+:header-args: :tangle conforg/dotfiles/mine/bashrc
 :END:
 
 **** File permissions
@@ -849,7 +867,7 @@ Imported copy: [[file:imported/dircolors.ansi-dark][imported/dircolors.ansi-dark
 
 *** Logout (=.bash_logout=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/bash_logout
+:header-args: :tangle conforg/dotfiles/mine/bash_logout
 :END:
 
 "When an interactive login shell exits, or a non-interactive login shell executes the exit builtin command, bash reads and executes commands
@@ -874,7 +892,7 @@ https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 
 *** Config (=.gitconfig=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/gitconfig
+:header-args: :tangle conforg/dotfiles/mine/gitconfig
 :END:
 
 TODO:  Expand on what all this means.  Find a better way to handle the editor for cases where I'm on a remote server without Emacs running.
@@ -914,7 +932,7 @@ Imported copy: [[file:imported/chktexrc][imported/chktexrc]].
 
 *** Lessfilter (=.lessfilter=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/lessfilter :shebang "#!/bin/bash"
+:header-args: :tangle conforg/dotfiles/mine/lessfilter :shebang "#!/bin/bash"
 :END:
 
 See [[*More or less][More or less]] above for where this fits in to the =less= configuration.  This short script enables pre-processing of files before =less= displays them, which allows syntax highlighting and even extracting text from PDFs.  It's pretty amazing when you can run =less foo.pdf= and see what's in the PDF as plain text.
@@ -962,7 +980,7 @@ exit 1
 *** Config (=.nanorc=)
 
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/nanorc
+:header-args: :tangle conforg/dotfiles/mine/nanorc
 :END:
 
 #+begin_src nano
@@ -979,7 +997,7 @@ set suspend
 
 *** Rprofile (=.Rprofile=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/Rprofile
+:header-args: :tangle conforg/dotfiles/mine/Rprofile
 :END:
 
 See also [[https://stackoverflow.com/q/1189759/854346][Expert R users, what's in your .Rprofile?]] from Stack Overflow.
@@ -1038,7 +1056,7 @@ Set the prompt?  I used to use a fancy "ℝ", but now just the default simple ">
 
 *** Gems (=.gemrc=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/gemrc
+:header-args: :tangle conforg/dotfiles/mine/gemrc
 :END:
 
 #+begin_src yaml
@@ -1053,7 +1071,7 @@ gem: --no-document
 
 *** Pry (=.pryrc=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/pryrc
+:header-args: :tangle conforg/dotfiles/mine/pryrc
 :END:
 
 [[https://pry.github.io/][Pry]] "is a powerful alternative to the standard IRB shell for Ruby. It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing."  See also the [[https://github.com/pry/pry/wiki/Pry-rc][pryrc documentation]].
@@ -1067,7 +1085,7 @@ AwesomePrint.pry!
 
 *** Rubocop (=.rubocop.yml=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/rubocop.yml
+:header-args: :tangle conforg/dotfiles/mine/rubocop.yml
 :END:
 
 [[https://github.com/rubocop/rubocop/][Rubocop]] "is a Ruby static code analyzer (a.k.a. linter) and code formatter."
@@ -1090,7 +1108,7 @@ AllCops:
 
 *** Personal (=.signature=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/signature
+:header-args: :tangle conforg/dotfiles/mine/signature
 :END:
 
 This is my personal sig.
@@ -1104,7 +1122,7 @@ Caveat lector.                      ---   STAPLR: https://staplr.org/
 
 *** Work (=.signature.work=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/signature.work
+:header-args: :tangle conforg/dotfiles/mine/signature.work
 :END:
 
 This is the sig I use at work.
@@ -1126,7 +1144,7 @@ STAPLR: https://staplr.org/
 *** Config (=.tmux.conf=)
 
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/tmux.conf
+:header-args: :tangle conforg/dotfiles/mine/tmux.conf
 :END:
 
 Start window numbering at 1.
@@ -1179,7 +1197,7 @@ set-window-option -g window-status-bell-style fg=black,bg=red
 
 *** Xmodmap (=.xmodmaprc=)
 :PROPERTIES:
-:header-args: :tangle dotfiles/mine/xmodmaprc
+:header-args: :tangle conforg/dotfiles/mine/xmodmaprc
 :END:
 
 Do I actually need this?  I'm not loading it in.  Is it being caught automatically?
@@ -1196,7 +1214,7 @@ keysym End = Insert
 
 You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.
 
-#+begin_src shell :tangle conforguration_scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
 sudo apt-get install libjansson-dev valgrind fonts-firacode
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
@@ -1208,7 +1226,7 @@ sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libti
 
 First get the source for Emacs and compile it.
 
-#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
@@ -1219,7 +1237,7 @@ make
 
 Then do the same for Org.
 
-#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd /usr/local/src/
 git clone https://code.orgmode.org/bzg/org-mode.git
 cd org-mode
@@ -1228,7 +1246,7 @@ make
 
 Finally, get my Emacs configuration (which is not here in Conforguration).  It will be cloned into =~/.emacs.d/=.  (Requires a GitHub account when done this way.)
 
-#+begin_src shell :tangle conforguration_scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-install-personal.sh :shebang "#!/bin/bash"
 cd
 git clone git@github.com:wdenton/.emacs.d.git
 # Or if you don't want to use a GitHub account:
@@ -1244,7 +1262,7 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 
 This is a simple script that pulls down the updated source for Emacs and Org and compiles them.  If something goes wrong with the Emacs compile you might need to do =make clean= or =make distclean= or =make extraclean= and then try again.
 
-#+begin_src shell :tangle conforguration_scripts/emacs-update.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
 ./configure && make
@@ -1265,7 +1283,7 @@ Change the version number as needed, then tangle and run the install script agai
 
 The first line of requirements may be needed for R 3.3.  The ~topicmodels~ package requires the GNU Scientific Library.  Once done, this doesn't need to be run again.  Sync and run the script on machines as necessary.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-requirements.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/r-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get install libbz2-dev liblzma-dev libxml2-dev libpcre2-dev libpcre3-dev fonts-inconsolata
 sudo apt-get install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev libcurl4-openssl-dev
 sudo apt-get curl build-dep r-base
@@ -1323,13 +1341,13 @@ Here we set up symlinks to point to the ~R~ and ~Rscript~ executables, then sour
 
 First, get R downloaded and compiled.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+#+begin_src shell :tangle conforg/scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 <<r_source_code_present_and_compiled>>
 #+end_src
 
 Next, set up the aliases for it in =/usr/local/src/R/=.  To be sure they work, reload bash to pick up on the PATH.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+#+begin_src shell :tangle conforg/scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 cd /usr/local/src/R/
 rm -f R Rscript
 ln -s R-${R_VERSION}/bin/R R
@@ -1340,7 +1358,7 @@ source ~/.bashrc
 
 Finally, install the packages.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+#+begin_src shell :tangle conforg/scripts/r-install-personal.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 cd $SCRIPTS_DIR
 ./r-install-packages.sh
 #+end_src
@@ -1349,7 +1367,7 @@ cd $SCRIPTS_DIR
 
 R packages need to be installed in a full root login.  There's probably a way to do this with ~sudo -i~, but I can't figure it out, so I do it this convoluted way.  It works, but if there's a better way, please let me know.  Here we become root, then get back to the directory where the package installation script is so we can run it.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
+#+begin_src shell :tangle conforg/scripts/r-install-system.sh :shebang "#!/bin/bash" :noweb yes :var R_VERSION=R_VERSION
 <<r_source_code_present_and_compiled>>
 sudo make install
 
@@ -1415,7 +1433,7 @@ package_list="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc f
 
 And the above code block is included in the one below with noweb.
 
-#+begin_src shell :tangle conforguration_scripts/r-install-packages.sh :shebang "#!/bin/bash" :noweb yes
+#+begin_src shell :tangle conforg/scripts/r-install-packages.sh :shebang "#!/bin/bash" :noweb yes
 <<packages-list-variable>>
 for pkg in $package_list
 do
@@ -1435,7 +1453,7 @@ When tangled, the script will have the full =package_list= definition with all t
 
 Make sure some necessities are in place before trying to build from source.
 
-#+begin_src shell :tangle conforguration_scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
 sudo apt-get install libreadline-dev libsqlite3-dev
 #+end_src
@@ -1444,7 +1462,7 @@ sudo apt-get install libreadline-dev libsqlite3-dev
 
 This script installs [[https://github.com/rbenv/rbenv][rbenv]] if it isn't already in place; if it is, it updates it.  It checks to see if =~/.rbenv/= exists; if it does, =rbenv= is installed, so it just tries to update it; if not, it installs it.
 
-#+begin_src shell :tangle conforguration_scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/ruby-rbenv.sh :shebang "#!/bin/bash"
 if [[ -d ~/.rbenv ]]; then
     echo "Upgrade if possible"
     cd ~/.rbenv/
@@ -1463,26 +1481,26 @@ This can be called with noweb by source blocks below to install =rbenv= on a rem
 
 #+NAME: ruby-rbenv-remotely
 #+begin_src shell
-ssh ${hostname} "conforguration_scripts/ruby-rbenv.sh"
+ssh ${hostname} "conforg/scripts/ruby-rbenv.sh"
 #+end_src
 
 ** Install with rbenv for personal use
 
-#+begin_src shell :tangle conforguration_scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+begin_src shell :tangle conforg/scripts/ruby-install-personal.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
-~/conforguration_scripts/ruby-install-gems.sh
+~/conforg/scripts/ruby-install-gems.sh
 echo "Now run bundle install where needed."
 #+end_src
 
 #+NAME: ruby-install-personal-remotely
 #+begin_src shell
-ssh ${hostname} "conforguration_scripts/ruby-install-personal.sh"
+ssh ${hostname} "conforg/scripts/ruby-install-personal.sh"
 #+end_src
 
 ** Install system-wide
 
-#+begin_src shell :tangle conforguration_scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
+#+begin_src shell :tangle conforg/scripts/ruby-install-system.sh :shebang "#!/bin/bash" :var RUBY_VERSION=RUBY_VERSION
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
@@ -1494,14 +1512,14 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo ~/conforguration_scripts/ruby-install-gems.sh
+sudo ~/conforg/scripts/ruby-install-gems.sh
 
 echo "Now run bundle install where needed."
 #+end_src
 
 #+NAME: ruby-install-system-remotely
 #+begin_src shell
-ssh ${hostname} "conforguration_scripts/ruby-install-system.sh"
+ssh ${hostname} "conforg/scripts/ruby-install-system.sh"
 #+end_src
 
 ** Install gems
@@ -1537,7 +1555,7 @@ GEM_LIST="awesome_print bundler docopt http marc nokogiri pry pry-doc rubocop ru
 
 And the above code block is included in the one below with noweb.
 
-#+begin_src shell :tangle conforguration_scripts/ruby-install-gems.sh :shebang "#!/bin/bash" :noweb yes
+#+begin_src shell :tangle conforg/scripts/ruby-install-gems.sh :shebang "#!/bin/bash" :noweb yes
 <<gem-list-variable>>
 for gem in $GEM_LIST
 do
@@ -1547,22 +1565,12 @@ done
 
 * Machines
 
-** Noweb setup
-
-This one call to =rsync= will push the Conforguration scripts to a remote host.  The =${hostname}= variable is defined in the PROPERTIES for each host's subheading below (except localhost, because here we can copy files directly), and the script is run with noweb.
-
-#+NAME: copy-conforguration-scripts-remotely
-#+begin_src shell
-rsync --archive --compress --delete --times conforguration_scripts/ ${hostname}:conforguration_scripts/
-#+end_src
-
 ** localhost
 
 *** Dot files
 
 #+begin_src shell :results output
-dotfiles/copy-dotfiles.shd
-dotfiles/link-dotfiles.sh
+install/install.sh
 #+end_src
 
 #+RESULTS:
@@ -1594,21 +1602,13 @@ imported
 :header-args: :var hostname="music"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
-*** Push scripts
-
-#+begin_src shell :results silent :noweb yes
-<<copy-conforguration-scripts-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 *** Install Emacs remotely one way
 
-#+begin_src shell :dir /scp:wtd@music:conforguration_scripts/ :results silent
+#+begin_src shell :dir /scp:wtd@music:conforg/scripts/ :results silent
 # ./emacs-install-requirements.sh
 ./emacs-install-personal.sh
 #+end_src
@@ -1622,7 +1622,6 @@ imported
 #+begin_src shell :results silent :noweb yes
 <<ruby-install-personal-remotely>>
 #+end_src
-
 
 *** Testing
 
@@ -1660,10 +1659,8 @@ sleep 10
 :header-args: :var hostname="pihole"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** studio
@@ -1671,10 +1668,8 @@ sleep 10
 :header-args: :var hostname="music"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** tor
@@ -1682,10 +1677,8 @@ sleep 10
 :header-args: :var hostname="tor"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** pair
@@ -1693,10 +1686,8 @@ sleep 10
 :header-args: :var hostname="pair"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** shell3
@@ -1704,16 +1695,8 @@ sleep 10
 :header-args: :var hostname="shell3"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
-*** Push scripts
-
-#+begin_src shell :results silent :noweb yes
-<<copy-conforguration-scripts-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** wdenton2
@@ -1721,16 +1704,8 @@ sleep 10
 :header-args: :var hostname="wdenton2"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
-*** Push scripts
-
-#+begin_src shell :results silent :noweb yes
-<<copy-conforguration-scripts-remotely>>
+<<install-conforg-remotely>>
 #+end_src
 
 ** orez
@@ -1738,14 +1713,6 @@ sleep 10
 :header-args: :var hostname="orez"
 :END:
 
-*** Dot files
-
 #+begin_src shell :results silent :noweb yes
-<<install-dotfiles-remotely>>
-#+end_src
-
-*** Push scripts
-
-#+begin_src shell :results silent :noweb yes
-<<copy-conforguration-scripts-remotely>>
+<<install-conforg-remotely>>
 #+end_src

@@ -12,6 +12,6 @@ cd ruby-${RUBY_VERSION}
 make
 
 sudo make install
-sudo ~/conforguration_scripts/ruby-install-gems.sh
+sudo ~/conforg/scripts/ruby-install-gems.sh
 
 echo "Now run bundle install where needed."

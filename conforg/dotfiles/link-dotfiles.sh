@@ -8,7 +8,7 @@ for dir in mine imported; do
     for file in *; do
 	echo "  " $file
 	rm -f ~/.${file}
-	ln -s ~/dotfiles/${dir}/${file} ~/.${file}
+	ln -s ~/conforg/dotfiles/${dir}/${file} ~/.${file}
     done
     cd ..
 done
