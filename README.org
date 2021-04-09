@@ -10,13 +10,13 @@ Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
 
 Everything is in [[file:conforguration.org][conforguration.org]].  Tangling that file (by running ~M-x org-babel-tangle~ or =C-c C-v t=) will generate all of the dot files and scripts.  Installing Conforguration copies these into =~/conforg/=:  dot files are in ~/conforg/dotfiles/~ and scripts (to install Emacs, R and Ruby) are in ~/conforg/scripts/~.  This =~/conforg/= directory can be pushed to remote machines.
 
-There are two types of dot files:  "mine" (most of them) or "imported" (a few copied verbatim from elsewhere).  Symbolic links are made from your home directory to =~/conforg/dotfiles/=.
+There are two types of dot files:  "mine" (most of them) or "imported" (a few copied verbatim from elsewhere).  Symbolic links are made from $HOME to =~/conforg/dotfiles/=.
 
 The scripts can be run locally or on remote machines.  Either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
 
 * How to install Emacs from scratch the Conforguration way
 
-Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.  (Work on Debian, Ubuntu and related systems.
+Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.  (Works on Debian, Ubuntu and related systems.)
 
 #+BEGIN_SRC shell :eval no
 cd
