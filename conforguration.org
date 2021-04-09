@@ -124,7 +124,7 @@ ssh ${hostname} "conforg/dotfiles/link-dotfiles.sh"
 
 ** Install!
 
-The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).
+The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).  It puts the current versions of dot files and scripts into =~/conforg/= and then links to the dot files.  After this is done, everything is ready to be copied to other machines.
 
 #+begin_src shell :dir install/ :tangle install/install.sh :shebang "#!/bin/bash" :results silent
 cd "$(dirname "$0")"
