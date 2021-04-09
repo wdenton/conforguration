@@ -4,7 +4,7 @@
 
 * Conforguration
 
-Use the power of [[http://orgmode.org/][Org]] to configure accounts and servers.
+Use the power of [[http://orgmode.org/][Org]] to manage accounts and install software.
 
 * How does it work?
 

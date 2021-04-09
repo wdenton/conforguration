@@ -2,15 +2,11 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
-#+STARTUP: showall entitiespretty inlineimages
+#+STARTUP: content entitiespretty inlineimages
 #+OPTIONS: toc:nil ^:nil
 
 # These variables are hardcoded now.  Could maybe abstract them out later.
 # +PROPERTY: header-args :var script_dir="conforguration_scripts" :var dotfiles_dir="dotfiles"
-
-# Could work with https://github.com/cbowdon/daemons.el/blob/master/README.org ?
-
-This has my dot files and helper scripts to install Emacs, R and Ruby from source.  There may be more in the future.
 
 If you're looking at this on GitHub, the BEGIN and END source block wrappers are hidden, so you can't see the parameters.  Look at the raw version of the file, or clone the repository and load it into Emacs, to read it properly.
 
@@ -1567,8 +1563,6 @@ done
 
 ** localhost
 
-*** Dot files
-
 #+begin_src shell :results output
 install/install.sh
 #+end_src
@@ -1623,36 +1617,7 @@ imported
 <<ruby-install-personal-remotely>>
 #+end_src
 
-*** Testing
-
-#+name: one
-#+begin_src shell
-echo "one"
-sleep 10
-#+end_src
-
-#+RESULTS:
-: one
-
-#+name: two
-#+begin_src shell
-echo "two three"
-sleep 10
-#+end_src
-
-#+RESULTS: two
-: two three
-
-# :dir /music:
-
-#+begin_src shell  :results output :noweb yes
-<<one>>
-<<two>>
-#+end_src
-
-#+RESULTS:
-: one
-: two three
+Or log in to the machine itself and run the scripts there.
 
 ** pihole
 :PROPERTIES:
