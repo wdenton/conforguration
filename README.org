@@ -4,7 +4,7 @@
 
 * Conforguration
 
-Use the power of [[http://orgmode.org/][Org]] to manage accounts and install software.
+Use the power of [[http://orgmode.org/][Org]] to manage accounts and install software the way I like it done.
 
 Conforguration contains:
 
@@ -12,6 +12,8 @@ Conforguration contains:
 + scripts to install (from source) Emacs, R and Ruby
 
 The dot files and scripts can be used locally and on remote machines.  It is easy to push everything from the local machine to a remote one from this Org file.
+
+I made this to suit my tastes and work the way I want.  There may be some things in my dot files that you like, in which case you're free to copy them, but watch out!  This is not meant for widespread general use!
 
 * How does it work?
 
@@ -41,8 +43,6 @@ First, get Conforguration.  To clone it with your Git account, run this:
 
 #+BEGIN_SRC shell
 git clone git@github.com:wdenton/conforguration.git ~/src/conforguration/
-# Or if you don't want to use a GitHub account:
-# git clone https://github.com/wdenton/conforguration.git ~/src/conforguration/
 #+END_SRC
 
 Or if you don't want to use a GitHub account:
@@ -84,7 +84,7 @@ git clone git@github.com:wdenton/.emacs.d.git
 
 Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!
 
-Whenever you want to upgrade, run:
+Whenever you want to upgrade Emacs and Org (packages need to be upgraded inside Emacs; my ridiculous keystroke for that is =C-x l p U x=), run:
 
 #+begin_src shell
 ~/conforg/scripts/emacs-update.sh
@@ -92,7 +92,7 @@ Whenever you want to upgrade, run:
 
 ** Installing R
 
-You can install [[https://www.r-project.org/][R]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.
+You can install [[https://www.r-project.org/][R]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.  The version number is set in [[file:conforguration.org][conforguration.org]].
 
 #+BEGIN_SRC shell
 ~/conforg/scripts/r-install-requirements.sh
@@ -103,7 +103,9 @@ Run =~/conforg/scripts/r-install-system.sh= to install R into =/usr/local/bin/=.
 
 ** Installing Ruby
 
-You can install [[https://www.ruby-lang.org/en/][Ruby]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.  Here is how to install a personal version with [[https://github.com/rbenv/rbenv][Rbenv]].
+You can install [[https://www.ruby-lang.org/en/][Ruby]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.  The version number is set in [[file:conforguration.org][conforguration.org]].
+
+To install a personal version with [[https://github.com/rbenv/rbenv][Rbenv]]:
 
 #+BEGIN_SRC shell
 ~/conforg/scripts/ruby-install-requirements.sh
