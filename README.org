@@ -6,6 +6,13 @@
 
 Use the power of [[http://orgmode.org/][Org]] to manage accounts and install software.
 
+Conforguration contains:
+
++ all my non-private "dot files" ([[https://en.wikipedia.org/wiki/Run_commands][run command files]], containing configuration instructions for different programs)
++ scripts to install (from source) Emacs, R and Ruby
+
+The dot files and scripts can be used locally and on remote machines.  It is easy to push everything from the local machine to a remote one from this Org file.
+
 * How does it work?
 
 Everything is in [[file:conforguration.org][conforguration.org]].  Tangling that file (by running ~M-x org-babel-tangle~ or =C-c C-v t=) will generate all of the dot files and scripts.  Installing Conforguration copies these into =~/conforg/=:  dot files are in ~/conforg/dotfiles/~ and scripts (to install Emacs, R and Ruby) are in ~/conforg/scripts/~.  This =~/conforg/= directory can be pushed to remote machines.
@@ -14,27 +21,107 @@ There are two types of dot files:  "mine" (most of them) or "imported" (a few co
 
 The scripts can be run locally or on remote machines.  Either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
 
-* How to install Emacs from scratch the Conforguration way
+* Usage
 
-Warning: this will overwrite all sorts of VERY IMPORTANT files, so you don't do this unless you're me, or you're on a new bare system and want to try it out.  (Works on Debian, Ubuntu and related systems.)
+Assume Conforguration will be in =~/src/conforguration/=.
 
-#+BEGIN_SRC shell :eval no
+** Requirements
+
+This all assumes your shell is [[https://www.gnu.org/software/bash/][Bash]].
+
+All that is needed to get it is Git.  On a Debian, Ubuntu or related system, run this:
+
+#+begin_src shell :eval no
+sudo apt install git
+#+end_src
+
+** Installation
+
+First, get Conforguration.
+
+#+BEGIN_SRC shell
 cd
-sudo apt-get install git
-git clone git@github.com:wdenton/.emacs.d.git
 mkdir -p src
 cd src
 git clone git@github.com:wdenton/conforguration.git
 # Or if you don't want to use a GitHub account:
 # git clone https://github.com/wdenton/conforguration.git
+#+END_SRC
+
+Set up =/usr/local/src/= and =~/conforg/=.
+
+#+BEGIN_SRC shell
+conforguration/conforg/scripts/initialize.sh
 conforguration/install/install.sh
 source ~/.bashrc
-~/conforg/scripts/initialize.sh
+#+END_SRC
+
+Install the dot files and scripts in =~/conforg/=, and refresh bash to see the effects.
+
+#+BEGIN_SRC shell
+conforguration/install/install.sh
+source ~/.bashrc
+#+END_SRC
+
+Now you're running under Conforguration.
+
+** Installing Emacs
+
+This installs [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://orgmode.org/][Org]] from source.
+
+#+BEGIN_SRC shell
 ~/conforg/scripts/emacs-install-requirements.sh
 ~/conforg/scripts/emacs-install-personal.sh
 #+END_SRC
 
-Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!  If you don't want to go that far, skip the =.emacs.d= repository download, but make sure your PATH is set up to point to Emacs in the right place under =/usr/local/src/=.
+To get my personal Emacs configuration, run the following.  Warning: this will overwrite all sorts of VERY IMPORTANT files, so don't do this unless you're me, or you're on a new bare system and want to try it out.
+
+#+begin_src shell
+cd
+git clone git@github.com:wdenton/.emacs.d.git
+#+end_src
+
+Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!
+
+Whenever you want to upgrade, run:
+
+#+begin_src shell
+~/conforg/scripts/emacs-update.sh
+#+end_src
+
+** Installing R
+
+You can install [[https://www.r-project.org/][R]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.
+
+#+BEGIN_SRC shell
+~/conforg/scripts/r-install-requirements.sh
+~/conforg/scripts/r-install-personal.sh
+#+END_SRC
+
+Run =~/conforg/scripts/r-install-system.sh= to install R into =/usr/local/bin/=.
+
+** Installing Ruby
+
+You can install [[https://www.ruby-lang.org/en/][Ruby]] for personal use (where it runs out of =/usr/local/src/=) or system-wide.  Here is how to install a personal version with [[https://github.com/rbenv/rbenv][Rbenv]].
+
+#+BEGIN_SRC shell
+~/conforg/scripts/ruby-install-requirements.sh
+~/conforg/scripts/ruby-rbenv.sh
+~/conforg/scripts/ruby-install-personal.sh
+#+END_SRC
+
+System-wide:
+
+#+BEGIN_SRC shell
+~/conforg/scripts/ruby-install-requirements.sh
+~/conforg/scripts/ruby-install-system.sh
+#+END_SRC
+
+Whenever you want to upgrade Rbenv, just run the same script again; if Rbenv is installed it will now upgrade it.
+
+#+BEGIN_SRC shell
+~/conforg/scripts/ruby-rbenv.sh
+#+END_SRC
 
 * Why?
 
