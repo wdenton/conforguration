@@ -1,6 +1,6 @@
 #!/bin/bash
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '3.0.0' )
+declare -a RUBY_VERSION=( '3.0.1' )
 rbenv install --verbose $RUBY_VERSION
 rbenv global $RUBY_VERSION
 ~/conforg/scripts/ruby-install-gems.sh
