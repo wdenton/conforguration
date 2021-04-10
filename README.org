@@ -37,23 +37,24 @@ sudo apt install git
 
 ** Installation
 
-First, get Conforguration.
+First, get Conforguration.  To clone it with your Git account, run this:
 
 #+BEGIN_SRC shell
-cd
-mkdir -p src
-cd src
-git clone git@github.com:wdenton/conforguration.git
+git clone git@github.com:wdenton/conforguration.git ~/src/conforguration/
 # Or if you don't want to use a GitHub account:
-# git clone https://github.com/wdenton/conforguration.git
+# git clone https://github.com/wdenton/conforguration.git ~/src/conforguration/
 #+END_SRC
 
-Set up =/usr/local/src/= and =~/conforg/=.
+Or if you don't want to use a GitHub account:
+
+#+BEGIN_SRC shell
+git clone https://github.com/wdenton/conforguration.git ~/src/conforguration/
+#+END_SRC
+
+Set up =/usr/local/src/= and =~/conforg/=.  This is only necessary once.
 
 #+BEGIN_SRC shell
 conforguration/conforg/scripts/initialize.sh
-conforguration/install/install.sh
-source ~/.bashrc
 #+END_SRC
 
 Install the dot files and scripts in =~/conforg/=, and refresh bash to see the effects.
@@ -63,7 +64,7 @@ conforguration/install/install.sh
 source ~/.bashrc
 #+END_SRC
 
-Now you're running under Conforguration.
+Now you're running under Conforguration!
 
 ** Installing Emacs
 
