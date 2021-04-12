@@ -17,11 +17,18 @@ I made this to suit my tastes and work the way I want.  There may be some things
 
 * How does it work?
 
-Everything is in [[file:conforguration.org][conforguration.org]].  Tangling that file (by running ~M-x org-babel-tangle~ or =C-c C-v t=) will generate all of the dot files and scripts.  Installing Conforguration copies these into =~/conforg/=:  dot files are in ~/conforg/dotfiles/~ and scripts (to install Emacs, R and Ruby) are in ~/conforg/scripts/~.  This =~/conforg/= directory can be pushed to remote machines.
+Everything is in [[file:conforguration.org][conforguration.org]].  Tangling that file (by running =M-x org-babel-tangle= or =C-c C-v t=) will generate all of the dot files and scripts.
+
+Installing Conforguration locally copies files into =~/conforg/=:
+
++ dot files to =~/conforg/dotfiles/=
++ scripts to =~/conforg/scripts/=
+
+This =~/conforg/= directory can then be pushed to remote machines.
 
 There are two types of dot files:  "mine" (most of them) or "imported" (a few copied verbatim from elsewhere).  Symbolic links are made from $HOME to =~/conforg/dotfiles/=.
 
-The scripts can be run locally or on remote machines.  Either locally or remotely, you can use ~C-c C-c~ on the shell blocks to execute them, or you can run the scripts at the command line.
+The scripts can be run locally or on remote machines.  Either locally or remotely, you can use =C-c C-c= on the shell blocks to execute them, or you can run the scripts at the command line.
 
 * Usage
 
