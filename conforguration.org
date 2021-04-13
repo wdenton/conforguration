@@ -1559,6 +1559,77 @@ do
 done
 #+end_src
 
+* Tor
+
+#+NAME: TOR_VERSION
+| 0.4.5.7 |
+
+I run two [[https://www.torproject.org/][Tor]] relays (guards, not exit points).  These scripts let me update and run them, but this is not good enough for someone else to set up a new relay of their own.  I may add more later.
+
+** Requirements
+
+Make sure some necessities are in place before trying to build from source.
+
+#+begin_src shell :tangle conforg/scripts/tor-install-requirements.sh :shebang "#!/bin/bash"
+sudo apt install libevent-dev libssl-dev libcap-dev liblzma-dev libzstd-dev libseccomp-dev libscrypt-dev
+sudo apt install speedometer tmux
+mkdir -p /usr/local/src/tor/
+#+end_src
+
+** Install
+
+#+begin_src shell :tangle conforg/scripts/tor-install-system.sh :shebang "#!/bin/bash" :var TOR_VERSION=TOR_VERSION
+cd /usr/local/src/tor/
+curl -LO https://dist.torproject.org/tor-${TOR_VERSION}.tar.gz
+tar --extract --verbose --gunzip --file tor-${TOR_VERSION}.tar.gz
+cd tor-${TOR_VERSION}
+./configure && make && sudo make install
+echo "Now run ~/conforg/scripts/tor-run.sh"
+#+end_src
+
+#+NAME: tor-install-system-remotely
+#+begin_src shell
+ssh ${hostname} "conforg/scripts/tor-install-system.sh"
+#+end_src
+
+** Script to run and monitor Tor
+
+This runs Tor in a [[https://github.com/tmux/tmux/wiki][Tmux]] session with a window where the =speedometer= program is showing how much bandwidth is in use.  Logging in and running =tmux attach -t tor= shows what's going on, then =C-b d= detaches but leaves everything running.
+
+First, if one of these is already running, kill it and everything inside.  Need to wait at least 30 seconds for Tor to shut down nicely.
+
+#+begin_src shell :tangle conforg/scripts/tor-run.sh :shebang "#!/bin/bash"
+if tmux has-session -t tor
+ then
+     echo "Session tor exists; killing it nicely ..."
+     tmux send-keys -t tor:1 "C-c"
+     tmux send-keys -t tor:2 "C-c"
+     sleep 35
+     tmux kill-window -t tor:1
+     tmux kill-window -t tor:2
+ fi
+#+end_src
+
+Now start a new session with two windows in it.
+
+#+begin_src shell :tangle conforg/scripts/tor-run.sh
+echo "Starting tor session ..."
+
+tmux new-session -d -s "tor"
+
+tmux new-window -t tor:2
+tmux send-keys -t tor:2 "speedometer -t wlan0 -r wlan0 -l -m 1048576" "C-m"
+
+tmux select-window -t 1
+tmux send-keys -t tor:1 "tor" "C-m"
+#+end_src
+
+Put this in the crontab to bring up Tor automatically when the machine reboots:
+
+#+begin_example
+@reboot ~/conforg/scripts/tor-run.sh
+#+end_example
+
 * Machines
 
 ** localhost
