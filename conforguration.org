@@ -27,40 +27,28 @@ They all do the same thing.
 
 * Initialize
 
-This only needs to be done once per machine, to create =/usr/local/src/= and make it owned by oneself (on Debian-like systems, at least). This is where all source code will be downloaded and compiled.
+This only needs to be done once per machine, to create =/usr/local/src/= and make it owned by oneself.  This is where all source code will be downloaded and compiled.
 
 #+begin_src shell :tangle conforg/scripts/initialize.sh :shebang "#!/bin/bash"
 sudo mkdir -p /usr/local/src/
 sudo chown $USER:$USER /usr/local/src
-mkdir -p ~/conforg/dotfiles/mine/ ~/conforg/dotfiles/imported/ ~/conforg/scripts/
 #+end_src
 
 * Installing
 
-** Dot files
+** Copy the dot files and scripts into place
 
-*** Script to copy the dot files
+Everything in the =conforg= directory needs to be copied to $HOME.  The easiest way to do this is with =rsync=, which will create any directories necessary.  To make sure no old cruft accumulates, delete anything in the target directory that shouldn't be there.
 
-Gather all the dot files and the install script into the =~/conforg/dotfiles/= directory.  It's easiest to have them all there because they can then be pushed to other machines, instead of trying to use Conforguration over there.  Of course it's possible to run Conforguration on another machine and treat it as localhost when logged in there, instead of pushing to it.
-
-First, move into the directory where the script is.  There is [[https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel][much discussion on Stack Overflow]] about the best way to do this, but this works.  It means you can call the script from anywhere.
-
-#+begin_src shell :tangle install/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
-cd "$(dirname "$0")"
+#+begin_src shell :tangle install/install.sh :shebang "#!/bin/bash"
+rsync --archive --delete ~/src/conforguration/conforg/ ${HOME}/conforg/
 #+end_src
 
-Then copy all the files I want from Conforguration into =~/conforg/dotfiles/=.
-
-#+begin_src shell :tangle install/copy-dotfiles.sh :shebang "#!/bin/bash" :eval no
-cd ../conforg/
-cp -pr dotfiles/* ~/conforg/dotfiles/
-#+end_src
-
-*** Script to create symlinks for the dot files
+** Script to create symlinks for the dot files
 
 Once all the dot files are in =~/conforg/dotfiles/=, we need a script to set them up in the home directory.  This is done by making symlinks.
 
-First, to be safe, again move into the directory where the script is run.
+First, to be safe, move into the directory where the script is run.
 
 #+begin_src shell :tangle conforg/dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 cd "$(dirname "$0")"
@@ -69,7 +57,7 @@ cd "$(dirname "$0")"
 
 The dot files are in two directories:  =mine= and =imported=.  Go into each directory and make a symbolic link (specifying the full path) to =file= from =~/.file=.  In other words, =~/.bashrc= is a symlink to the =mine/bashrc= here.
 
-(To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out because it messes up the syntax highlighting.)
+(To be absolutely safe, all the filenames should be in double quotes, but there are no spaces or strange characters in my filenames, so I'm going to leave that out.)
 
 #+begin_src shell :tangle conforg/dotfiles/link-dotfiles.sh :shebang "#!/bin/bash" :eval no
 for dir in mine imported; do
@@ -91,21 +79,14 @@ rm ~/.profile
 ln -s ~/.bash_profile ~/.profile
 #+end_src
 
-Once this is run you need to open up a new shell, our =source ~/.bashrc=, to see any changes.
+Once this is run you need to open up a new shell, or =source ~/.bashrc=, to see any changes.
 
-** Scripts
+** Install
 
-*** Script to copy the scripts
+Add a line to the install script to call the above linking script.  This =install.sh= script can be run when Conforguration is pulled down fresh from GitHub on a new machine, and will put everything in place.  To update and refresh dot files and scripts locally within Emacs, you should use the localhost section below.
 
-#+begin_src shell :tangle install/copy-scripts.sh :shebang "#!/bin/bash" :eval no
-cd "$(dirname "$0")"
-#+end_src
-
-Then copy all the files I want from Conforguration into =~/dotfiles/=.
-
-#+begin_src shell :tangle install/copy-scripts.sh :shebang "#!/bin/bash" :eval no
-cd ../conforg/
-cp -p scripts/* ~/conforg/scripts/
+#+begin_src shell :tangle install/install.sh
+~/conforg/dotfiles/link-dotfiles.sh
 #+end_src
 
 ** Noweb for installing remotely
@@ -114,19 +95,8 @@ TODO:  Explain.
 
 #+NAME: install-conforg-remotely
 #+begin_src shell
-rsync --archive --compress --delete ~/conforg/ ${hostname}:conforg/
+rsync --archive --compress --delete ~/src/conforguration/conforg/ ${hostname}:conforg/
 ssh ${hostname} "conforg/dotfiles/link-dotfiles.sh"
-#+end_src
-
-** Install
-
-The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).  It puts the current versions of dot files and scripts into =~/conforg/= and then links to the dot files.  After this is done, everything is ready to be copied to other machines.
-
-#+begin_src shell :dir install/ :tangle install/install.sh :shebang "#!/bin/bash" :results silent
-cd "$(dirname "$0")"
-./copy-dotfiles.sh
-~/conforg/dotfiles/link-dotfiles.sh
-./copy-scripts.sh
 #+end_src
 
 * Dot files

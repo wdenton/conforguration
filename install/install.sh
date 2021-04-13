@@ -1,5 +1,4 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-./copy-dotfiles.sh
+rsync --archive --delete ~/src/conforguration/conforg/ ${HOME}/conforg/
+
 ~/conforg/dotfiles/link-dotfiles.sh
-./copy-scripts.sh

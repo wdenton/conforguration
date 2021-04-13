@@ -24,11 +24,11 @@ Installing Conforguration locally copies files into =~/conforg/=:
 + dot files to =~/conforg/dotfiles/=
 + scripts to =~/conforg/scripts/=
 
-This =~/conforg/= directory can then be pushed to remote machines.
+The same files can easily be pushed to remote machines.
 
 There are two types of dot files:  "mine" (most of them) or "imported" (a few copied verbatim from elsewhere).  Symbolic links are made from $HOME to =~/conforg/dotfiles/=.
 
-The scripts can be run locally or on remote machines.  Either locally or remotely, you can use =C-c C-c= on the shell blocks to execute them, or you can run the scripts at the command line.
+The scripts can be run locally or on remote machines.  For either local or remote installations or updates, you can use =C-c C-c= on the shell blocks to execute them or you can run the scripts at the command line on the given machine.  (If it takes twenty minutes to compile something on a remote machine, you might find it easier to run that script over there instead of from inside Emacs here.)
 
 * Usage
 
