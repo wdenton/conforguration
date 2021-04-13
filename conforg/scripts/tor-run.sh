@@ -21,4 +21,4 @@ tmux new-window -t tor:2
 tmux send-keys -t tor:2 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 1048576" "C-m"
 
 tmux select-window -t 1
-# tmux send-keys -t tor:1 "tor" "C-m"
+tmux send-keys -t tor:1 "tor" "C-m"
