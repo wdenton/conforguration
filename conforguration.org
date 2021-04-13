@@ -1593,8 +1593,6 @@ if [[ -z $TOR_IFACE ]]; then
    TOR_IFACE=wlan0
 fi
 
-tmux setenv -t tor TOR_IFACE ${TOR_IFACE}
-
 tmux new-window -t tor:2
 tmux send-keys -t tor:2 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 1048576" "C-m"
 
@@ -1606,6 +1604,12 @@ Put this in the crontab to bring up Tor automatically when the machine reboots:
 
 #+begin_example
 @reboot ~/conforg/scripts/tor-run.sh
+#+end_example
+
+If you defined TOR_IFACE specially, do this:
+
+#+begin_example
+@reboot source ~/.bash.machine.rc; ~/conforg/scripts/tor-run.sh
 #+end_example
 
 * Machines
