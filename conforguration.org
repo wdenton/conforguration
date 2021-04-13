@@ -118,7 +118,7 @@ rsync --archive --compress --delete ~/conforg/ ${hostname}:conforg/
 ssh ${hostname} "conforg/dotfiles/link-dotfiles.sh"
 #+end_src
 
-** Install!
+** Install
 
 The script can be run here or from the command line (called from anywhere---you don't need to be in the same directory).  It puts the current versions of dot files and scripts into =~/conforg/= and then links to the dot files.  After this is done, everything is ready to be copied to other machines.
 
@@ -1610,7 +1610,7 @@ if tmux has-session -t tor
  fi
 #+end_src
 
-Now start a new session with two windows in it.
+Now start a new session with two windows in it, one running Tor and one running the =speedometer= visualization.  Being able to script Tmux like this makes it very powerful.
 
 #+begin_src shell :tangle conforg/scripts/tor-run.sh
 echo "Starting tor session ..."

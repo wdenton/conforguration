@@ -9,7 +9,7 @@ Use the power of [[http://orgmode.org/][Org]] to manage accounts and install sof
 Conforguration contains:
 
 + all my non-private "dot files" ([[https://en.wikipedia.org/wiki/Run_commands][run command files]], containing configuration instructions for different programs)
-+ scripts to install (from source) Emacs, R and Ruby
++ scripts to install (from source) Emacs, R, Ruby and Tor
 
 The dot files and scripts can be used locally and on remote machines.  It is easy to push everything from the local machine to a remote one from this Org file.
 
