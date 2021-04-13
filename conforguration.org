@@ -1582,13 +1582,21 @@ if tmux has-session -t tor
 
 Now start a new session with two windows in it, one running Tor and one running the =speedometer= visualization.  Being able to script Tmux like this makes it very powerful.
 
+By default, =speedometer= will show traffic on the =wlan0= interface.  To use another one, set the TOR_IFACE environment variable in =~/.bash.machine.rc= (using the hostname of the machine), like so: =export TOR_IFACE=ens160= or whatever.
+
 #+begin_src shell :tangle conforg/scripts/tor-run.sh
 echo "Starting tor session ..."
 
 tmux new-session -d -s "tor"
 
+if [[ -z $TOR_IFACE ]]; then
+   TOR_IFACE=wlan0
+fi
+
+tmux setenv -t tor TOR_IFACE ${TOR_IFACE}
+
 tmux new-window -t tor:2
-tmux send-keys -t tor:2 "speedometer -t wlan0 -r wlan0 -l -m 1048576" "C-m"
+tmux send-keys -t tor:2 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 1048576" "C-m"
 
 tmux select-window -t 1
 tmux send-keys -t tor:1 "tor" "C-m"
