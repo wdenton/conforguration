@@ -61,13 +61,13 @@ git clone https://github.com/wdenton/conforguration.git ~/src/conforguration/
 Set up =/usr/local/src/= and =~/conforg/=.  This is only necessary once.
 
 #+BEGIN_SRC shell
-conforguration/conforg/scripts/initialize.sh
+~/src/conforguration/conforg/scripts/initialize.sh
 #+END_SRC
 
 Install the dot files and scripts in =~/conforg/=, and refresh bash to see the effects.
 
 #+BEGIN_SRC shell
-conforguration/install/install.sh
+~/src/conforguration/install/install.sh
 source ~/.bashrc
 #+END_SRC
 
@@ -75,7 +75,7 @@ Now you're running under Conforguration!
 
 ** Installing Emacs
 
-This installs [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://orgmode.org/][Org]] from source.
+This installs [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://orgmode.org/][Org]] from source.  (For this to work in Ubuntu you'll need to have enabled source code repositories for packages in the software update tool.)
 
 #+BEGIN_SRC shell
 ~/conforg/scripts/emacs-install-requirements.sh
