@@ -509,7 +509,7 @@ fi
 Also use colours when grepping.
 
 #+begin_src shell
-alias grep='grep --color=auto'
+alias grep='grep --color=always'
 #+end_src
 
 Call up LibreOffice with just =o file=.
