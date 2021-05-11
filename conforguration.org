@@ -1081,9 +1081,9 @@ This is my personal sig.
 
 #+begin_src text
 --
-William Denton :: Toronto, Canada   ---   Listening to Art: https://listeningtoart.org/
-https://www.miskatonic.org/         ---   GHG.EARTH: https://ghg.earth/
-Caveat lector.                      ---   STAPLR: https://staplr.org/
+William Denton
+https://www.miskatonic.org/
+Librarian, artist and licensed private investigator.
 #+end_src
 
 *** Work (=.signature.work=)
