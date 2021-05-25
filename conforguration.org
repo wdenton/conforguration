@@ -625,7 +625,7 @@ Pass through raw ANSI colour escape sequences.  In other words, make colourizing
 export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 #+end_src
 
-=Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.  If it's not installed, fall back to a script I wrote myself (see [[*Lessfilter][Lessfilter]] below).
+=Lessfile= lets =less= open up tarred and gzipped files and so on and show what's inside.  If it's not installed, fall back to a script I wrote myself (see Lessfilter section below).
 
 #+begin_src shell
 if command -v lessfile > /dev/null 2>&1; then
@@ -829,7 +829,7 @@ https://github.com/seebi/dircolors-solarized
 
 Raw source:  [[https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark][dircolors.ansi-dark]].
 
-Imported copy: [[file:imported/dircolors.ansi-dark][imported/dircolors.ansi-dark]].
+Imported copy: [[file:conforg/dotfiles/imported/dircolors.ansi-dark][conforg/dotfiles/imported/dircolors.ansi-dark]].
 
 *** Logout (=.bash_logout=)
 :PROPERTIES:
@@ -892,7 +892,7 @@ TODO:  did i tweak anything?  investigate.  for now, since it's so long and comp
 
 Raw source: [[http://git.savannah.nongnu.org/cgit/chktex.git/plain/chktex/chktexrc][chktexrc]].
 
-Imported copy: [[file:imported/chktexrc][imported/chktexrc]].
+Imported copy: [[file:conforg/dotfiles/imported/chktexrc][conforg/dotfiles/imported/chktexrc]].
 
 ** Less
 
@@ -944,7 +944,6 @@ exit 1
 ** Nano
 
 *** Config (=.nanorc=)
-
 :PROPERTIES:
 :header-args: :tangle conforg/dotfiles/mine/nanorc
 :END:
@@ -1108,7 +1107,6 @@ STAPLR: https://staplr.org/
 ** Tmux
 
 *** Config (=.tmux.conf=)
-
 :PROPERTIES:
 :header-args: :tangle conforg/dotfiles/mine/tmux.conf
 :END:
