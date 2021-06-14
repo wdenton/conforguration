@@ -291,6 +291,14 @@ Then the =.bashrc= is processed.
 source ~/.bashrc
 #+end_src
 
+There are some settings or commands (like calling =ssh-add= for a particular host) that I use on a particular machine, and this makes that possible.  If the machine is named =dartagnan=, put commands in =~/.profile.dartagnan= (similar to the =.bashrc=) for them just to be  run in login shells there.
+
+#+begin_src shell
+if [ -f ~/.profile."$HOSTNAME" ] ; then
+    . ~/.profile.$HOSTNAME
+fi
+#+end_src
+
 *** Config (=.bashrc=)
 :PROPERTIES:
 :header-args: :tangle conforg/dotfiles/mine/bashrc
