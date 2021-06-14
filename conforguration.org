@@ -1366,6 +1366,7 @@ There are quite a few R packages I want installed by default, including of cours
 | maps          |
 | maptools      |
 | osmdata       |
+| readODS       |
 | readxl        |
 | remotes       |
 | rgeos         |
