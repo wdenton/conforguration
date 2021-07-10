@@ -1091,6 +1091,7 @@ This is my personal sig.
 William Denton
 https://www.miskatonic.org/
 Librarian, artist and licensed private investigator.
+Toronto, Canada
 #+end_src
 
 *** Work (=.signature.work=)
