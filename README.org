@@ -117,6 +117,7 @@ To install a personal version with [[https://github.com/rbenv/rbenv][Rbenv]]:
 #+BEGIN_SRC shell
 ~/conforg/scripts/ruby-install-requirements.sh
 ~/conforg/scripts/ruby-rbenv.sh
+source ~/.bashrc
 ~/conforg/scripts/ruby-install-personal.sh
 #+END_SRC
 
