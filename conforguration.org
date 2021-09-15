@@ -409,6 +409,7 @@ GREEN="\[\033[0;32m\]"
 BLUE="\[\033[0;34m\]"
 # LIGHT_BLUE="\[\033[1;34m\]"
 PURPLE="\[\033[0;35m\]"
+OCHRE="\e[38;2;204;119;34m\]" ## RGB (204, 119, 34), see https://stackoverflow.com/a/26665998
 
 # WHITE='\e[0;37m'
 # LIGHT_GRAY="\[\033[0;37m\]"
@@ -427,6 +428,9 @@ case $HOSTNAME in
 	;;
     shell3)
 	PROMPT_COLOUR=$GREEN
+	;;
+    ochre)
+	PROMPT_COLOUR=$OCHRE
 	;;
     ,*)
 	PROMPT_COLOUR=$RED
@@ -473,13 +477,13 @@ I simplified it a bit and discovered I can use Unicode characters instead of tho
 #+end_example
 
 #+begin_src shell
-PS1="┌─[\h]─[\w]\n└─\\$ "
+PROMPT="┌─[\h]─[\w]\n└─\\$ "
 #+end_src
 
 Set the prompt to be the colour I want.
 
 #+begin_src shell
-PS1="${PROMPT_COLOUR}${PS1}${NO_COLOUR}"
+PS1="${PROMPT_COLOUR}${PROMPT}${NO_COLOUR}"
 #+end_src
 
 Glue the prompt to always go to the first column ([[https://jonisalonen.com/2012/your-bash-prompt-needs-this/][source]]).
@@ -1353,6 +1357,11 @@ sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"
 
 There are quite a few R packages I want installed by default, including of course the [[https://www.tidyverse.org/][Tidyverse]], which I greatly admire.  The packages are all in this next table.  Add to (and resort) as needed.
 
+# TODO: Catch any errors that come up when installing the packages, and bail out with a warning.
+# The problem could be that a dependency is missing (for example for GIS packages, which use
+# programs and libraries installed on the system)
+# See "How do I make install.packages return an error if an R package cannot be installed?" (https://stackoverflow.com/q/26244530)
+
 #+NAME: r_packages
 | RCurl         |
 | arules        |
@@ -1404,7 +1413,7 @@ echo -n '"'
 #+NAME: packages-list-variable
 #+RESULTS:
 #+begin_src shell
-package_list="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
+package_list="RCurl arules arulesViz cluster devtools docopt flexdashboard fpc fs geonames geosphere ggrepel ggridges ggvis hms igraph knitr lintr lubridate mapproj maps maptools osmdata readODS readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
 #+end_src
 
 And the above code block is included in the one below with noweb.

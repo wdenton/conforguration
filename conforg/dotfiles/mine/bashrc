@@ -38,6 +38,7 @@ GREEN="\[\033[0;32m\]"
 BLUE="\[\033[0;34m\]"
 # LIGHT_BLUE="\[\033[1;34m\]"
 PURPLE="\[\033[0;35m\]"
+OCHRE="\e[38;2;204;119;34m\]" ## RGB (204, 119, 34), see https://stackoverflow.com/a/26665998
 
 # WHITE='\e[0;37m'
 # LIGHT_GRAY="\[\033[0;37m\]"
@@ -53,6 +54,9 @@ case $HOSTNAME in
     shell3)
 	PROMPT_COLOUR=$GREEN
 	;;
+    ochre)
+	PROMPT_COLOUR=$OCHRE
+	;;
     *)
 	PROMPT_COLOUR=$RED
 esac
@@ -61,9 +65,9 @@ if [[ ${EUID} == 0 ]] ; then
     PROMPT_COLOUR=$PURPLE
 fi
 
-PS1="┌─[\h]─[\w]\n└─\\$ "
+PROMPT="┌─[\h]─[\w]\n└─\\$ "
 
-PS1="${PROMPT_COLOUR}${PS1}${NO_COLOUR}"
+PS1="${PROMPT_COLOUR}${PROMPT}${NO_COLOUR}"
 
 PS1="\[\033[G\]$PS1"
 
