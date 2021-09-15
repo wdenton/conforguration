@@ -1,10 +1,13 @@
 #!/bin/bash
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '3.0.1' )
+declare -a RUBY_VERSION=( '3.0.2' )
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
-curl -LO https://cache.ruby-lang.org/pub/ruby/2.7/ruby-${RUBY_VERSION}.tar.gz
+# The 3.0.2.tar.gz tarball is in the 3.0/ directory, for example.
+MINOR_VERSION=$(echo ${RUBY_VERSION} | sed 's/\.[[:digit:]]$//')
+
+curl -LO https://cache.ruby-lang.org/pub/ruby/${MINOR_VERSION}/ruby-${RUBY_VERSION}.tar.gz
 tar xzvf ruby-${RUBY_VERSION}.tar.gz
 cd ruby-${RUBY_VERSION}
 
