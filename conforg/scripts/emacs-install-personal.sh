@@ -7,7 +7,7 @@ cd emacs
 make
 
 cd /usr/local/src/
-git clone https://code.orgmode.org/bzg/org-mode.git
+git clone https://git.savannah.gnu.org/git/emacs/org-mode.git
 cd org-mode
 make
 
