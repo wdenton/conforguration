@@ -165,6 +165,10 @@ function colsum {
     paste -s -d+ | bc --
 }
 
+function get {
+    rsync --archive --progress --human-readable "$@" .
+}
+
 source ~/.git-completion.bash
 
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then

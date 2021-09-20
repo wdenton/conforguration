@@ -729,6 +729,14 @@ $ (echo 1; echo 3; echo 5) | colsum
 9
 #+end_example
 
+Copy files from somewhere to here, preserving all metadata (timestamp and such) as is.
+
+#+begin_src shell
+function get {
+    rsync --archive --progress --human-readable "$@" .
+}
+#+end_src
+
 **** Completions
 
 Git.  Can be found as part of Git source.
