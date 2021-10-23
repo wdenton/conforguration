@@ -9,6 +9,7 @@ make
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs/org-mode.git
 cd org-mode
+make autoloads
 make
 
 cd
