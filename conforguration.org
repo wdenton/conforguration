@@ -159,7 +159,7 @@ Specify your required encoding options here. Multiple options can be selected as
 
 #+begin_src abcde
 # FLACOPTS='-s -e -V -8'
-FLACOPTS='--silent --exhaustiv-model-search --verify --compression-level-8'
+FLACOPTS='--silent --exhaustive-model-search --verify --compression-level-8'
 #+end_src
 
 Output type for FLAC.
