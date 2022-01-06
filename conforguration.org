@@ -1441,7 +1441,7 @@ When tangled, the script will have the full =package_list= definition with all t
 * Ruby
 
 #+NAME: RUBY_VERSION
-| 3.0.2 |
+| 3.1.0 |
 
 ** Requirements
 

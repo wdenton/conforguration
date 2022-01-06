@@ -41,7 +41,7 @@ This all assumes your shell is [[https://www.gnu.org/software/bash/][Bash]].
 All that is needed to get it is Git.  On a Debian, Ubuntu or related system, run this:
 
 #+begin_src shell :eval no
-sudo apt install git
+sudo apt install git rsync
 #+end_src
 
 ** Installation
