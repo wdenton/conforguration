@@ -1218,7 +1218,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure
+./configure --with-json
 make
 #+end_src
 
@@ -1253,7 +1253,7 @@ This is a simple script that pulls down the updated source for Emacs and Org and
 #+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure && make
+./configure --with-json && make
 cd ../org-mode/
 make update
 #+end_src

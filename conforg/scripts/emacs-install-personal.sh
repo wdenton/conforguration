@@ -3,7 +3,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure
+./configure --with-json
 make
 
 cd /usr/local/src/
