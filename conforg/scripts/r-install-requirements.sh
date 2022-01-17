@@ -3,4 +3,5 @@ sudo apt install libbz2-dev liblzma-dev libxml2-dev libpcre2-dev libpcre3-dev fo
 sudo apt install xorg-dev gfortran libreadline-dev libcurl4-openssl-dev libssl-dev libgsl-dev curl libcurl4-openssl-dev libudunits2-dev libgdal-dev
 sudo apt build-dep r-base
 mkdir -p ~/R/history/
+mkdir -p ~/.R/lintr_cache/
 mkdir -p /usr/local/src/R
