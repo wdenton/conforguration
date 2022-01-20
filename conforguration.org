@@ -1182,6 +1182,17 @@ set-window-option -g window-status-bell-style fg=black,bg=red
 
 ** X
 
+*** XCompose (=.XCompose=)
+:PROPERTIES:
+:header-args: :tangle conforg/dotfiles/mine/XCompose
+:END:
+
+This allows the Compose key (for me Left-Ctrl, because I use CapLock as the Control key) to be used in Emacs.
+
+#+begin_src XCompose
+include "%L"
+#+end_src
+
 *** Xmodmap (=.xmodmaprc=)
 :PROPERTIES:
 :header-args: :tangle conforg/dotfiles/mine/xmodmaprc
@@ -1195,6 +1206,7 @@ TODO:  Try disabling it and see what happens.
 keysym Home = Insert
 keysym End = Insert
 #+end_src
+
 * Emacs
 
 ** Requirements
@@ -1669,6 +1681,7 @@ mine
    signature
    signature.work
    tmux.conf
+   XCompose
    xmodmaprc
 imported
    chktexrc
