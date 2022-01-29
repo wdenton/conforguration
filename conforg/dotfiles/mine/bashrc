@@ -155,9 +155,16 @@ function order() {
     sort | uniq -c | sort -rn
 }
 
-function exifwipe() {
+function imagewipe() {
     for FILE in "$@"; do
 	exiftool -all= "$FILE"
+    done
+}
+
+function pdfwipe() {
+    for FILE in "$@"; do
+	exiftool -all= "$FILE"
+	qpdf --linearize --replace-input "$FILE"
     done
 }
 
