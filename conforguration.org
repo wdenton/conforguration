@@ -1737,15 +1737,6 @@ Or log in to the machine itself and run the scripts there.
 <<install-conforg-remotely>>
 #+end_src
 
-** studio
-:PROPERTIES:
-:header-args: :var hostname="music"
-:END:
-
-#+begin_src shell :results silent :noweb yes
-<<install-conforg-remotely>>
-#+end_src
-
 ** tor
 :PROPERTIES:
 :header-args: :var hostname="tor"
