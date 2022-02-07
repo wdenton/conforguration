@@ -1127,14 +1127,9 @@ Toronto, Canada
 This is the sig I use at work.
 
 #+begin_src text
-William Denton  <wdenton@yorku.ca>
+William Denton <wdenton@yorku.ca> (he/him)
 Associate Librarian: Scholarly Analytics / Mathematics & Statistics
-York University (Toronto) https://www.library.yorku.ca/
-
-GHG.EARTH: https://ghg.earth/
-STAPLR: https://staplr.org/
-
-"The library is the mathematician's laboratory." --- Paul Halmos
+York University (Toronto, Canada) https://www.library.yorku.ca/
 #+end_src
 
 
