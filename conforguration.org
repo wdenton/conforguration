@@ -1392,6 +1392,7 @@ There are quite a few R packages I want installed by default, including of cours
 
 #+NAME: r_packages
 | RCurl         |
+| RSQLite       |
 | arules        |
 | arulesViz     |
 | cluster       |
