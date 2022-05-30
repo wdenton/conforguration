@@ -566,6 +566,12 @@ Open any file in the default application with just =x file=.
 alias x='xdg-open'
 #+end_src
 
+Don't show snaps in =df= listings.  They use a particular file system, which can be excluded.
+
+#+begin_src shell
+alias df='df -x "squashfs"'
+#+end_src
+
 **** ls
 
 Count in proper kilobytes.
