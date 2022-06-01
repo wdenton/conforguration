@@ -1,6 +1,6 @@
 #!/bin/bash
 unset R_VERSION
-declare -a R_VERSION=( '4.1.1' )
+declare -a R_VERSION=( '4.2.0' )
 cd $(dirname "$0")
 SCRIPTS_DIR=$(pwd)
 MIRROR="https://utstat.toronto.edu/cran/"
