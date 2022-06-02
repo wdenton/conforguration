@@ -93,6 +93,8 @@ alias ww="curl https://wttr.in/yyz"
 
 alias x='xdg-open'
 
+alias df='df -x "squashfs"'
+
 export BLOCKSIZE=1024
 
 if [[ $(uname) == "FreeBSD" ]] ; then

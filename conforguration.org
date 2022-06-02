@@ -566,6 +566,12 @@ Open any file in the default application with just =x file=.
 alias x='xdg-open'
 #+end_src
 
+Don't show snaps in =df= listings.  They use a particular file system, which can be excluded.
+
+#+begin_src shell
+alias df='df -x "squashfs"'
+#+end_src
+
 **** ls
 
 Count in proper kilobytes.
@@ -1392,6 +1398,7 @@ There are quite a few R packages I want installed by default, including of cours
 
 #+NAME: r_packages
 | RCurl         |
+| RSQLite       |
 | arules        |
 | arulesViz     |
 | cluster       |
@@ -1582,7 +1589,7 @@ done
 * Tor
 
 #+NAME: TOR_VERSION
-| 0.4.6.10 |
+| 0.4.7.7  |
 
 I run a [[https://www.torproject.org/][Tor]] relay (a guards, not an exit point).  These scripts let me update and run it, but this is not good enough for someone else to set up a new relay of their own.  I may add more later.
 
