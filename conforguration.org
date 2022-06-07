@@ -1205,6 +1205,8 @@ This allows the Compose key (for me Left-Ctrl, because I use CapLock as the Cont
 include "%L"
 #+end_src
 
+(See also this [[https://github.com/kragen/xcompose][xcompose]] project at GitHub that has a massive .XCompose file with and an enormous set of key combinations.  More than I need right now, but maybe one day.)
+
 *** Xmodmap (=.xmodmaprc=)
 :PROPERTIES:
 :header-args: :tangle conforg/dotfiles/mine/xmodmaprc
