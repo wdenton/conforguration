@@ -1012,7 +1012,7 @@ TODO:  The mirror is also used in [[file:~/src/conforguration/conforguration.org
 
 #+begin_src R
 r <- getOption("repos")
-r["CRAN"] <- c("https://utstat.toronto.edu/cran/")
+r["CRAN"] <- c("https://mirror.csclub.uwaterloo.ca/CRAN/")
 options(repos = r)
 rm(r)
 #+end_src
@@ -1313,7 +1313,7 @@ Whether R is being installed system-wide or just for personal use, this code wil
 #+begin_src :shell :noweb-ref r_source_code_present_and_compiled
 cd $(dirname "$0")
 SCRIPTS_DIR=$(pwd)
-MIRROR="https://utstat.toronto.edu/cran/"
+MIRROR="https://mirror.csclub.uwaterloo.ca/CRAN/"
 cd /usr/local/src/R
 #+end_src
 
@@ -1459,7 +1459,7 @@ And the above code block is included in the one below with noweb.
 <<packages-list-variable>>
 for pkg in $package_list
 do
-    Rscript --vanilla -e "install.packages('$pkg', repos=c('https://utstat.toronto.edu/cran/'))"
+    Rscript --vanilla -e "install.packages('$pkg', repos=c('https://mirror.csclub.uwaterloo.ca/CRAN/'))"
 done
 Rscript --vanilla -e "devtools::install_github('yorkulibraries/yulr')"
 #+end_src

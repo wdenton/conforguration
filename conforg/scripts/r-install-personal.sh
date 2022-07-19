@@ -3,7 +3,7 @@ unset R_VERSION
 declare -a R_VERSION=( '4.2.0' )
 cd $(dirname "$0")
 SCRIPTS_DIR=$(pwd)
-MIRROR="https://utstat.toronto.edu/cran/"
+MIRROR="https://cran.utstat.toronto.edu/"
 cd /usr/local/src/R
 if [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
   echo "Removing old source directory ..."
