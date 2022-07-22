@@ -44,6 +44,8 @@ Everything in the =conforg= directory needs to be copied to $HOME.  The easiest 
 rsync --archive --delete ~/src/conforguration/conforg/ ${HOME}/conforg/
 #+end_src
 
+#+RESULTS:
+
 ** Script to create symlinks for the dot files
 
 Once all the dot files are in =~/conforg/dotfiles/=, we need a script to set them up in the home directory.  This is done by making symlinks.

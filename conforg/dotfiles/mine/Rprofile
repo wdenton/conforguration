@@ -1,5 +1,5 @@
 r <- getOption("repos")
-r["CRAN"] <- c("https://cran.utstat.toronto.edu/")
+r["CRAN"] <- c("https://mirror.csclub.uwaterloo.ca/CRAN/")
 options(repos = r)
 rm(r)
 
