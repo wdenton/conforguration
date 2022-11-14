@@ -1689,6 +1689,7 @@ mine
    bash_profile
    bashrc
    gemrc
+   gitattributes
    gitconfig
    lessfilter
    nanorc
