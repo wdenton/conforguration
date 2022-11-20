@@ -1,23 +1,18 @@
-[user]
-  name = William Denton
-  email = wtd@pobox.com
 [include]
-  path = ~/.gitconfig.local
+	path = ~/.gitconfig.local
 [color]
-  ui = auto
-  pager = true
+	ui = auto
+	pager = true
 [column]
-  ui = auto
+	ui = auto
 [core]
-  editor = emacsclient
-  attributesfile = ~/.gitattributes
+	editor = emacsclient
+[user]
+	name = William Denton
+	email = wtd@pobox.com
 [push]
-  default = current
+	default = current
 [init]
   defaultBranch = main
 [alias]
-  hist = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-[diff "lisp"]
-  xfuncname = "^(\\(.*)$"
-[diff "org"]
-  xfuncname = "^(\\*+ +.*)$"
+	hist = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all

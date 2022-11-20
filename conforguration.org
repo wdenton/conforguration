@@ -520,10 +520,11 @@ fi
 
 **** Command aliases
 
-Also use colours when grepping.
+Use colours when grepping.
 
 #+begin_src shell
-alias grep='grep --color=always'
+export GREP_COLORS='mt=1;37;44'
+alias grep='grep --color=auto'
 #+end_src
 
 Call up LibreOffice with just =o file=.

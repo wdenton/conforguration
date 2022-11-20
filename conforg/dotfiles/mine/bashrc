@@ -77,7 +77,8 @@ fi
 
 PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 
-alias grep='grep --color=always'
+export GREP_COLORS='mt=1;37;44'
+alias grep='grep --color=auto'
 
 alias o='libreoffice'
 
