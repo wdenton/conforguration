@@ -3,8 +3,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-json
-make
+./configure --with-pgtk && make -j 8
 
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs/org-mode.git

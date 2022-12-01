@@ -1247,8 +1247,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-json
-make
+./configure --with-pgtk && make -j 8
 #+end_src
 
 Then do the same for Org.
@@ -1289,7 +1288,7 @@ cd ../org-mode/
 make -j 8 update
 #+end_src
 
-#+begin_src shell :tangle conforg/scripts/emacs-update-autocompilation.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-update-compilation.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
 ./configure --with-json --with-pgtk --with-native-compilation=aot && make -j 8
