@@ -1228,11 +1228,11 @@ keysym End = Insert
 
 ** Requirements
 
-You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.
+You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.  (Unless the version of GCC changes, in which case a new =libgccjit-xx-dev= will be needed.  Check the current version with =gcc --version=.)
 
 #+begin_src shell :tangle conforg/scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
-sudo apt-get install libjansson-dev valgrind fonts-firacode
+sudo apt-get install libjansson-dev valgrind fonts-firacode libgccjit0 libgccjit-11-dev
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
 sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
@@ -1279,12 +1279,22 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 
 This is a simple script that pulls down the updated source for Emacs and Org and compiles them.  If something goes wrong with the Emacs compile you might need to do =make clean= or =make distclean= or =make extraclean= and then try again.
 
+If there are compilation problems then running =make maintainer-clean= in the Emacs source directory will probably fix it by resetting everything.
+
 #+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json && make
+./configure --with-json --with-pgtk && make -j 8
 cd ../org-mode/
-make update
+make -j 8 update
+#+end_src
+
+#+begin_src shell :tangle conforg/scripts/emacs-update-autocompilation.sh :shebang "#!/bin/bash"
+cd /usr/local/src/emacs/
+git pull
+./configure --with-json --with-pgtk --with-native-compilation=aot && make -j 8
+cd ../org-mode/
+make -j 8 update
 #+end_src
 
 * R

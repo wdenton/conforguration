@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json && make
+./configure --with-json --with-pgtk && make -j 8
 cd ../org-mode/
-make update
+make -j 8 update
