@@ -1228,11 +1228,11 @@ keysym End = Insert
 
 ** Requirements
 
-You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.  (Unless the version of GCC changes, in which case a new =libgccjit-xx-dev= will be needed.  Check the current version with =gcc --version=.)
+You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.  (Unless the version of GCC changes, in which case a new =libgccjit-xx-dev= will be needed.  Check the current version with =gcc --version=.)  These requirements go beyond the bare minimum in order to make native compilation work (on Ubuntu 22.04).
 
 #+begin_src shell :tangle conforg/scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
-sudo apt-get install libjansson-dev valgrind fonts-firacode libgccjit0 libgccjit-11-dev
+sudo apt-get install libjansson-dev valgrind fonts-firacode libgccjit0 libgccjit-11-dev libgtk-3-dev
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
 sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
