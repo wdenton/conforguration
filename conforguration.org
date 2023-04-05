@@ -1235,7 +1235,7 @@ sudo apt-get build-dep emacs
 sudo apt-get install libjansson-dev valgrind fonts-firacode libgccjit0 libgccjit-11-dev libgtk-3-dev
 ## On Linux Mint, at least, these are not installed when the above is done.  Curious.
 ## On other systems, it can't hurt.
-sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev
+sudo apt-get install texinfo libxpm-dev libjpeg-dev libgif-dev libtiff-dev libtinfo-dev libtree-sitter-dev
 #+end_src
 
 ** Install for personal use
@@ -1247,7 +1247,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-pgtk && make -j 8
+./configure --with-json --with-pgtk --with-tree-sitter && make -j 8
 #+end_src
 
 Then do the same for Org.
@@ -1283,15 +1283,17 @@ If there are compilation problems then running =make maintainer-clean= in the Em
 #+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk && make -j 8
+./configure --with-json --with-pgtk --with-tree-sitter && make -j 8
 cd ../org-mode/
 make -j 8 update
 #+end_src
 
-#+begin_src shell :tangle conforg/scripts/emacs-update-aot.sh :shebang "#!/bin/bash"
+(=--with-native-compilation=aot= is broken as of early April 2023.)
+
+#+begin_src shell :tangle conforg/scripts/emacs-update-native-compilation.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-native-compilation=aot && make -j 8
+./configure --with-json --with-pgtk --with-tree-sitter --with-native-compilation && make -j 8
 cd ../org-mode/
 make -j 8 update
 #+end_src
