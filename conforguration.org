@@ -889,6 +889,16 @@ if [ "$SHLVL" = 1 ]; then
 fi
 #+end_src
 
+*** ShellCheck (=.shellcheckrc=)
+:PROPERTIES:
+:header-args: :tangle conforg/dotfiles/mine/shellcheckrc
+:END:
+
+There is one directive I want to [[https://github.com/koalaman/shellcheck/wiki/Ignore][ignore]] when [[https://www.shellcheck.net/][ShellCheck]] runs on a script:  "Double quote to prevent globbing and word splitting" (SC2086).  That's because syntax highlighting in Emacs treats =$VAR= as a variable and colours it nicely, but ="$VAR"= is handled differently and not coloured, so I leave variables unquoted as much as possible, but I have to be careful about whitespace.
+
+#+begin_src shell
+disable=SC2086
+#+end_src
 
 ** Git
 
@@ -1709,6 +1719,7 @@ mine
    pryrc
    Rprofile
    rubocop.yml
+   shellcheckrc
    signature
    signature.work
    tmux.conf
