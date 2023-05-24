@@ -1293,9 +1293,7 @@ If there are compilation problems then running =make maintainer-clean= in the Em
 #+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-tree-sitter && make -j 8
-cd ../org-mode/
-make -j 8 update
+./configure --with-json --with-pgtk --with-tree-sitter && make -j 8 && cd ../org-mode/ && make -j 8 update
 #+end_src
 
 (=--with-native-compilation=aot= is broken as of early April 2023.)
@@ -1303,9 +1301,7 @@ make -j 8 update
 #+begin_src shell :tangle conforg/scripts/emacs-update-native-compilation.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-tree-sitter --with-native-compilation && make -j 8
-cd ../org-mode/
-make -j 8 update
+./configure --with-json --with-pgtk --with-tree-sitter --with-native-compilation && make -j 8 && cd ../org-mode/ && make -j 8 update
 #+end_src
 
 * R
