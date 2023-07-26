@@ -1,6 +1,6 @@
 #!/bin/bash
 unset TOR_VERSION
-declare -a TOR_VERSION=( '0.4.7.13' )
+declare -a TOR_VERSION=( '0.4.7.14' )
 cd /usr/local/src/tor/
 curl -LO https://dist.torproject.org/tor-${TOR_VERSION}.tar.gz
 tar --extract --verbose --gunzip --file tor-${TOR_VERSION}.tar.gz
