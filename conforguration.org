@@ -575,6 +575,12 @@ Don't show snaps in =df= listings.  They use a particular file system, which can
 alias df='df -x "squashfs"'
 #+end_src
 
+Set up =fd= (which on Ubuntu is used by another application) for [[https://github.com/sharkdp/fd][fd]] the replacement for =find=.
+
+#+begin_src shell
+alias fd='fdfind'
+#+end_src
+
 **** ls
 
 Count in proper kilobytes.

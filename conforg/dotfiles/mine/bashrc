@@ -96,6 +96,8 @@ alias x='xdg-open'
 
 alias df='df -x "squashfs"'
 
+alias fd='fdfind'
+
 export BLOCKSIZE=1024
 
 if [[ $(uname) == "FreeBSD" ]] ; then
