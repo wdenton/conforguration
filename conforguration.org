@@ -1438,6 +1438,7 @@ There are quite a few R packages I want installed by default, including of cours
 | fs            |
 | geonames      |
 | geosphere     |
+| ggally        |
 | ggrepel       |
 | ggridges      |
 | ggvis         |
