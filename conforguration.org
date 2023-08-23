@@ -1619,7 +1619,7 @@ done
 * Tor
 
 #+NAME: TOR_VERSION
-| 0.4.7.14 |
+| 0.4.8.4  |
 
 I run a [[https://www.torproject.org/][Tor]] relay (a guards, not an exit point).  These scripts let me update and run it, but this is not good enough for someone else to set up a new relay of their own.  I may add more later.
 
