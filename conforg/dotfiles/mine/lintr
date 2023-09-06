@@ -1,0 +1,4 @@
+linters: linters_with_defaults(
+    indentation_linter = indentation_linter(4L)
+)
+encoding: "UTF-8"

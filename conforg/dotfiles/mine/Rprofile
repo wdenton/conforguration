@@ -17,3 +17,5 @@ options(menu.graphics = FALSE)
 utils::rc.settings(ipck = TRUE)
 
 ## options(prompt="ℝ> ")
+
+options(lintr.linter_file="~/.lintr")
