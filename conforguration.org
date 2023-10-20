@@ -1472,6 +1472,7 @@ There are quite a few R packages I want installed by default, including of cours
 | mapproj       |
 | maps          |
 | maptools      |
+| openxlsx      |
 | osmdata       |
 | readODS       |
 | readxl        |
@@ -1500,8 +1501,10 @@ echo -n '"'
 #+NAME: packages-list-variable
 #+RESULTS:
 #+begin_src shell
-package_list="RCurl RSQLite arules arulesViz cluster dbplyr devtools docopt flexdashboard fpc fs geonames geosphere GGally ggrepel ggridges ggvis gmp gtools hms igraph knitr lintr lubridate mapproj maps maptools osmdata readODS readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
+package_list="RCurl RSQLite arules arulesViz cluster dbplyr devtools docopt flexdashboard fpc fs geonames geosphere GGally ggrepel ggridges ggvis gmp gtools hms igraph knitr lintr lubridate mapproj maps maptools openxlsx osmdata readODS readxl remotes rgeos roxygen2 seriation sf shiny skimr testthat tidyverse tm topicmodels usethis xlsx"
 #+end_src
+
+#+RESULTS: packages-list-variable
 
 And the above code block is included in the one below with noweb.
 
@@ -1743,7 +1746,6 @@ mine
    lintr
    nanorc
    pryrc
-   #Rprofile#
    Rprofile
    rubocop.yml
    shellcheckrc
