@@ -80,6 +80,8 @@ PS2="${PROMPT_COLOUR}\342\224\224> ${NO_COLOUR}"
 export GREP_COLORS='mt=1;37;44'
 alias grep='grep --color=auto'
 
+alias ag='\ag --pager=less'
+
 alias o='libreoffice'
 
 alias pi='alpine -i'

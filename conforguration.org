@@ -527,6 +527,12 @@ export GREP_COLORS='mt=1;37;44'
 alias grep='grep --color=auto'
 #+end_src
 
+Automatically page results from ~ag~ with ~less~ (see its options for how it works).
+
+#+begin_src shell
+alias ag='\ag --pager=less'
+#+end_src
+
 Call up LibreOffice with just =o file=.
 
 #+begin_src shell
