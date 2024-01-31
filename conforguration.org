@@ -1270,7 +1270,7 @@ keysym End = Insert
 
 ** Requirements
 
-You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.  (Unless the version of GCC changes, in which case a new =libgccjit-xx-dev= will be needed.  Check the current version with =gcc --version=.)  These requirements go beyond the bare minimum in order to make native compilation work (on Ubuntu 22.04).
+You can't build anything from source without making sure all the necessary utilities and libraries are there first.  Once done, this will never need to be run again.  (Unless the version of GCC changes, in which case a new =libgccjit-xx-dev= will be needed.  Check the current version with ~gcc --version~.)  These requirements go beyond the bare minimum in order to make native compilation work (on Ubuntu 22.04).
 
 #+begin_src shell :tangle conforg/scripts/emacs-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep emacs
@@ -1318,23 +1318,30 @@ It's probably best to quit Emacs and restart after this, but you don't actually 
 
 ** Update
 
-This is a simple script that pulls down the updated source for Emacs and Org and compiles them.  If something goes wrong with the Emacs compile you might need to do =make clean= or =make distclean= or =make extraclean= and then try again.
+This is a simple script that pulls down the updated source for Emacs and Org and compiles them.  If something goes wrong with the Emacs compile you might need to do ~make clean~ or ~make distclean~ or ~make extraclean~ and then try again.
 
-If there are compilation problems then running =make maintainer-clean= in the Emacs source directory will probably fix it by resetting everything.
+If there are compilation problems then running ~make maintainer-clean~ in the Emacs source directory will probably fix it by resetting everything.  I find I need to do this every few months.
 
-#+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
+#+begin_src shell :tangle conforg/scripts/emacs-update-no-native-compilation.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-tree-sitter && make -j 8 && cd ../org-mode/ && make -j 8 update
+./configure --with-json --with-pgtk --with-tree-sitter && make -j && cd ../org-mode/ && make -j update
 #+end_src
-
-(=--with-native-compilation=aot= is broken as of early April 2023.)
 
 #+begin_src shell :tangle conforg/scripts/emacs-update-native-compilation.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-tree-sitter --with-native-compilation && make -j 8 && cd ../org-mode/ && make -j 8 update
+./configure --with-json --with-pgtk --with-tree-sitter --with-native-compilation=aot && make -j && cd ../org-mode/ && make -j update
 #+end_src
+
+I want ahead-of-time native compilation to be the default, so I set this.  The other script is always available, and this symlink can be changed as needed.
+
+#+begin_src shell :dir conforg/scripts/
+rm -f emacs-update.sh
+ln -s emacs-update-native-compilation.sh emacs-update.sh
+#+end_src
+
+#+RESULTS:
 
 * R
 
