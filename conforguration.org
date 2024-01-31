@@ -1369,7 +1369,7 @@ mkdir -p /usr/local/src/R
 
 Whether R is being installed system-wide or just for personal use, this code will be run.
 
-#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
+#+begin_src shell :noweb-ref r_source_code_present_and_compiled
 cd $(dirname "$0")
 SCRIPTS_DIR=$(pwd)
 MIRROR="https://mirror.csclub.uwaterloo.ca/CRAN/"
@@ -1378,7 +1378,7 @@ cd /usr/local/src/R
 
 If the source has been untarred already, wipe that directory because we want to start fresh.
 
-#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
+#+begin_src shell :noweb-ref r_source_code_present_and_compiled
 if [ -d "/usr/local/src/R/R-${R_VERSION}" ]; then
   echo "Removing old source directory ..."
   rm -r R-${R_VERSION}
@@ -1387,7 +1387,7 @@ fi
 
 If the source tarball is there, use it, otherwise download.  The =R_MAJOR= variable is there because we need to know the major version number, so we can get to e.g. base/R-4 to download 4.0.4.
 
-#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
+#+begin_src shell :noweb-ref r_source_code_present_and_compiled
 if ! [ -f "R-${R_VERSION}.tar.gz" ]; then
   echo "Downloading R-${R_VERSION} tarball ..."
   R_MAJOR=${R_VERSION:0:1}
@@ -1399,7 +1399,7 @@ fi
 
 Now uncompress, configure and compile.  This could take a while.
 
-#+begin_src :shell :noweb-ref r_source_code_present_and_compiled
+#+begin_src shell :noweb-ref r_source_code_present_and_compiled
 echo "Uncompressing ..."
 tar xzvf R-$R_VERSION.tar.gz
 
