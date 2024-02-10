@@ -881,6 +881,8 @@ https://github.com/seebi/dircolors-solarized
 
 Raw source:  [[https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark][dircolors.ansi-dark]].
 
+I added a line at the bottom to make directories lighter: =DIR 00;38;5;33=.
+
 Imported copy: [[file:conforg/dotfiles/imported/dircolors.ansi-dark][conforg/dotfiles/imported/dircolors.ansi-dark]].
 
 *** Logout (=.bash_logout=)

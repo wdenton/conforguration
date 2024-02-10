@@ -482,3 +482,5 @@ EXEC 01;31  # Unix
 .aes 34
 .enc 34
 .sqlite 34
+
+DIR 00;38;5;33
