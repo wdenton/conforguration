@@ -391,6 +391,7 @@ then
     eval "$(dircolors ~/.dircolors.ansi-dark)"
 fi
 #+end_src
+
 # Also use solarized theme in GNOME terminal
 # See https://github.com/sigurdga/gnome-terminal-colors-solarized
 
