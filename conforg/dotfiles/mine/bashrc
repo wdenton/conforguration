@@ -1,4 +1,4 @@
-umask 022
+umask 0022
 
 export EDITOR=nano
 export VISUAL=nano

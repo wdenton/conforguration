@@ -308,10 +308,10 @@ fi
 
 **** File permissions
 
-Set the default "user file-created mask" to 022, so that by default regular files are created 644 (=-rw-r--r--=) and executables 755 (=-rwxr-xr-x=)
+Set the default "user file-created mask" to 0022, so that by default regular files are created 644 (=-rw-r--r--=) and executables 755 (=-rwxr-xr-x=)
 
 #+begin_src shell
-umask 022
+umask 0022
 #+end_src
 
 **** Editing
