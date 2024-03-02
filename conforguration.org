@@ -1341,7 +1341,7 @@ For running a personal version of R, ~PATH~ needs to include ~/usr/local/src/R~,
 Change the version number as needed, then tangle and run the install script again.
 
 #+NAME: R_VERSION
-| 4.3.2 |
+| 4.3.3 |
 
 ** Requirements
 
