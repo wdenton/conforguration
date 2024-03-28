@@ -1682,9 +1682,9 @@ ssh ${hostname} "conforg/scripts/tor-install-system.sh"
 
 ** Script to run and monitor Tor
 
-This runs Tor in a [[https://github.com/tmux/tmux/wiki][Tmux]] session with a window where the =speedometer= program is showing how much bandwidth is in use.  Logging in and running =tmux attach -t tor= shows what's going on, then =C-b d= detaches but leaves everything running.
+This runs Tor in a [[https://github.com/tmux/tmux/wiki][Tmux]] session with a window where the =speedometer= program is showing how much bandwidth is in use.  Logging in and running ~tmux attach -t tor~ shows what's going on, then ~C-b d~ detaches but leaves everything running.
 
-First, if one of these is already running, kill it and everything inside.  Need to wait at least 30 seconds for Tor to shut down nicely.
+First, if one of these is already running, kill it and everything inside.  We need to wait at least thirty seconds for Tor to shut down nicely.
 
 #+begin_src shell :tangle conforg/scripts/tor-run.sh :shebang "#!/bin/bash"
 if tmux has-session -t tor
@@ -1692,15 +1692,17 @@ if tmux has-session -t tor
      echo "Session tor exists; killing it nicely ..."
      tmux send-keys -t tor:1 "C-c"
      tmux send-keys -t tor:2 "C-c"
+     tmux send-keys -t tor:3 "C-c"
      sleep 35
      tmux kill-window -t tor:1
      tmux kill-window -t tor:2
+     tmux kill-window -t tor:3
  fi
 #+end_src
 
-Now start a new session with two windows in it, one running Tor and one running the =speedometer= visualization.  Being able to script Tmux like this makes it very powerful.
+Now start a new session with three windows in it: one running Tor, one running the =speedometer= visualization, and one picking out bandwidth notices in the log file.  Being able to script Tmux like this makes it very powerful.
 
-By default, =speedometer= will show traffic on the =wlan0= interface.  To use another one, set the TOR_IFACE environment variable in =~/.bash.${HOSTNAME}.rc=, like so: =export TOR_IFACE=ens160=.
+By default, =speedometer= will show traffic on the =wlan0= interface.  To use another one, set the =TOR_IFACE= environment variable in =~/.bash.${HOSTNAME}.rc=, like so: =export TOR_IFACE=ens160=.
 
 #+begin_src shell :tangle conforg/scripts/tor-run.sh
 echo "Starting tor session ..."
@@ -1716,6 +1718,9 @@ tmux send-keys -t tor:2 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 10485
 
 tmux select-window -t 1
 tmux send-keys -t tor:1 "tor" "C-m"
+
+tmux new-window -t tor:3
+tmux send-keys -t tor:3 "tail -f /usr/local/src/tor/log/notices.log | grep Heartbeat" "C-m"
 #+end_src
 
 Put this in the crontab to bring up Tor automatically when the machine reboots:
@@ -1724,7 +1729,7 @@ Put this in the crontab to bring up Tor automatically when the machine reboots:
 @reboot ~/conforg/scripts/tor-run.sh
 #+end_example
 
-If you defined TOR_IFACE specially, do this:
+If you defined =TOR_IFACE= specially, do this:
 
 #+begin_example
 @reboot source ~/.bash.${HOSTNAME}.rc; ~/conforg/scripts/tor-run.sh
