@@ -1,6 +1,6 @@
 #+TITLE: Conforguration
 #+AUTHOR: William Denton
-#+EMAIL: wtd@pobox.com
+#+EMAIL: william@williamdenton.org
 
 #+STARTUP: content entitiespretty inlineimages
 #+OPTIONS: toc:nil ^:nil
