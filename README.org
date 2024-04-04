@@ -75,7 +75,9 @@ Now you're running under Conforguration!
 
 ** Installing Emacs
 
-This installs [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://orgmode.org/][Org]] from source.  (For this to work in Ubuntu you'll need to have enabled source code repositories for packages in the software update tool.)
+This installs [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://orgmode.org/][Org]] from source.
+
+For this to work in Ubuntu you'll need to have enabled source code repositories for packages in the APT configuration.  You can do this with the GUI Software Updater tool (in the Ubuntu Software tab, enable the source code option) or in a shell (edit =/etc/apt/sources.list= and uncomment all of the =deb-src= lines).  Then update all the packages, for example with =sudo apt update=.
 
 #+BEGIN_SRC shell
 ~/conforg/scripts/emacs-install-requirements.sh
