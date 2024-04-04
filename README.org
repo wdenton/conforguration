@@ -91,7 +91,9 @@ cd
 git clone git@github.com:wdenton/.emacs.d.git
 #+end_src
 
-Then run =emacs=.  A few dozen packages will be downloaded and installed and when that's done your Emacs will look exactly like mine!
+Then run =emacs=.  A few dozen packages should be downloaded and installed and when that's done your Emacs will look exactly like mine!
+
+If something goes wrong, you can run everything in =init.el= by hand to install all of the packages.  Run ~emacs~ (or ~emacs -nw~  if you can only use a terminal), then type ~C-x C-f ~/.emacs/init.el~ to load the file, then run ~M-x eval-buffer~ to execute everything in it at once. Then quit Emacs and restart it, perhaps twice.  Then everything should be good.
 
 Whenever you want to upgrade Emacs and Org (packages need to be upgraded inside Emacs; my ridiculous keystroke for that is =C-x l p U x=), run:
 
