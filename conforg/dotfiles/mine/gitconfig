@@ -9,7 +9,7 @@
 	editor = emacsclient
 [user]
 	name = William Denton
-	email = wtd@pobox.com
+	email = william@williamdenton.org
 [push]
 	default = current
 [init]

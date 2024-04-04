@@ -1,6 +1,6 @@
 #+TITLE: Conforguration README
 #+AUTHOR: William Denton
-#+EMAIL: wtd@pobox.com
+#+EMAIL: william@williamdenton.org
 
 * Conforguration
 

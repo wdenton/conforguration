@@ -940,7 +940,7 @@ TODO:  Expand on what all this means.  Find a better way to handle the editor fo
 	editor = emacsclient
 [user]
 	name = William Denton
-	email = wtd@pobox.com
+	email = william@williamdenton.org
 [push]
 	default = current
 [init]
