@@ -1659,7 +1659,8 @@ I run a [[https://www.torproject.org/][Tor]] relay (a guard, not an exit point).
 Make sure some necessities are in place before trying to build from source.
 
 #+begin_src shell :tangle conforg/scripts/tor-install-requirements.sh :shebang "#!/bin/bash"
-sudo apt install libevent-dev libssl-dev libcap-dev liblzma-dev libzstd-dev libseccomp-dev libscrypt-dev
+sudo apt install build-essential
+sudo apt install libevent-dev libssl-dev libcap-dev liblzma-dev libzstd-dev libseccomp-dev libscrypt-dev zlib1g zlib1g-dev
 sudo apt install speedometer tmux
 mkdir -p /usr/local/src/tor/
 #+end_src
@@ -1826,9 +1827,9 @@ Or log in to the machine itself and run the scripts there.
 <<install-conforg-remotely>>
 #+end_src
 
-** shell3
+** shell4
 :PROPERTIES:
-:header-args: :var hostname="shell3"
+:header-args: :var hostname="shell4"
 :END:
 
 #+begin_src shell :results silent :noweb yes
