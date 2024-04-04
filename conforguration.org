@@ -1536,7 +1536,7 @@ Make sure some necessities are in place before trying to build from source.
 
 #+begin_src shell :tangle conforg/scripts/ruby-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt-get build-dep ruby
-sudo apt-get install libreadline-dev libsqlite3-dev libyaml-dev
+sudo apt-get install libreadline-dev libsqlite3-dev libyaml-dev libssl-dev
 #+end_src
 
 ** Install (or upgrade) rbenv
