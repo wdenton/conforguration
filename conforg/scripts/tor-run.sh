@@ -26,4 +26,4 @@ tmux select-window -t 1
 tmux send-keys -t tor:1 "tor" "C-m"
 
 tmux new-window -t tor:3
-tmux send-keys -t tor:3 "tail -f /usr/local/src/tor/log/notices.log | grep Heartbeat" "C-m"
+tmux send-keys -t tor:3 "tail -f /usr/local/src/tor/log/notices.log" "C-m"
