@@ -1652,7 +1652,7 @@ done
 #+NAME: TOR_VERSION
 | 0.4.8.11 |
 
-I run a [[https://www.torproject.org/][Tor]] relay (a guard, not an exit point).  These scripts let me update and run it, but this is not good enough for someone else to set up a new relay of their own.  I may add more later.
+I run two [[https://www.torproject.org/][Tor]] relays (not exit points).  These scripts let me update and run them—see my post [[https://www.miskatonic.org/2024/04/07/how-i-set-up-a-tor-bridge/][How I set up a Tor bridge]] for more.  The necessary =torrc= is not covered here; it requires special care to configure.
 
 ** Requirements
 
