@@ -17,4 +17,4 @@ make
 sudo make install
 sudo ~/conforg/scripts/ruby-install-gems.sh
 
-echo "Now run bundle install where needed."
+echo "Now run bundle install where needed (and perhaps bundle update --bundler)."
