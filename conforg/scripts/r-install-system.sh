@@ -1,6 +1,6 @@
 #!/bin/bash
 unset R_VERSION
-declare -a R_VERSION=( '4.3.3' )
+declare -a R_VERSION=( '4.4.0' )
 cd $(dirname "$0")
 SCRIPTS_DIR=$(pwd)
 MIRROR="https://mirror.csclub.uwaterloo.ca/CRAN/"
