@@ -1827,15 +1827,6 @@ Or log in to the machine itself and run the scripts there.
 <<install-conforg-remotely>>
 #+end_src
 
-** wdenton2
-:PROPERTIES:
-:header-args: :var hostname="wdenton2"
-:END:
-
-#+begin_src shell :results silent :noweb yes
-<<install-conforg-remotely>>
-#+end_src
-
 ** orez
 :PROPERTIES:
 :header-args: :var hostname="orez"
