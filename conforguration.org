@@ -1661,7 +1661,7 @@ Make sure some necessities are in place before trying to build from source.
 #+begin_src shell :tangle conforg/scripts/tor-install-requirements.sh :shebang "#!/bin/bash"
 sudo apt install build-essential
 sudo apt install libevent-dev libssl-dev libcap-dev liblzma-dev libzstd-dev libseccomp-dev libscrypt-dev zlib1g zlib1g-dev
-sudo apt install speedometer tmux
+sudo apt install speedometer tmux vnstat
 mkdir -p /usr/local/src/tor/
 #+end_src
 
@@ -1694,14 +1694,16 @@ if tmux has-session -t tor
      tmux send-keys -t tor:1 "C-c"
      tmux send-keys -t tor:2 "C-c"
      tmux send-keys -t tor:3 "C-c"
+     tmux send-keys -t tor:4 "C-c"
      sleep 35
      tmux kill-window -t tor:1
      tmux kill-window -t tor:2
      tmux kill-window -t tor:3
+     tmux kill-window -t tor:4
  fi
 #+end_src
 
-Now start a new session with three windows in it: one running Tor, one running the =speedometer= visualization, and one picking out bandwidth notices in the log file.  Being able to script Tmux like this makes it very powerful.
+Now start a new session with four windows in it: Tor; bandwidth notices in the log file; the =speedometer= visualization; and a shell for ~vnstat~ for traffic reports. Being able to script Tmux like this makes it very powerful.
 
 By default, =speedometer= will show traffic on the =wlan0= interface.  To use another one, set the =TOR_IFACE= environment variable in =~/.bash.${HOSTNAME}.rc=, like so: =export TOR_IFACE=ens160=.
 
@@ -1715,13 +1717,17 @@ if [[ -z $TOR_IFACE ]]; then
 fi
 
 tmux new-window -t tor:2
-tmux send-keys -t tor:2 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 1048576" "C-m"
+tmux new-window -t tor:3
+tmux new-window -t tor:4
+
+tmux send-keys -t tor:3 "speedometer -t ${TOR_IFACE} -r ${TOR_IFACE} -l -m 1048576" "C-m"
 
 tmux select-window -t 1
 tmux send-keys -t tor:1 "tor" "C-m"
 
-tmux new-window -t tor:3
-tmux send-keys -t tor:3 "tail -f /usr/local/src/tor/log/notices.log" "C-m"
+tmux send-keys -t tor:2 "tail -f /usr/local/src/tor/log/notices.log" "C-m"
+
+tmux send-keys -t tor:4 "vnstat -d --iface ${TOR_IFACE}" "C-m"
 #+end_src
 
 Put this in the crontab to bring up Tor automatically when the machine reboots:
