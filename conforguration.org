@@ -731,7 +731,7 @@ function order() {
 Wipe all metadata from one or more images.
 
 #+begin_src shell
-function imagewipe() {
+function wipe_image() {
     for FILE in "$@"; do
 	exiftool -all= "$FILE"
     done
@@ -741,7 +741,7 @@ function imagewipe() {
 Wipe all metadata from one or more PDFs.
 
 #+begin_src shell
-function pdfwipe() {
+function wipe_pdf() {
     for FILE in "$@"; do
 	exiftool -all= "$FILE"
 	qpdf --linearize --replace-input "$FILE"

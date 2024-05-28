@@ -162,13 +162,13 @@ function order() {
     sort | uniq -c | sort -rn
 }
 
-function imagewipe() {
+function wipe_image() {
     for FILE in "$@"; do
 	exiftool -all= "$FILE"
     done
 }
 
-function pdfwipe() {
+function wipe_pdf() {
     for FILE in "$@"; do
 	exiftool -all= "$FILE"
 	qpdf --linearize --replace-input "$FILE"
