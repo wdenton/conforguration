@@ -2,4 +2,3 @@ set fill -8
 set nonewlines
 set nowrap
 set softwrap
-set suspend
