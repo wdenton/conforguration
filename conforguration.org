@@ -1294,7 +1294,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-json --with-pgtk --with-tree-sitter && make -j 8
+./configure --with-pgtk --with-tree-sitter && make -j 8
 #+end_src
 
 Then do the same for Org.
@@ -1330,7 +1330,7 @@ If there are compilation problems then running ~make maintainer-clean~ in the Em
 #+begin_src shell :tangle conforg/scripts/emacs-update.sh :shebang "#!/bin/bash"
 cd /usr/local/src/emacs/
 git pull
-./configure --with-json --with-pgtk --with-tree-sitter && make -j && cd ../org-mode/ && make -j update
+./configure --with-pgtk --with-tree-sitter && make -j && cd ../org-mode/ && make -j update
 #+end_src
 
 * R
