@@ -1649,7 +1649,7 @@ done
 * Tor
 
 #+NAME: TOR_VERSION
-| 0.4.8.12 |
+| 0.4.8.13 |
 
 I run two [[https://www.torproject.org/][Tor]] relays (not exit points).  These scripts let me update and run them—see my post [[https://www.miskatonic.org/2024/04/07/how-i-set-up-a-tor-bridge/][How I set up a Tor bridge]] for more.  The necessary =torrc= is not covered here; it requires special care to configure.
 
