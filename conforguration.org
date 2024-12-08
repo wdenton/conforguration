@@ -1154,7 +1154,6 @@ AllCops:
   NewCops: enable
 #+end_src
 
-
 ** Signature
 
 *** Personal (=.signature=)
@@ -1185,6 +1184,17 @@ Associate Librarian: Scholarly Analytics / Mathematics & Statistics
 York University (Toronto, Canada) https://www.library.yorku.ca/
 #+end_src
 
+** SQLite
+
+*** Config (=.sqliterc=)
+:PROPERTIES:
+:header-args: :tangle conforg/dotfiles/mine/sqliterc
+:END:
+
+#+begin_src sqlite
+.headers on
+.mode column
+#+end_src
 
 ** Tmux
 
@@ -1294,7 +1304,7 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-pgtk --with-tree-sitter && make -j 8
+./configure --with-pgtk --with-tree-sitter && make -j
 #+end_src
 
 Then do the same for Org.
@@ -1303,8 +1313,7 @@ Then do the same for Org.
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs/org-mode.git
 cd org-mode
-make autoloads
-make
+make -j
 #+end_src
 
 Finally, get my Emacs configuration (which is not here in Conforguration).  It will be cloned into =~/.emacs.d/=.  (Requires a GitHub account when done this way.)

@@ -3,13 +3,12 @@ cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs.git
 cd emacs
 ./autogen.sh
-./configure --with-pgtk --with-tree-sitter && make -j 8
+./configure --with-pgtk --with-tree-sitter && make -j
 
 cd /usr/local/src/
 git clone https://git.savannah.gnu.org/git/emacs/org-mode.git
 cd org-mode
-make autoloads
-make
+make -j
 
 cd
 git clone git@github.com:wdenton/.emacs.d.git
