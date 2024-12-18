@@ -1777,6 +1777,7 @@ mine
    shellcheckrc
    signature
    signature.work
+   sqliterc
    tmux.conf
    XCompose
    xmodmaprc
