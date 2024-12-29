@@ -1,6 +1,6 @@
 #!/bin/bash
 unset RUBY_VERSION
-declare -a RUBY_VERSION=( '3.3.4' )
+declare -a RUBY_VERSION=( '3.4.1' )
 mkdir -p /usr/local/src/ruby
 cd /usr/local/src/ruby
 
