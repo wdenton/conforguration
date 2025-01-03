@@ -22,7 +22,7 @@ tar xzvf R-$R_VERSION.tar.gz
 echo "Compiling ..."
 cd R-$R_VERSION
 ./configure --enable-R-shlib
-make && make check
+make -j && make -j check
 sudo make install
 
 sudo su - -c "cd $SCRIPTS_DIR; ./r-install-packages.sh"

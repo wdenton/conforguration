@@ -22,7 +22,7 @@ tar xzvf R-$R_VERSION.tar.gz
 echo "Compiling ..."
 cd R-$R_VERSION
 ./configure --enable-R-shlib
-make && make check
+make -j && make -j check
 
 unset R_VERSION
 declare -a R_VERSION=( '4.4.2' )
