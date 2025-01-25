@@ -183,6 +183,12 @@ function get {
     rsync --archive --progress --human-readable "$@" .
 }
 
+function repeat(){
+  for ((i=0; i < $1; i++)); do
+    eval ${*:2}
+  done
+}
+
 source ~/.git-completion.bash
 
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
